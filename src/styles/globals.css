@@ -1,0 +1,64 @@
+@font-face {
+    font-family: 'Mikado';
+    src: url('../../fonts/MikadoBlack.otf');
+}
+
+@font-face {
+    font-family: 'Linotte';
+    src: url('../../fonts/LinotteRegular.otf');
+}
+
+@keyframes fadeinup-light {
+    0% {
+        opacity: 0;
+        transform: translateY(-75px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media all and (orientation: portrait) {
+    body {
+        transform: scale(0.80);
+    }
+}
+
+* {
+    font-family : 'Linotte', sans-serif !important;
+}
+
+html {
+    min-height: 100%;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsla(217, 100%, 50%, 1);
+    background: linear-gradient(270deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+    background: -moz-linear-gradient(270deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+    background: -webkit-linear-gradient(270deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+}
+
+h1 {
+    font-family: 'Mikado', sans-serif !important;
+}
+
+label > span {
+    color: #e24c4c
+}
+
+.pi {
+    font-family: 'primeicons', sans-serif !important;
+}
+
+.fadeinup-light {
+    animation: fadeinup-light 1s ease 0s 1 normal forwards;
+}
