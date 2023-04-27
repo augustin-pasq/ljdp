@@ -20,7 +20,7 @@
     }
 }
 
-@media all and (orientation: portrait) {
+@media screen and (max-width: 576px) {
     body {
         transform: scale(0.80);
     }
@@ -53,7 +53,7 @@
     }
 }
 
-@media all and (orientation: landscape) {
+@media screen and (min-width: 576px) {
     @keyframes scale-in-br {
         0% {
             transform: scale(0);
