@@ -45,18 +45,19 @@ export default function Login() {
     }
 
     return (
-        <div className="max-w-30rem shadow-7 fadeinup-light">
-            <Card>
-                <div className="flex flex-column align-items-center">
-                    <h1 className="text-7xl pt-6 pb-7 px-8">Connexion</h1>
-                    {errorMessage === 'badCredentials' &&
-                        <div className="flex flex-row align-items-center justify-content-center pb-7"><span className="p-error">Nom d'utilisateur ou mot de passe invalide.</span></div>
-                    }
-                    {errorMessage === 'undefinedError' &&
-                        <div className="flex flex-row align-items-center justify-content-center pb-7"><span className="p-error">Une erreur s'est produite. Réessaye pour voir ?</span></div>
-                    }
-                    <form className="flex flex-column align-items-center row-gap-6" onSubmit={formik.handleSubmit}>
-                        <div className="flex flex-column align-items-start max-w-min row-gap-2">
+        <Card className="max-w-30rem shadow-7 fadeinup-light border-round-4xl">
+            <div className="flex flex-column align-items-center">
+                <h1 className="text-7xl pt-6 pb-7 px-8">Connexion</h1>
+                {errorMessage === 'badCredentials' &&
+                    <div className="flex flex-row align-items-center justify-content-center pb-7"><span
+                        className="p-error">Nom d'utilisateur ou mot de passe invalide.</span></div>
+                }
+                {errorMessage === 'undefinedError' &&
+                    <div className="flex flex-row align-items-center justify-content-center pb-7"><span
+                        className="p-error">Une erreur s'est produite. Réessaye pour voir ?</span></div>
+                }
+                <form className="flex flex-column align-items-center row-gap-6" onSubmit={formik.handleSubmit}>
+                    <div className="flex flex-column align-items-start max-w-min row-gap-2">
                             <span className="p-float-label">
                                 <InputText id="username"
                                            name="username"
@@ -69,9 +70,9 @@ export default function Login() {
                                 />
                                 <label htmlFor="username">Nom d'utilisateur<span> *</span></label>
                             </span>
-                            {getFormErrorMessage('username')}
-                        </div>
-                        <div className="flex flex-column align-items-start max-w-min row-gap-2">
+                        {getFormErrorMessage('username')}
+                    </div>
+                    <div className="flex flex-column align-items-start max-w-min row-gap-2">
                             <span className="p-float-label">
                                 <Password id="password"
                                           name="password"
@@ -85,16 +86,15 @@ export default function Login() {
                                 />
                                 <label htmlFor="password">Mot de passe<span> *</span></label>
                             </span>
-                            {getFormErrorMessage('password')}
-                        </div>
-                        <Button type="submit" size="large" className="mt-3" rounded>Se connecter</Button>
-                    </form>
-                    <div className="flex flex-row align-items-center justify-content-center pt-5">
-                        <span>Besoin d'un compte ?</span>
-                        <Link href="/register"><Button className="px-2" link>S'inscrire</Button></Link>
+                        {getFormErrorMessage('password')}
                     </div>
+                    <Button type="submit" size="large" className="mt-3" rounded>Se connecter</Button>
+                </form>
+                <div className="flex flex-row align-items-center justify-content-center pt-5">
+                    <span>Besoin d'un compte ?</span>
+                    <Link href="/register"><Button className="px-2" link>S'inscrire</Button></Link>
                 </div>
-            </Card>
-        </div>
+            </div>
+        </Card>
     )
 }
