@@ -50,7 +50,7 @@ export default function Register() {
     return (
         <Card className="max-w-30rem shadow-7 fadeinup-light border-round-4xl">
             <div className="flex flex-column align-items-center">
-                <h1 className="text-7xl pt-6 pb-7 px-8">Inscription</h1>
+                <h1 className="text-6xl md:text-7xl pt-5 md:pt-6 pb-6 md:pb-7 px-5 md:px-8">Inscription</h1>
                 {errorMessage === 'userAlreadyExists' &&
                     <div className="flex flex-row align-items-center justify-content-center pb-7"><span
                         className="p-error">Ce nom d'utilisateur est déjà pris.</span></div>
