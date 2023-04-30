@@ -35,7 +35,7 @@ export default function Register() {
 
             if (results.success) await router.push('/home')
             else {
-                if (results.result.code === "P2002") setErrorMessage('userAlreadyExists')
+                if (results.content.code === "P2002") setErrorMessage('userAlreadyExists')
                 else setErrorMessage('undefinedError')
             }
             formik.resetForm();

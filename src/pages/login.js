@@ -32,8 +32,8 @@ export default function Login() {
                 body: JSON.stringify(body),
             })).json()
 
-            if (results.success && results.result) await router.push('/home')
-            else if (results.success && !results.result) setErrorMessage('badCredentials')
+            if (results.success && results.content) await router.push('/home')
+            else if (results.success && !results.content) setErrorMessage('badCredentials')
             else setErrorMessage('undefinedError')
             formik.resetForm();
         }

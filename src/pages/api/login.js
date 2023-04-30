@@ -1,8 +1,11 @@
 import prisma from "../../../lib/prisma"
 import bcrypt from "bcrypt";
+import {withSessionRoute} from "../../../lib/ironSession";
 
-export default async function handle(req, res) {
-    let results = {"success" : "", result : []}
+export default withSessionRoute(handleLogin);
+
+async function handleLogin(req, res) {
+    let results = {"success" : "", content : []}
 
     try {
         let user = await prisma.user.findUnique({
@@ -11,11 +14,17 @@ export default async function handle(req, res) {
             }
         })
 
-        results.result = user !== null ? bcrypt.compareSync(req.body.password, user.password) : false
+        results.content = user !== null ? bcrypt.compareSync(req.body.password, user.password) : false
+
+        if (results.content) {
+            req.session.user = {...user, password: undefined, isLoggedIn: true}
+            await req.session.save()
+        }
+
         results.success = true
     } catch (e) {
         results.success = false
-        results.result = e
+        results.content = e
     }
 
     res.json(results)

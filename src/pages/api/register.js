@@ -1,21 +1,28 @@
 import prisma from "../../../lib/prisma"
 import bcrypt from "bcrypt";
+import { withSessionRoute } from "../../../lib/ironSession";
 
-export default async function handle(req, res) {
-    let results = {"success" : "", result : []}
+export default withSessionRoute(handleRegister);
+
+async function handleRegister(req, res) {
+    let results = {"success" : "", content : []}
     const hash = bcrypt.hashSync(req.body.password, 10)
 
     try {
-        results.result = await prisma.user.create({
+        results.content = await prisma.user.create({
             data: {
                 username: req.body.username,
                 password: hash
             }
         })
+
+        req.session.user = {...results.content, password: undefined, isLoggedIn: true}
+        await req.session.save()
+
         results.success = true
     } catch (e) {
         results.success = false
-        results.result = e
+        results.content = e
     }
 
     res.json(results)

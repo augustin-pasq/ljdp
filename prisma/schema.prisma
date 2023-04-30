@@ -8,9 +8,58 @@ datasource db {
 }
 
 model User {
-  id             Int     @id @default(autoincrement())
-  username       String  @unique(map: "username") @db.VarChar(32)
-  displayedName  String? @db.VarChar(32)
-  profilePicture String? @db.Text
-  password       String  @db.Text
+  id             Int           @id @default(autoincrement())
+  username       String        @unique(map: "username") @db.VarChar(32)
+  displayedName  String?       @db.VarChar(32)
+  profilePicture String?       @db.Text
+  password       String        @db.Text
+  Game           Game[]
+  Participant    Participant[]
+  Photo          Photo[]
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  title String  @db.Text
+  type  String  @db.Text
+  game  Int
+  Game  Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")
+  Photo Photo[]
+
+  @@index([game], map: "game")
+}
+
+model Game {
+  id          Int           @id @default(autoincrement())
+  accessCode  String        @unique(map: "accessCode") @db.VarChar(4)
+  status      String        @db.Text
+  owner       Int
+  Category    Category[]
+  User        User          @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Game_ibfk_1")
+  Participant Participant[]
+
+  @@index([owner], map: "owner")
+}
+
+model Participant {
+  game  Int
+  user  Int
+  score Int?
+  Game  Game @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_1")
+  User  User @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_2")
+
+  @@id([game, user])
+  @@index([user], map: "user")
+}
+
+model Photo {
+  id       Int       @id @default(autoincrement())
+  link     String    @db.Text
+  category Int?
+  user     Int?
+  Category Category? @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_1")
+  User     User?     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_2")
+
+  @@index([category], map: "category")
+  @@index([user], map: "user")
 }
