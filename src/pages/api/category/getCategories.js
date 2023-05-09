@@ -10,13 +10,17 @@ export default async function handle(req, res) {
             }
         })
 
-        results.content = await prisma.category.create({
-            data: {
-                title: req.body.title,
-                type: req.body.type,
-                game: game.id,
+        results.content = await prisma.category.findMany({
+            select: {
+                id: true,
+                title: true,
+                type: true
+            },
+            where: {
+                game: game.id
             }
         })
+
         results.success = true
     } catch (e) {
         results.success = false

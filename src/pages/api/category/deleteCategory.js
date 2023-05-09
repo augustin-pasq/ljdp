@@ -4,19 +4,12 @@ export default async function handle(req, res) {
     let results = {"success" : undefined, content : []}
 
     try {
-        let game = await prisma.game.findUnique({
+        results.content = await prisma.category.delete({
             where: {
-                accessCode: req.body.accessCode,
-            }
+                id: req.body.id,
+            },
         })
 
-        results.content = await prisma.category.create({
-            data: {
-                title: req.body.title,
-                type: req.body.type,
-                game: game.id,
-            }
-        })
         results.success = true
     } catch (e) {
         results.success = false

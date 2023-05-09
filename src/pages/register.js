@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from "react";
 import {Card} from "primereact/card";
 import {InputText} from "primereact/inputtext";
 import {Button} from "primereact/button";
@@ -9,8 +9,9 @@ import {classNames} from 'primereact/utils';
 import {useRouter} from "next/router";
 
 export default function Register() {
-    const [errorMessage, setErrorMessage] = React.useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     const router = useRouter()
+
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -26,7 +27,10 @@ export default function Register() {
             return errors;
         },
         onSubmit: async (data) => {
-            const body = {username: data.username, password: data.password}
+            const body = {
+                username: data.username,
+                password: data.password
+            }
             const results = await (await fetch('/api/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -42,60 +46,50 @@ export default function Register() {
         }
     })
 
-    const isFormFieldInvalid = (name) => !!(formik.touched[name] && formik.errors[name])
-    const getFormErrorMessage = (name) => {
-        return isFormFieldInvalid(name) ? <small className="p-error">{formik.errors[name]}</small> : '';
+    const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
+    const getFormErrorMessage = (value) => {
+        return isFormFieldInvalid(value) ? <small className="p-error">{formik.errors[value]}</small> : '';
     }
 
     return (
         <Card className="max-w-30rem shadow-7 fadeinup-light border-round-4xl">
             <div className="flex flex-column align-items-center">
                 <h1 className="text-6xl md:text-7xl pt-5 md:pt-6 pb-6 md:pb-7 px-5 md:px-8">Inscription</h1>
+
                 {errorMessage === 'userAlreadyExists' &&
-                    <div className="flex flex-row align-items-center justify-content-center pb-7"><span
-                        className="p-error">Ce nom d'utilisateur est déjà pris.</span></div>
+                    <div className="flex flex-row align-items-center justify-content-center pb-7">
+                        <span className="p-error">Ce nom d'utilisateur est déjà pris.</span>
+                    </div>
                 }
                 {errorMessage === 'undefinedError' &&
-                    <div className="flex flex-row align-items-center justify-content-center pb-7"><span
-                        className="p-error">Une erreur s'est produite. Réessaye pour voir ?</span></div>
+                    <div className="flex flex-row align-items-center justify-content-center pb-7">
+                        <span className="p-error">Une erreur s'est produite. Réessaye pour voir ?</span>
+                    </div>
                 }
+
                 <form className="flex flex-column align-items-center row-gap-6" onSubmit={formik.handleSubmit}>
                     <div className="flex flex-column align-items-start max-w-min row-gap-2">
-                            <span className="p-float-label">
-                                <InputText id="username"
-                                           name="username"
-                                           value={formik.values.username}
-                                           onChange={(e) => {
-                                               formik.setFieldValue("username", e.target.value)
-                                           }}
-                                           maxLength={32}
-                                           className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('username')})}`}
-                                />
-                                <label htmlFor="username">Nom d'utilisateur<span> *</span></label>
-                            </span>
+                        <span className="p-float-label">
+                            <InputText id="username" name="username" value={formik.values.username} onChange={(e) => {formik.setFieldValue("username", e.target.value)}} maxLength={32} className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('username')})}`}/>
+                            <label htmlFor="username">Nom d'utilisateur<span> *</span></label>
+                        </span>
                         {getFormErrorMessage('username')}
                     </div>
                     <div className="flex flex-column align-items-start max-w-min row-gap-2">
-                            <span className="p-float-label">
-                                <Password id="password"
-                                          name="password"
-                                          feedback={false}
-                                          value={formik.values.password}
-                                          toggleMask
-                                          onChange={(e) => {
-                                              formik.setFieldValue("password", e.target.value)
-                                          }}
-                                          className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('password')})}`}
-                                />
-                                <label htmlFor="password">Mot de passe<span> *</span></label>
-                            </span>
+                        <span className="p-float-label">
+                            <Password id="password" name="password" feedback={false} value={formik.values.password} toggleMask onChange={(e) => {formik.setFieldValue("password", e.target.value)}} className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('password')})}`}/>
+                            <label htmlFor="password">Mot de passe<span> *</span></label>
+                        </span>
                         {getFormErrorMessage('password')}
                     </div>
                     <Button type="submit" size="large" className="mt-3" rounded>S'inscrire</Button>
                 </form>
+
                 <div className="flex flex-row align-items-center justify-content-center pt-5">
                     <span>Déjà un compte ?</span>
-                    <Link href="/login"><Button className="px-2" link>Se connecter</Button></Link>
+                    <Link href="/login">
+                        <Button className="px-2" link>Se connecter</Button>
+                    </Link>
                 </div>
             </div>
         </Card>

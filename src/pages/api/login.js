@@ -5,7 +5,7 @@ import {withSessionRoute} from "../../../lib/ironSession";
 export default withSessionRoute(handleLogin);
 
 async function handleLogin(req, res) {
-    let results = {"success" : "", content : []}
+    let results = {"success" : undefined, content : []}
 
     try {
         let user = await prisma.user.findUnique({

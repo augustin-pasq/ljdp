@@ -5,7 +5,7 @@ import { withSessionRoute } from "../../../lib/ironSession";
 export default withSessionRoute(handleRegister);
 
 async function handleRegister(req, res) {
-    let results = {"success" : "", content : []}
+    let results = {"success" : undefined, content : []}
     const hash = bcrypt.hashSync(req.body.password, 10)
 
     try {

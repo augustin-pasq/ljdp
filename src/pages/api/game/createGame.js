@@ -1,7 +1,7 @@
 import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
-    let results = {"success" : "", content : []}
+    let results = {"success" : undefined, content : []}
     let accessCode = require('crypto').randomBytes(2).toString('hex').toUpperCase()
     let existingAccessCodes = {}
 
