@@ -6,10 +6,10 @@ export default function Home() {
     return (
         <Card title="LJDP : Le Jeu Des Photos">
             <Link href="/login">
-                <Button size="large" rounded outlined>Connexion</Button>
+                <Button label="Connexion" size="large" rounded outlined/>
             </Link>
             <Link href="/register">
-                <Button size="large" rounded outlined>Inscription</Button>
+                <Button label="Inscription" size="large" rounded outlined/>
             </Link>
         </Card>
     )

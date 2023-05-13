@@ -170,3 +170,22 @@ label > span {
     cursor: pointer;
     box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 11px 15px rgba(0, 0, 0, 0.2);
 }
+
+.p-button-label {
+    font-weight: normal !important;
+}
+
+.game-access {
+    margin: 0.65rem;
+    padding: 1rem 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 1.25rem;
+    border: 1px solid #dee2e6;
+}
+
+.access-code-field {
+    font-size: 3rem !important;
+    text-align: center;
+    font-weight: bold;
+}

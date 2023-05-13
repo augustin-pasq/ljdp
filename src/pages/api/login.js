@@ -2,9 +2,9 @@ import prisma from "../../../lib/prisma"
 import bcrypt from "bcrypt";
 import {withSessionRoute} from "../../../lib/ironSession";
 
-export default withSessionRoute(handleLogin);
+export default withSessionRoute(handle);
 
-async function handleLogin(req, res) {
+async function handle(req, res) {
     let results = {"success" : undefined, content : []}
 
     try {

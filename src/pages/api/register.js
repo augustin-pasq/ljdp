@@ -2,9 +2,9 @@ import prisma from "../../../lib/prisma"
 import bcrypt from "bcrypt";
 import { withSessionRoute } from "../../../lib/ironSession";
 
-export default withSessionRoute(handleRegister);
+export default withSessionRoute(handle);
 
-async function handleRegister(req, res) {
+async function handle(req, res) {
     let results = {"success" : undefined, content : []}
     const hash = bcrypt.hashSync(req.body.password, 10)
 

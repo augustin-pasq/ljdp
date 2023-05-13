@@ -70,25 +70,25 @@ export default function Register() {
                 <form className="flex flex-column align-items-center row-gap-6" onSubmit={formik.handleSubmit}>
                     <div className="flex flex-column align-items-start max-w-min row-gap-2">
                         <span className="p-float-label">
-                            <InputText id="username" name="username" value={formik.values.username} onChange={(e) => {formik.setFieldValue("username", e.target.value)}} maxLength={32} className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('username')})}`}/>
+                            <InputText id="username" name="username" value={formik.values.username} onChange={formik.handleChange} maxLength={32} className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('username')})}`}/>
                             <label htmlFor="username">Nom d'utilisateur<span> *</span></label>
                         </span>
                         {getFormErrorMessage('username')}
                     </div>
                     <div className="flex flex-column align-items-start max-w-min row-gap-2">
                         <span className="p-float-label">
-                            <Password id="password" name="password" feedback={false} value={formik.values.password} toggleMask onChange={(e) => {formik.setFieldValue("password", e.target.value)}} className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('password')})}`}/>
+                            <Password id="password" name="password" feedback={false} value={formik.values.password} toggleMask onChange={formik.handleChange} className={`p-inputtext-lg h-4rem ${classNames({'p-invalid': isFormFieldInvalid('password')})}`}/>
                             <label htmlFor="password">Mot de passe<span> *</span></label>
                         </span>
                         {getFormErrorMessage('password')}
                     </div>
-                    <Button type="submit" size="large" className="mt-3" rounded>S'inscrire</Button>
+                    <Button label="S'inscrire" type="submit" size="large" className="mt-3" rounded/>
                 </form>
 
                 <div className="flex flex-row align-items-center justify-content-center pt-5">
                     <span>Déjà un compte ?</span>
                     <Link href="/login">
-                        <Button className="px-2" link>Se connecter</Button>
+                        <Button label="Se connecter" className="px-2" link/>
                     </Link>
                 </div>
             </div>
