@@ -14,6 +14,7 @@ Le projet en est à ses balbutiements. Voici les fonctionnalités actuellement d
 - Connexion à l'application
 - Session utilisateur
 - Création d'une partie et de ses catégories
+- Formulaire d'accès à une partie (modification et participation)
 
 ### Stack technologique
 - Next.js / React (JavaScript)
