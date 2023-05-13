@@ -19,6 +19,8 @@ export default function Home(props) {
         }, '/game/edit');
     };
 
+    const navigateUpload = async () => { await router.push('/upload') };
+
     return (
         <div className="grid">
             <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-end scale-in-br scale-in-center-1">
@@ -29,7 +31,7 @@ export default function Home(props) {
             </div>
 
             <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-start scale-in-bl scale-in-center-2">
-                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center">
+                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center" onClick={navigateUpload}>
                     <h1 className="text-4xl text-center">Uploader des photos</h1>
                     <span className="text-4xl">📷</span>
                 </Card>

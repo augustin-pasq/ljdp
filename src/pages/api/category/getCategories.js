@@ -4,7 +4,7 @@ export default async function handle(req, res) {
     let results = {"success" : undefined, content : []}
 
     try {
-        let game = await prisma.game.findUnique({
+        let game = await prisma.game.findFirst({
             where: {
                 accessCode: req.body.accessCode,
             }

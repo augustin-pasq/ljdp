@@ -91,7 +91,7 @@ export default function GameEditor(props) {
                                               placeholder="Type"
                                               onChange={(e) => {
                                                   formik.setFieldValue("type", e.value);
-                                              }} options={["Photo", "Vidéo", "Audio", "Document", "Web"]}
+                                              }} options={["Photo", "Vidéo", "YouTube"]}
                                               className={`w-10rem ${classNames({'p-invalid': isFormFieldInvalid('type')})}`}/>
                                 </div>
                                 <Button type="submit" icon="pi pi-plus"/>

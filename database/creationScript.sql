@@ -32,7 +32,7 @@ CREATE TABLE Category
     game  INTEGER NOT NULL,
 
     FOREIGN KEY (game) REFERENCES Game (id),
-    CONSTRAINT ck_type CHECK (type IN ('Photo', 'Vidéo', 'Audio', 'Document', 'Web'))
+    CONSTRAINT ck_type CHECK (type IN ('Photo', 'Vidéo', 'YouTube'))
 );
 
 CREATE TABLE Photo

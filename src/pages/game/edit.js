@@ -6,33 +6,32 @@ import AccessCodeForm from "@/pages/Components/AccessCodeForm";
 import {withSessionSsr} from "../../../lib/ironSession";
 
 export default function GameEdit() {
-    const [accessCode, setAccessCode] = useState("")
     const [categories, setCategories] = useState([])
     const router = useRouter()
 
     useEffect(() => {
-        if (router.query.accessCode !== undefined) setAccessCode(router.query.accessCode.toString())
         async function getCategories() {
             return await (await fetch('/api/category/getCategories', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({accessCode: accessCode}),
+                body: JSON.stringify({accessCode: router.query.accessCode}),
             })).json()
         }
-        
+
         getCategories()
             .then((result) => {
-                result.content.forEach((category, index) => result.content[index] = <CategoryItem id={category.id} title={category.title} type={category.type}/>)
+                result.content.forEach((category, index) => result.content[index] =
+                    <CategoryItem key={index} id={category.id} title={category.title} type={category.type}/>)
                 setCategories(result.content)
             })
             .catch(error => console.error(error))
     }, [router.query.accessCode])
 
     return (
-        accessCode === "" ?
+        router.query.accessCode === undefined ?
             <AccessCodeForm subtitle="LJDP a besoin du code d'accès pour retrouver la partie :" button="Accéder au panneau d'édition" redirect="/game/edit" action="edit"/>
             :
-            <GameEditor accessCode={accessCode} categories={categories}/>
+            <GameEditor accessCode={router.query.accessCode} categories={categories}/>
     )
 }
 
