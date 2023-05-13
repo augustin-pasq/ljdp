@@ -54,7 +54,7 @@ export default function Home(props) {
 }
 
 export const getServerSideProps = withSessionSsr(async function getServerSideProps({req}) {
-    let user = req.session.user;
+    let user = req.session.user
 
     if (!user?.isLoggedIn) {
         return {
@@ -66,7 +66,7 @@ export const getServerSideProps = withSessionSsr(async function getServerSidePro
 
     return {
         props: {
-            owner: req.session.user.id
+            user: user.id
         }
     }
 })

@@ -8,7 +8,7 @@ import {useFormik} from "formik";
 import {classNames} from 'primereact/utils';
 import {useRouter} from "next/router";
 
-export default function Login() {
+export default function Login(props) {
     const [errorMessage, setErrorMessage] = useState('')
     const router = useRouter()
 
@@ -36,7 +36,7 @@ export default function Login() {
                 body: JSON.stringify(body),
             })).json()
 
-            if (results.success && results.content) await router.push('/home')
+            if (results.success && results.content) await router.push(`${props.redirect}`)
             else if (results.success && !results.content) setErrorMessage('badCredentials')
             else setErrorMessage('undefinedError')
 

@@ -16,6 +16,8 @@ export default function GameEditor(props) {
     const toast = useRef(null);
 
     useEffect(() => {
+        props.categories.forEach((category, index) => props.categories[index] =
+            <CategoryItem key={index} id={category.id} title={category.title} type={category.type}/>)
         setCategories(props.categories);
     }, [props.categories]);
 

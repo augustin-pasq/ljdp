@@ -8,7 +8,7 @@ import {useFormik} from "formik";
 import {classNames} from 'primereact/utils';
 import {useRouter} from "next/router";
 
-export default function Register() {
+export default function Register(props) {
     const [errorMessage, setErrorMessage] = useState('')
     const router = useRouter()
 
@@ -37,7 +37,7 @@ export default function Register() {
                 body: JSON.stringify(body),
             })).json()
 
-            if (results.success) await router.push('/home')
+            if (results.success) await router.push(`${props.redirect}`)
             else {
                 if (results.content.code === "P2002") setErrorMessage('userAlreadyExists')
                 else setErrorMessage('undefinedError')

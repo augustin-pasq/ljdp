@@ -18,7 +18,7 @@ export default async function handle(req, res) {
             data: {
                 accessCode: accessCode,
                 status: 'Créée',
-                owner: req.body.owner
+                owner: req.body.user
             }
         })
         results.success = true
