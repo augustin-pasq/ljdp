@@ -22,9 +22,13 @@ export default async function handle(req, res) {
             }
         })
         results.success = true
+
+        res.status(200)
     } catch (e) {
         results.success = false
         results.content = e
+
+        res.status(500)
     }
 
     res.json(results)

@@ -20,9 +20,13 @@ async function handle(req, res) {
         await req.session.save()
 
         results.success = true
+
+        res.status(200)
     } catch (e) {
         results.success = false
         results.content = e
+
+        res.status(500)
     }
 
     res.json(results)
