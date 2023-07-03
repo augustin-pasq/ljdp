@@ -14,9 +14,9 @@ export default function Home(props) {
         })).json()
 
         await router.push({
-            pathname: '/game/edit',
+            pathname: '/edit',
             query: {accessCode: game.content.accessCode},
-        }, '/game/edit');
+        }, '/edit');
     };
 
     const navigateUpload = async () => { await router.push('/upload') };

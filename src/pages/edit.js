@@ -1,13 +1,13 @@
 import React from "react";
 import {useRouter} from "next/router";
-import {withSessionSsr} from "../../../lib/ironSession";
+import {withSessionSsr} from "../../lib/ironSession";
 import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher";
 
 export default function Edit() {
     const router = useRouter()
 
     return (
-        <AccessCodeDispatcher subtitle="LJDP a besoin du code d'accès pour retrouver la partie :" button="Accéder au panneau d'édition" redirect="/game/edit" accessCode={router.query.accessCode} action="edit"/>
+        <AccessCodeDispatcher subtitle="LJDP a besoin du code d'accès pour retrouver la partie :" button="Accéder au panneau d'édition" redirect="/edit" accessCode={router.query.accessCode} action="edit"/>
     )
 }
 
