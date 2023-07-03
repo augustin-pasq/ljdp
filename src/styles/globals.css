@@ -189,3 +189,8 @@ label > span {
     text-align: center;
     font-weight: bold;
 }
+
+.p-fileupload .p-fileupload-content {
+    padding: 1rem;
+    border: 1px dashed #dee2e6;
+}
