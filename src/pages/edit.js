@@ -1,7 +1,7 @@
-import React from "react";
-import {useRouter} from "next/router";
-import {withSessionSsr} from "../../lib/ironSession";
-import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher";
+import React from "react"
+import {useRouter} from "next/router"
+import {withSessionSsr} from "../../lib/ironSession"
+import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher"
 
 export default function Edit() {
     const router = useRouter()

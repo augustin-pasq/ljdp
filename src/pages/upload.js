@@ -1,6 +1,6 @@
-import React from "react";
-import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher";
-import {useRouter} from "next/router";
+import React from "react"
+import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher"
+import {useRouter} from "next/router"
 
 export default function Upload() {
     const router = useRouter()

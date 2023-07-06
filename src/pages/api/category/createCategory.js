@@ -1,8 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
-    let results = {"success" : undefined, content : []}
-
     try {
         let game = await prisma.game.findUnique({
             where: {
@@ -10,22 +8,16 @@ export default async function handle(req, res) {
             }
         })
 
-        results.content = await prisma.category.create({
+        const results = await prisma.category.create({
             data: {
                 title: req.body.title,
                 type: req.body.type,
                 game: game.id,
             }
         })
-        results.success = true
 
-        res.status(200)
+        res.status(200).json(results)
     } catch (e) {
-        results.success = false
-        results.content = e
-
-        res.status(500)
+        res.status(500).json(e)
     }
-
-    res.json(results)
 }

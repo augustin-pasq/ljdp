@@ -1,6 +1,6 @@
-import {Card} from "primereact/card";
-import {Button} from "primereact/button";
-import Link from "next/link";
+import {Card} from "primereact/card"
+import {Button} from "primereact/button"
+import Link from "next/link"
 
 export default function Home() {
     return (

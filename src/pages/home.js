@@ -1,25 +1,36 @@
-import React from 'react';
+import React, {useRef} from 'react'
 import {Card} from "primereact/card"
-import {withSessionSsr} from "../../lib/ironSession";
-import {useRouter} from "next/router";
+import {withSessionSsr} from "../../lib/ironSession"
+import {useRouter} from "next/router"
+import {Toast} from "primereact/toast"
 
 export default function Home(props) {
     const router = useRouter()
+    const toastErr = useRef(null)
 
     const navigateNewGame = async () => {
-        const game = await (await fetch('/api/game/createGame', {
+        const results = await fetch('/api/game/createGame', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(props),
-        })).json()
+        })
 
-        await router.push({
-            pathname: '/edit',
-            query: {accessCode: game.content.accessCode},
-        }, '/edit');
-    };
+        switch(results.status) {
+            case 200:
+                let content = await results.json()
+                await router.push({
+                    pathname: '/edit',
+                    query: {accessCode: content.accessCode},
+                }, '/edit')
+                break
+            case 500:
+                toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                break
+        }
 
-    const navigateUpload = async () => { await router.push('/upload') };
+    }
+
+    const navigateUpload = async () => { await router.push('/upload') }
 
     return (
         <div className="grid">
@@ -50,6 +61,8 @@ export default function Home(props) {
                     <span className="text-4xl">🕵️</span>
                 </Card>
             </div>
+
+            <Toast ref={toastErr}/>
         </div>)
 }
 

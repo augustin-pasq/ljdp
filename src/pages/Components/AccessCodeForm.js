@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-import {Card} from "primereact/card";
-import {InputText} from "primereact/inputtext";
-import {useFormik} from "formik";
-import {classNames} from "primereact/utils";
-import {Button} from "primereact/button";
-import {useRouter} from "next/router";
+import React, {useState} from "react"
+import {Card} from "primereact/card"
+import {InputText} from "primereact/inputtext"
+import {useFormik} from "formik"
+import {classNames} from "primereact/utils"
+import {Button} from "primereact/button"
+import {useRouter} from "next/router"
 
 export default function AccessCodeForm(props) {
     const [errorMessage, setErrorMessage] = useState('')
@@ -15,41 +15,48 @@ export default function AccessCodeForm(props) {
             code: '',
         },
         validate: (data) => {
-            let errors = {};
+            let errors = {}
 
-            if (!data.code || /^\s*$/.test(data.code)) errors.code = 'Requis.';
-            else if (!data.code || !/^[a-zA-Z0-9]{4}$/.test(data.code)) errors.code = 'Le code doit comporter exactement 4 caractères et uniquement des lettres et des chiffres.';
+            if (!data.code || /^\s*$/.test(data.code)) errors.code = 'Requis.'
+            else if (!data.code || !/^[a-zA-Z0-9]{4}$/.test(data.code)) errors.code = 'Le code doit comporter exactement 4 caractères et uniquement des lettres et des chiffres.'
 
-            return errors;
+            return errors
         },
         onSubmit: async (data) => {
             const body = {
                 code: data.code,
                 action: props.action
             }
-            const results = await (await fetch('/api/game/getGame', {
+            const results = await fetch('/api/game/getGame', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(body),
-            })).json()
+            })
 
-            if (results.success && results.content) {
-                await router.push({
-                    pathname: `${props.redirect}`,
-                    query: {accessCode: results.content.accessCode},
-                }, `${props.redirect}`)
+            switch(results.status) {
+                case 200:
+                    let content = await results.json()
+                    await router.push({
+                        pathname: `${props.redirect}`,
+                        query: {accessCode: content.accessCode},
+                    }, `${props.redirect}`)
+                    break
+                case 404:
+                    setErrorMessage('badAccessCode')
+                    break
+                case 500:
+                    setErrorMessage('undefinedError')
+                    break
             }
-            else if (results.success && !results.content) setErrorMessage('badAccessCode')
-            else setErrorMessage('undefinedError')
 
-            formik.resetForm();
+            formik.resetForm()
         }
     })
 
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
     const getFormErrorMessage = (value) => {
-        return isFormFieldInvalid(value) ? <small className="p-error max-w-20rem text-center">{formik.errors[value]}</small> : '';
+        return isFormFieldInvalid(value) ? <small className="p-error max-w-20rem text-center">{formik.errors[value]}</small> : ''
     }
 
     return (

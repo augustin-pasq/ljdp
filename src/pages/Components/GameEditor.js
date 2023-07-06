@@ -1,25 +1,24 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Card} from "primereact/card";
-import {InputText} from "primereact/inputtext";
-import {Dropdown} from "primereact/dropdown";
-import {Button} from "primereact/button";
-import {useFormik} from "formik";
-import {classNames} from "primereact/utils";
-import CategoryItem from "@/pages/Components/CategoryItem";
-import {Divider} from "primereact/divider";
-import {Toast} from "primereact/toast";
-import {ToggleButton} from "primereact/togglebutton";
+import React, {useEffect, useRef, useState} from "react"
+import {Card} from "primereact/card"
+import {InputText} from "primereact/inputtext"
+import {Dropdown} from "primereact/dropdown"
+import {Button} from "primereact/button"
+import {useFormik} from "formik"
+import {classNames} from "primereact/utils"
+import {Divider} from "primereact/divider"
+import {Toast} from "primereact/toast"
+import {ToggleButton} from "primereact/togglebutton"
 
 export default function GameEditor(props) {
     const [categories, setCategories] = useState([])
-    const [checked, setChecked] = useState(true);
-    const toast = useRef(null);
+    const [checked, setChecked] = useState(true)
+    const toastCopy = useRef(null)
+    const toastErr = useRef(null)
 
     useEffect(() => {
-        props.categories.forEach((category, index) => props.categories[index] =
-            <CategoryItem key={index} id={category.id} title={category.title} type={category.type}/>)
-        setCategories(props.categories);
-    }, [props.categories]);
+        props.categories.forEach((category, index) => props.categories[index] = categoryItem(category.id, category.title, category.type, index))
+        setCategories(props.categories)
+    }, [props.categories])
 
     const formik = useFormik({
         initialValues: {
@@ -27,12 +26,12 @@ export default function GameEditor(props) {
             type: ''
         },
         validate: (data) => {
-            let errors = {};
+            let errors = {}
 
-            if (!data.title || /^\s*$/.test(data.title)) errors.title = 'Requis.';
-            if (!data.type || /^\s*$/.test(data.type)) errors.type = 'Requis.';
+            if (!data.title || /^\s*$/.test(data.title)) errors.title = 'Requis.'
+            if (!data.type || /^\s*$/.test(data.type)) errors.type = 'Requis.'
 
-            return errors;
+            return errors
         },
         onSubmit: async (data) => {
             const body = {
@@ -46,37 +45,77 @@ export default function GameEditor(props) {
                 body: JSON.stringify(body),
             })).json()
 
-            if (results.success) setCategories(categories.concat(<CategoryItem id={results.content.id}
-                                                                               title={results.content.title}
-                                                                               type={results.content.type}/>))
+            switch(results.status) {
+                case 200:
+                    let content = await results.json()
+                    setCategories(categories.concat(categoryItem(content.id, content.title, content.type)))
+                    break
+                case 500:
+                    toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                    break
+            }
 
-            formik.resetForm();
+            formik.resetForm()
         }
     })
 
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
     const handleGameStatus = async (button) => {
-        const results = await (await fetch('/api/game/setStatus', {
+        const results = await fetch('/api/game/setStatus', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({accessCode: props.accessCode, status: button ? "Créée" : "Commencée"}),
-        })).json()
+        })
 
-        if (results.success) setChecked(button)
+        switch(results.status) {
+            case 200:
+                setChecked(button)
+                break
+            case 500:
+                toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                break
+        }
+    }
+
+    const categoryItem = (id, title, type, key = '') => {
+        return (
+            <div key={key} id={id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
+                <span className="col-7">{title}</span>
+                <span className="col-4">{type}</span>
+                <Button icon="pi pi-trash" onClick={() => handleDelete(id)}/>
+            </div>
+        )
+    }
+
+    const handleDelete = async (id) => {
+        const results = await fetch('/api/category/deleteCategory', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id}),
+        })
+
+        switch(results.status) {
+            case 200:
+                document.getElementById(id).remove()
+                break
+            case 500:
+                toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                break
+        }
     }
 
     return (
         <>
-            <Card className="px-3">
-                <h1 className="text-6xl text-center p-8">Nouvelle partie</h1>
-
+            <Card className="w-90vw shadow-7 border-round-4xl p-4">
+                <h1 className="text-7xl text-center p-1">Nouvelle partie</h1>
                 <div className="grid flex md:flex-row flex-column">
-                    <div className="col-7 pr-6">
+                    <div className="col-7 pr-6 pt-7 pb-3">
                         <h2 className="text-3xl text-center pb-3">Catégories</h2>
                         <div className="flex flex-column gap-3 p-3" id="categories-container">
                             {categories}
-
+                        </div>
+                        <div className="flex flex-column px-3 pt-5">
                             <form onSubmit={formik.handleSubmit}
                                   className="grid flex category-item pl-3 pr-2 py-2 shadow-3 border-round-lg align-items-center">
                                 <div className="col-7">
@@ -92,7 +131,7 @@ export default function GameEditor(props) {
                                     <Dropdown inputId="type" name="type" value={formik.values.type}
                                               placeholder="Type"
                                               onChange={(e) => {
-                                                  formik.setFieldValue("type", e.value);
+                                                  formik.setFieldValue("type", e.value)
                                               }} options={["Photo", "Vidéo", "YouTube"]}
                                               className={`w-10rem ${classNames({'p-invalid': isFormFieldInvalid('type')})}`}/>
                                 </div>
@@ -101,7 +140,7 @@ export default function GameEditor(props) {
                         </div>
                     </div>
 
-                    <div className="col-5 pr-3 pl-6 flex flex-column align-items-center">
+                    <div className="col-5 pr-3 pl-6 pt-7 pb-3 flex flex-column align-items-center">
                         <h2 className="text-3xl text-center pb-3">Jouer avec des amis</h2>
 
                         {checked &&
@@ -112,7 +151,7 @@ export default function GameEditor(props) {
                                 <div className="flex flex-row align-items-center justify-content-center">
                                     <span className="game-access">{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`${props.accessCode}`).then(toast.current.show({
+                                        navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
                                             severity: 'success',
                                             summary: 'Le code a été copié',
                                             detail: 'Partage-le avec tes amis !',
@@ -128,7 +167,7 @@ export default function GameEditor(props) {
                                     <span
                                         className="game-access">ljdp.augustinpasquier.com/upload/{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toast.current.show({
+                                        navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toastCopy.current.show({
                                             severity: 'success',
                                             summary: 'Le lien a été copié',
                                             detail: 'Partage-le avec tes amis !',
@@ -147,7 +186,7 @@ export default function GameEditor(props) {
                                 <div className="flex flex-row align-items-center justify-content-center">
                                     <span className="game-access">{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`${props.accessCode}`).then(toast.current.show({
+                                        navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
                                             severity: 'success',
                                             summary: 'Le code a été copié',
                                             detail: 'Partage-le avec tes amis !',
@@ -163,7 +202,7 @@ export default function GameEditor(props) {
                                     <span
                                         className="game-access">ljdp.augustinpasquier.com/join/{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toast.current.show({
+                                        navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toastCopy.current.show({
                                             severity: 'success',
                                             summary: 'Le lien a été copié',
                                             detail: 'Partage-le avec tes amis !',
@@ -189,7 +228,8 @@ export default function GameEditor(props) {
                     </div>
                 </div>
             </Card>
-            <Toast ref={toast} position="bottom-left"/>
+            <Toast ref={toastErr}/>
+            <Toast ref={toastCopy}/>
         </>
     )
 }

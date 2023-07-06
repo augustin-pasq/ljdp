@@ -1,10 +1,9 @@
-import Head from "next/head";
+import Head from "next/head"
 import "primeflex/primeflex.css"
-import "primereact/resources/themes/lara-light-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "@/styles/globals.css";
-import "@/styles/file-uploader.css";
+import "primereact/resources/themes/lara-light-blue/theme.css"
+import "primereact/resources/primereact.min.css"
+import "primeicons/primeicons.css"
+import "@/styles/styles.css"
 
 export default function App({Component, pageProps}) {
     return <>

@@ -1,8 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
-    let results = {"success" : undefined, content : []}
-
     try {
         let game = await prisma.game.findFirst({
             where: {
@@ -10,7 +8,7 @@ export default async function handle(req, res) {
             }
         })
 
-        results.content = await prisma.category.findMany({
+        const results = await prisma.category.findMany({
             select: {
                 id: true,
                 title: true,
@@ -21,15 +19,8 @@ export default async function handle(req, res) {
             }
         })
 
-        results.success = true
-
-        res.status(200)
+        res.status(200).json(results)
     } catch (e) {
-        results.success = false
-        results.content = e
-
-        res.status(500)
+        res.status(500).json(e)
     }
-
-    res.json(results)
 }

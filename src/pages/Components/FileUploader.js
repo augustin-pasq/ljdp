@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Button} from "primereact/button";
+import React, {useEffect, useRef, useState} from "react"
+import {Button} from "primereact/button"
 
 export default function FileUploader(props) {
     const reference = useRef(null)
@@ -12,16 +12,16 @@ export default function FileUploader(props) {
                 setFile(this.files[0])
                 setComposantToRender("itemTemplate")
 
-                const formData = new FormData();
-                formData.append('file', this.files[0]);
+                const formData = new FormData()
+                formData.append('file', this.files[0])
 
                 await fetch('/api/upload', {
                     method: 'POST',
                     body: formData,
-                });
-            });
+                })
+            })
         }
-    }, [composantToRender]);
+    }, [composantToRender])
 
     const emptyTemplate = () => {
         return (
@@ -53,4 +53,4 @@ export default function FileUploader(props) {
         (composantToRender === "itemTemplate") && itemTemplate() ||
         (composantToRender === "emptyTemplate") && emptyTemplate()
     )
-};
+}

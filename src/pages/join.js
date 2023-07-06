@@ -1,5 +1,5 @@
-import React from "react";
-import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher";
+import React from "react"
+import AccessCodeDispatcher from "@/pages/Components/AccessCodeDispatcher"
 
 export default function Join() {
     return (

@@ -1,14 +1,14 @@
-import React, {useState} from "react";
-import {Card} from "primereact/card";
-import {InputText} from "primereact/inputtext";
-import {Button} from "primereact/button";
-import {Password} from "primereact/password";
-import Link from "next/link";
-import {useFormik} from "formik";
-import {classNames} from 'primereact/utils';
-import {useRouter} from "next/router";
+import React, {useState} from "react"
+import {Card} from "primereact/card"
+import {InputText} from "primereact/inputtext"
+import {Button} from "primereact/button"
+import {Password} from "primereact/password"
+import Link from "next/link"
+import {useFormik} from "formik"
+import {classNames} from 'primereact/utils'
+import {useRouter} from "next/router"
 
-export default function Register(props) {
+export default function Register() {
     const [errorMessage, setErrorMessage] = useState('')
     const router = useRouter()
 
@@ -18,13 +18,13 @@ export default function Register(props) {
             password: ''
         },
         validate: (data) => {
-            let errors = {};
+            let errors = {}
 
-            if (!data.username || /^\s*$/.test(data.username)) errors.username = 'Requis.';
-            if (!data.password || /^\s*$/.test(data.password)) errors.password = 'Requis.';
-            if (data.password.length < 8 || !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+/.test(data.password)) errors.password = 'Le mot de passe doit comporter au moins 8 caractères dont une majuscule, une minuscule et un chiffre.';
+            if (!data.username || /^\s*$/.test(data.username)) errors.username = 'Requis.'
+            if (!data.password || /^\s*$/.test(data.password)) errors.password = 'Requis.'
+            if (data.password.length < 8 || !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+/.test(data.password)) errors.password = 'Le mot de passe doit comporter au moins 8 caractères dont une majuscule, une minuscule et un chiffre.'
 
-            return errors;
+            return errors
         },
         onSubmit: async (data) => {
             const body = {
@@ -35,20 +35,26 @@ export default function Register(props) {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(body),
-            })).json()
+            }))
 
-            if (results.success) await router.push(`${props.redirect}`)
-            else {
-                if (results.content.code === "P2002") setErrorMessage('userAlreadyExists')
-                else setErrorMessage('undefinedError')
+            switch(results.status) {
+                case 200:
+                    await router.push('/home')
+                    break
+                case 500:
+                    const content = await results.json()
+                    if (content.code === "P2002") setErrorMessage('userAlreadyExists')
+                    else setErrorMessage('undefinedError')
+                    break
             }
-            formik.resetForm();
+
+            formik.resetForm()
         }
     })
 
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
     const getFormErrorMessage = (value) => {
-        return isFormFieldInvalid(value) ? <small className="p-error">{formik.errors[value]}</small> : '';
+        return isFormFieldInvalid(value) ? <small className="p-error">{formik.errors[value]}</small> : ''
     }
 
     return (

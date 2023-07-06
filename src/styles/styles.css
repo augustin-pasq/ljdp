@@ -1,0 +1,116 @@
+@import 'styles-desktop.css';
+@import 'styles-mobile.css';
+@import 'FileUploader.css';
+
+@font-face {
+    font-family: 'Mikado';
+    src: url('../../fonts/MikadoBlack.otf');
+}
+
+@font-face {
+    font-family: 'Linotte';
+    src: url('../../fonts/LinotteRegular.otf');
+}
+
+@keyframes fadeinup-light {
+    0% {
+        opacity: 0;
+        transform: translateY(-75px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+* {
+    font-family : 'Linotte', sans-serif !important;
+}
+
+html, body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+body {
+    background: linear-gradient(180deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+}
+
+h1, h2 {
+    font-family: 'Mikado', sans-serif !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+label > span {
+    color: #e24c4c
+}
+
+.pi {
+    font-family: 'primeicons', sans-serif !important;
+}
+
+.fadeinup-light {
+    animation: fadeinup-light 1s ease 0s 1 normal forwards;
+}
+
+.border-round-4xl {
+    border-radius: 3.125rem;
+}
+
+.card-home {
+    transition: box-shadow 0.35s ease 0s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03), 0 0 2px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.12);
+    cursor: default;
+}
+
+.card-home:hover,
+.card-home:active {
+    cursor: pointer;
+    box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 11px 15px rgba(0, 0, 0, 0.2);
+}
+
+.p-button-label {
+    font-weight: normal !important;
+}
+
+.game-access {
+    margin: 0.65rem;
+    padding: 1rem 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 1.25rem;
+    border: 1px solid #dee2e6;
+}
+
+.access-code-field {
+    font-size: 3rem !important;
+    text-align: center;
+    font-weight: bold;
+}
+
+.p-fileupload .p-fileupload-content {
+    padding: 1rem;
+    border: 1px dashed #dee2e6;
+}
+
+.w-90vw {
+    width: 90vw !important;
+}
+
+#categories-container {
+    height: 21rem;
+    overflow: auto;
+    display: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#categories-container::-webkit-scrollbar {
+    display: none;
+}

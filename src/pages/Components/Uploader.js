@@ -1,6 +1,6 @@
-import React from "react";
-import {Card} from "primereact/card";
-import FileUploader from "@/pages/Components/FileUploader";
+import React from "react"
+import {Card} from "primereact/card"
+import FileUploader from "@/pages/Components/FileUploader"
 
 export default function Uploader(props) {
     return (

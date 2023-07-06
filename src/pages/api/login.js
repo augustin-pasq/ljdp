@@ -1,12 +1,10 @@
 import prisma from "../../../lib/prisma"
-import bcrypt from "bcrypt";
-import {withSessionRoute} from "../../../lib/ironSession";
+import bcrypt from "bcrypt"
+import {withSessionRoute} from "../../../lib/ironSession"
 
-export default withSessionRoute(handle);
+export default withSessionRoute(handle)
 
 async function handle(req, res) {
-    let results = {"success" : undefined, content : []}
-
     try {
         let user = await prisma.user.findUnique({
             where: {
@@ -14,22 +12,20 @@ async function handle(req, res) {
             }
         })
 
-        results.content = user !== null ? bcrypt.compareSync(req.body.password, user.password) : false
+        if (user !== null) {
+            let results = bcrypt.compareSync(req.body.password, user.password)
 
-        if (results.content) {
-            req.session.user = {...user, password: undefined, isLoggedIn: true}
-            await req.session.save()
-        }
+            if (results) {
+                res.status(200).json()
 
-        results.success = true
+                req.session.user = {...user, password: undefined, isLoggedIn: true}
+                await req.session.save()
+            } else res.status(401).json()
 
-        res.status(200)
+
+        } else res.status(404).json()
+
     } catch (e) {
-        results.success = false
-        results.content = e
-
-        res.status(500)
+        res.status(500).json(e)
     }
-
-    res.json(results)
 }
