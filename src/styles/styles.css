@@ -79,6 +79,11 @@ label > span {
     font-weight: normal !important;
 }
 
+.p-card-body {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .game-access {
     margin: 0.65rem;
     padding: 1rem 1.25rem;
@@ -99,16 +104,27 @@ label > span {
     border: 1px dashed #dee2e6;
 }
 
-.w-90vw {
-    width: 90vw !important;
+.panel-size {
+    width: 93vw !important;
+    height: 93vh !important;
+}
+
+.text-6xl {
+    font-size: 3.5rem !important;
+}
+
+.no-scroll {
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 #categories-container {
-    height: 21rem;
-    overflow: auto;
-    display: none;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    max-height: 24.75rem;
+}
+
+#files-container {
+    max-height: 67vh;
 }
 
 #categories-container::-webkit-scrollbar {

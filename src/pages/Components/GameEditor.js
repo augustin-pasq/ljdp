@@ -14,11 +14,16 @@ export default function GameEditor(props) {
     const [checked, setChecked] = useState(true)
     const toastCopy = useRef(null)
     const toastErr = useRef(null)
+    const [hasToScroll, setHasToScroll] = useState(false)
 
     useEffect(() => {
-        props.categories.forEach((category, index) => props.categories[index] = categoryItem(category.id, category.title, category.type, index))
-        setCategories(props.categories)
-    }, [props.categories])
+        if (hasToScroll) {
+            document.getElementById('categories-container').scrollTo({top: document.getElementById('categories-container').scrollHeight, behavior: 'smooth'})
+            setHasToScroll(false)
+        } else {
+            setCategories(props.categories)
+        }
+    }, [categories])
 
     const formik = useFormik({
         initialValues: {
@@ -43,12 +48,13 @@ export default function GameEditor(props) {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(body),
-            })).json()
+            }))
 
             switch(results.status) {
                 case 200:
                     let content = await results.json()
-                    setCategories(categories.concat(categoryItem(content.id, content.title, content.type)))
+                    setCategories([...categories, {id: content.id, title: content.title, type: content.type}])
+                    setHasToScroll(true)
                     break
                 case 500:
                     toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
@@ -78,16 +84,6 @@ export default function GameEditor(props) {
         }
     }
 
-    const categoryItem = (id, title, type, key = '') => {
-        return (
-            <div key={key} id={id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
-                <span className="col-7">{title}</span>
-                <span className="col-4">{type}</span>
-                <Button icon="pi pi-trash" onClick={() => handleDelete(id)}/>
-            </div>
-        )
-    }
-
     const handleDelete = async (id) => {
         const results = await fetch('/api/category/deleteCategory', {
             method: 'POST',
@@ -97,6 +93,7 @@ export default function GameEditor(props) {
 
         switch(results.status) {
             case 200:
+                console.log(categories.filter(category => category.id !== id))
                 document.getElementById(id).remove()
                 break
             case 500:
@@ -107,27 +104,37 @@ export default function GameEditor(props) {
 
     return (
         <>
-            <Card className="w-90vw shadow-7 border-round-4xl p-4">
-                <h1 className="text-7xl text-center p-1">Nouvelle partie</h1>
+            <Card className="panel-size shadow-7 border-round-4xl px-4 py-2 flex align-items-center justify-content-center">
+                <h1 className="text-6xl text-center pb-4">Nouvelle partie</h1>
                 <div className="grid flex md:flex-row flex-column">
-                    <div className="col-7 pr-6 pt-7 pb-3">
-                        <h2 className="text-3xl text-center pb-3">Catégories</h2>
-                        <div className="flex flex-column gap-3 p-3" id="categories-container">
-                            {categories}
-                        </div>
-                        <div className="flex flex-column px-3 pt-5">
+                    <div className="col-7 pr-6 pl-3 py-3 flex flex-column justify-content-between">
+                        <h2 className="text-3xl text-center pb-2">Catégories</h2>
+                        {categories.length > 0 &&
+                            <div className="flex flex-column gap-3 p-3 no-scroll" id="categories-container">
+                                {categories.map((category, index) => {
+                                    return (
+                                        <div key={index} id={category.id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
+                                            <span className="col-8">{category.title}</span>
+                                            <span className="col-3">{category.type}</span>
+                                            <Button icon="pi pi-trash" onClick={() => handleDelete(category.id)}/>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        }
+                        <div className="flex flex-column gap-3 px-3 pt-4">
                             <form onSubmit={formik.handleSubmit}
                                   className="grid flex category-item pl-3 pr-2 py-2 shadow-3 border-round-lg align-items-center">
-                                <div className="col-7">
+                                <div className="col-8">
                                     <InputText id="title"
                                                name="title"
                                                placeholder="Titre"
                                                value={formik.values.title}
                                                onChange={formik.handleChange}
-                                               className={`w-22rem ${classNames({'p-invalid': isFormFieldInvalid('type')})}`}
+                                               className={`w-full ${classNames({'p-invalid': isFormFieldInvalid('type')})}`}
                                     />
                                 </div>
-                                <div className="col-4">
+                                <div className="col-3">
                                     <Dropdown inputId="type" name="type" value={formik.values.type}
                                               placeholder="Type"
                                               onChange={(e) => {
@@ -140,8 +147,8 @@ export default function GameEditor(props) {
                         </div>
                     </div>
 
-                    <div className="col-5 pr-3 pl-6 pt-7 pb-3 flex flex-column align-items-center">
-                        <h2 className="text-3xl text-center pb-3">Jouer avec des amis</h2>
+                    <div className="col-5 pr-3 pl-6 py-3 flex flex-column align-items-center">
+                        <h2 className="text-3xl text-center pb-2">Jouer avec des amis</h2>
 
                         {checked &&
                             <div className="flex flex-column justify-content-center text-lg text-center pb-6">

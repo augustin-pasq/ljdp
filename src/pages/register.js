@@ -41,10 +41,11 @@ export default function Register() {
                 case 200:
                     await router.push('/home')
                     break
+                case 409:
+                    setErrorMessage('userAlreadyExists')
+                    break
                 case 500:
-                    const content = await results.json()
-                    if (content.code === "P2002") setErrorMessage('userAlreadyExists')
-                    else setErrorMessage('undefinedError')
+                    setErrorMessage('undefinedError')
                     break
             }
 

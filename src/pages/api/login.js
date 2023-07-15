@@ -16,13 +16,11 @@ async function handle(req, res) {
             let results = bcrypt.compareSync(req.body.password, user.password)
 
             if (results) {
-                res.status(200).json()
-
                 req.session.user = {...user, password: undefined, isLoggedIn: true}
                 await req.session.save()
+
+                res.status(200).json()
             } else res.status(401).json()
-
-
         } else res.status(404).json()
 
     } catch (e) {
