@@ -1,6 +1,6 @@
 @import 'styles-desktop.css';
 @import 'styles-mobile.css';
-@import 'FileUploader.css';
+@import 'PhotoUploader.css';
 
 @font-face {
     font-family: 'Mikado';
@@ -99,7 +99,7 @@ label > span {
     font-weight: bold;
 }
 
-.p-fileupload .p-fileupload-content {
+.p-photoupload .p-photoupload-content {
     padding: 1rem;
     border: 1px dashed #dee2e6;
 }
@@ -114,19 +114,22 @@ label > span {
 }
 
 .no-scroll {
+    height: 100%;
     overflow: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+}
+
+.no-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.p-disabled, .p-component:disabled {
+    opacity: 1 !important;
 }
 
 #categories-container {
-    max-height: 24.75rem;
+    max-height: calc(93vh - 474px);
 }
 
-#files-container {
-    max-height: 67vh;
-}
-
-#categories-container::-webkit-scrollbar {
-    display: none;
+#photos-container {
+    max-height: calc(93vh - 373px);
 }

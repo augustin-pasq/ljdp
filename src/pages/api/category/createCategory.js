@@ -2,7 +2,7 @@ import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
     try {
-        let game = await prisma.game.findUnique({
+        const game = await prisma.game.findUnique({
             where: {
                 accessCode: req.body.accessCode,
             }
@@ -17,7 +17,7 @@ export default async function handle(req, res) {
         })
 
         res.status(200).json(results)
-    } catch (e) {
-        res.status(500).json(e)
+    } catch (err) {
+        res.status(500).json(err)
     }
 }

@@ -2,12 +2,15 @@ import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
     try {
-        await prisma.game.update({
+        const photo = await prisma.photo.findFirst({
             where: {
-                accessCode: req.body.accessCode,
+                link: req.body.link,
             },
-            data: {
-                status: req.body.status
+        })
+
+        await prisma.photo.delete({
+            where: {
+                id: photo.id
             }
         })
 

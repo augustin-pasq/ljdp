@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useRef} from "react"
 import {Card} from "primereact/card"
 import {withSessionSsr} from "../../lib/ironSession"
 import {useRouter} from "next/router"
@@ -9,28 +9,28 @@ export default function Home(props) {
     const toastErr = useRef(null)
 
     const navigateNewGame = async () => {
-        const results = await fetch('/api/game/createGame', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+        const results = await fetch("/api/game/createGame", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(props),
         })
 
         switch(results.status) {
             case 200:
-                let content = await results.json()
+                const content = await results.json()
                 await router.push({
-                    pathname: '/edit',
+                    pathname: "/edit",
                     query: {accessCode: content.accessCode},
-                }, '/edit')
+                }, "/edit")
                 break
             case 500:
-                toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
                 break
         }
 
     }
 
-    const navigateUpload = async () => { await router.push('/upload') }
+    const navigateUpload = async () => { await router.push("/upload") }
 
     return (
         <div className="grid">
@@ -50,14 +50,14 @@ export default function Home(props) {
 
             <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-end scale-in-tr scale-in-center-3">
                 <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center">
-                    <h1 className="text-4xl text-center">Mes parties</h1>
+                    <h1 className="text-4xl text-center">Mes<br/>parties</h1>
                     <span className="text-4xl">🏆</span>
                 </Card>
             </div>
 
             <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-start scale-in-tl scale-in-center-4">
                 <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center">
-                    <h1 className="text-4xl text-center">Mon compte</h1>
+                    <h1 className="text-4xl text-center">Mon<br/>compte</h1>
                     <span className="text-4xl">🕵️</span>
                 </Card>
             </div>
@@ -67,12 +67,12 @@ export default function Home(props) {
 }
 
 export const getServerSideProps = withSessionSsr(async function getServerSideProps({req}) {
-    let user = req.session.user
+    const user = req.session.user
 
     if (!user?.isLoggedIn) {
         return {
             redirect: {
-                permanent: false, destination: '/login'
+                permanent: false, destination: "/login"
             }
         }
     }

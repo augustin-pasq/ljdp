@@ -18,7 +18,7 @@ export default function GameEditor(props) {
 
     useEffect(() => {
         if (hasToScroll) {
-            document.getElementById('categories-container').scrollTo({top: document.getElementById('categories-container').scrollHeight, behavior: 'smooth'})
+            document.getElementById("categories-container").scrollTo({top: document.getElementById("categories-container").scrollHeight, behavior: "smooth"})
             setHasToScroll(false)
         } else {
             setCategories(props.categories)
@@ -27,37 +27,32 @@ export default function GameEditor(props) {
 
     const formik = useFormik({
         initialValues: {
-            title: '',
-            type: ''
+            title: "",
+            type: ""
         },
         validate: (data) => {
             let errors = {}
 
-            if (!data.title || /^\s*$/.test(data.title)) errors.title = 'Requis.'
-            if (!data.type || /^\s*$/.test(data.type)) errors.type = 'Requis.'
+            if (!data.title || /^\s*$/.test(data.title)) errors.title = "Requis."
+            if (!data.type || /^\s*$/.test(data.type)) errors.type = "Requis."
 
             return errors
         },
         onSubmit: async (data) => {
-            const body = {
-                title: data.title,
-                type: data.type,
-                accessCode: props.accessCode
-            }
-            const results = await (await fetch('/api/category/createCategory', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(body),
+            const results = await (await fetch("/api/category/createCategory", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({title: data.title, type: data.type, accessCode: props.accessCode}),
             }))
 
             switch(results.status) {
                 case 200:
-                    let content = await results.json()
+                    const content = await results.json()
                     setCategories([...categories, {id: content.id, title: content.title, type: content.type}])
                     setHasToScroll(true)
                     break
                 case 500:
-                    toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                    toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
                     break
             }
 
@@ -68,9 +63,9 @@ export default function GameEditor(props) {
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
     const handleGameStatus = async (button) => {
-        const results = await fetch('/api/game/setStatus', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+        const results = await fetch("/api/game/setStatus", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({accessCode: props.accessCode, status: button ? "Créée" : "Commencée"}),
         })
 
@@ -79,25 +74,24 @@ export default function GameEditor(props) {
                 setChecked(button)
                 break
             case 500:
-                toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
                 break
         }
     }
 
     const handleDelete = async (id) => {
-        const results = await fetch('/api/category/deleteCategory', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+        const results = await fetch("/api/category/deleteCategory", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({id}),
         })
 
         switch(results.status) {
             case 200:
-                console.log(categories.filter(category => category.id !== id))
                 document.getElementById(id).remove()
                 break
             case 500:
-                toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
                 break
         }
     }
@@ -106,32 +100,18 @@ export default function GameEditor(props) {
         <>
             <Card className="panel-size shadow-7 border-round-4xl px-4 py-2 flex align-items-center justify-content-center">
                 <h1 className="text-6xl text-center pb-4">Nouvelle partie</h1>
-                <div className="grid flex md:flex-row flex-column">
-                    <div className="col-7 pr-6 pl-3 py-3 flex flex-column justify-content-between">
+                <div className="grid md:flex-row flex-column">
+                    <div className="col-7 pr-6 pl-3 py-3 flex-column justify-content-start">
                         <h2 className="text-3xl text-center pb-2">Catégories</h2>
-                        {categories.length > 0 &&
-                            <div className="flex flex-column gap-3 p-3 no-scroll" id="categories-container">
-                                {categories.map((category, index) => {
-                                    return (
-                                        <div key={index} id={category.id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
-                                            <span className="col-8">{category.title}</span>
-                                            <span className="col-3">{category.type}</span>
-                                            <Button icon="pi pi-trash" onClick={() => handleDelete(category.id)}/>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        }
-                        <div className="flex flex-column gap-3 px-3 pt-4">
-                            <form onSubmit={formik.handleSubmit}
-                                  className="grid flex category-item pl-3 pr-2 py-2 shadow-3 border-round-lg align-items-center">
+                        <div className="flex flex-column gap-3 p-3">
+                            <form onSubmit={formik.handleSubmit} className="grid category-item pl-3 pr-2 py-2 shadow-3 border-round-lg align-items-center">
                                 <div className="col-8">
                                     <InputText id="title"
                                                name="title"
                                                placeholder="Titre"
                                                value={formik.values.title}
                                                onChange={formik.handleChange}
-                                               className={`w-full ${classNames({'p-invalid': isFormFieldInvalid('type')})}`}
+                                               className={`w-full ${classNames({"p-invalid": isFormFieldInvalid("type")})}`}
                                     />
                                 </div>
                                 <div className="col-3">
@@ -140,14 +120,29 @@ export default function GameEditor(props) {
                                               onChange={(e) => {
                                                   formik.setFieldValue("type", e.value)
                                               }} options={["Photo", "Vidéo", "YouTube"]}
-                                              className={`w-10rem ${classNames({'p-invalid': isFormFieldInvalid('type')})}`}/>
+                                              className={`w-10rem ${classNames({"p-invalid": isFormFieldInvalid("type")})}`}/>
                                 </div>
-                                <Button type="submit" icon="pi pi-plus"/>
+                                <div className="col-1">
+                                    <Button type="submit" icon="pi pi-plus"/>
+                                </div>
                             </form>
                         </div>
+                        {categories.length > 0 &&
+                            <div className="flex flex-column gap-3 p-3 no-scroll" id="categories-container">
+                                {categories.map((category, index) => {
+                                    return (
+                                        <div key={index} id={category.id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
+                                            <span className="col-8">{category.title}</span>
+                                            <span className="col-3">{category.type}</span>
+                                            <span className="col-1"><Button className="h-3rem" icon="pi pi-trash" onClick={() => handleDelete(category.id)}/></span>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        }
                     </div>
 
-                    <div className="col-5 pr-3 pl-6 py-3 flex flex-column align-items-center">
+                    <div className="col-5 pr-3 pl-6 py-3 flex-column align-items-center">
                         <h2 className="text-3xl text-center pb-2">Jouer avec des amis</h2>
 
                         {checked &&
@@ -159,9 +154,9 @@ export default function GameEditor(props) {
                                     <span className="game-access">{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
                                         navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: 'success',
-                                            summary: 'Le code a été copié',
-                                            detail: 'Partage-le avec tes amis !',
+                                            severity: "success",
+                                            summary: "Le code a été copié",
+                                            detail: "Partage-le avec tes amis !",
                                             life: 3000
                                         }))
                                     }}/>
@@ -175,9 +170,9 @@ export default function GameEditor(props) {
                                         className="game-access">ljdp.augustinpasquier.com/upload/{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
                                         navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: 'success',
-                                            summary: 'Le lien a été copié',
-                                            detail: 'Partage-le avec tes amis !',
+                                            severity: "success",
+                                            summary: "Le lien a été copié",
+                                            detail: "Partage-le avec tes amis !",
                                             life: 3000
                                         }))
                                     }}/>
@@ -194,9 +189,9 @@ export default function GameEditor(props) {
                                     <span className="game-access">{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
                                         navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: 'success',
-                                            summary: 'Le code a été copié',
-                                            detail: 'Partage-le avec tes amis !',
+                                            severity: "success",
+                                            summary: "Le code a été copié",
+                                            detail: "Partage-le avec tes amis !",
                                             life: 3000
                                         }))
                                     }}/>
@@ -210,9 +205,9 @@ export default function GameEditor(props) {
                                         className="game-access">ljdp.augustinpasquier.com/join/{props.accessCode}</span>
                                     <Button icon="pi pi-copy" rounded text onClick={() => {
                                         navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: 'success',
-                                            summary: 'Le lien a été copié',
-                                            detail: 'Partage-le avec tes amis !',
+                                            severity: "success",
+                                            summary: "Le lien a été copié",
+                                            detail: "Partage-le avec tes amis !",
                                             life: 3000
                                         }))
                                     }}/>
@@ -220,18 +215,20 @@ export default function GameEditor(props) {
                             </div>
                         }
 
-                        <ToggleButton onLabel="Démarrer la partie"
-                                      offLabel="Arrêter la partie"
-                                      checked={checked}
-                                      onChange={(e) => handleGameStatus(e.value)}/>
+                        <div className="flex flex-wrap flex-column align-items-center">
+                            <ToggleButton onLabel="Démarrer la partie"
+                                          offLabel="Arrêter la partie"
+                                          checked={checked}
+                                          onChange={(e) => handleGameStatus(e.value)}/>
 
-                        {checked &&
-                            <small className="pt-3 text-700">(Toi et tes amis ne pourrez plus uploader de fichiers une fois la partie commencée.)</small>
-                        }
+                            {checked &&
+                                <small className="pt-3 text-700">(Toi et tes amis ne pourrez plus uploader de fichiers une fois la partie commencée.)</small>
+                            }
 
-                        {!checked &&
-                            <small className="pt-3 text-700">(La partie reprendra depuis le début et les scores seront réinitialisés.)</small>
-                        }
+                            {!checked &&
+                                <small className="pt-3 text-700">(La partie reprendra depuis le début et les scores seront réinitialisés.)</small>
+                            }
+                        </div>
                     </div>
                 </div>
             </Card>

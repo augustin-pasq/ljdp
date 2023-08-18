@@ -38,9 +38,9 @@ CREATE TABLE Category
 CREATE TABLE Photo
 (
     id       INTEGER PRIMARY KEY AUTO_INCREMENT,
-    link     TEXT NOT NULL,
-    category INTEGER,
-    user     INTEGER,
+    link     TEXT    NOT NULL,
+    category INTEGER NOT NULL,
+    user     INTEGER NOT NULL,
 
     FOREIGN KEY (category) REFERENCES Category (id),
     FOREIGN KEY (user) REFERENCES User (id)

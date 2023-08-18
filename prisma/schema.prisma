@@ -53,12 +53,12 @@ model Participant {
 }
 
 model Photo {
-  id       Int       @id @default(autoincrement())
-  link     String    @db.Text
-  category Int?
-  user     Int?
-  Category Category? @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_1")
-  User     User?     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_2")
+  id       Int      @id @default(autoincrement())
+  link     String   @db.Text
+  category Int
+  user     Int
+  Category Category @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_1")
+  User     User     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_2")
 
   @@index([category], map: "category")
   @@index([user], map: "user")

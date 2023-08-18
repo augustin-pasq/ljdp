@@ -1,7 +1,7 @@
-import GameEditor from "@/pages/Components/GameEditor"
+import GameEditor from "@/components/GameEditor"
 import React, {useState, useEffect, useRef} from "react"
-import AccessCodeForm from "@/pages/Components/AccessCodeForm"
-import Uploader from "@/pages/Components/Uploader"
+import AccessCodeForm from "@/components/AccessCodeForm"
+import Uploader from "@/components/Uploader"
 import {Toast} from "primereact/toast"
 
 export default function AccessCodeDispatcher(props) {
@@ -10,17 +10,17 @@ export default function AccessCodeDispatcher(props) {
 
     useEffect(() => {
         async function getCategories() {
-            const results = await fetch('/api/category/getCategories', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({accessCode: props.accessCode}),
+            const results = await fetch("/api/category/getCategories", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({accessCode: props.accessCode, user: props.user}),
             })
 
             switch(results.status) {
                 case 200:
                     return await results.json()
                 case 500:
-                    toastErr.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur s\'est produite. Réessaye pour voir ?', life: 3000})
+                    toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
                     break
             }
         }
@@ -33,12 +33,11 @@ export default function AccessCodeDispatcher(props) {
     return (
         <>
             {props.accessCode === undefined ?
-                <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action}/>
+                <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action} user={props.user}/>
                 :
                 props.action === "edit" && <GameEditor accessCode={props.accessCode} categories={categories}/> ||
-                props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories}/>}
+                props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/>}
             <Toast ref={toastErr}/>
         </>
-
-)
+    )
 }

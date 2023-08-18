@@ -1,6 +1,6 @@
-import prisma from "../../../lib/prisma"
+import prisma from "../../../../lib/prisma"
 import bcrypt from "bcrypt"
-import { withSessionRoute } from "../../../lib/ironSession"
+import { withSessionRoute } from "../../../../lib/ironSession"
 
 export default withSessionRoute(handle)
 
@@ -19,8 +19,8 @@ async function handle(req, res) {
         await req.session.save()
 
         res.status(200).json({})
-    } catch (e) {
-        if (e.code === "P2002") res.status(409).json(e)
-        else res.status(500).json(e)
+    } catch (err) {
+        if (err.code === "P2002") res.status(409).json(err)
+        else res.status(500).json(err)
     }
 }

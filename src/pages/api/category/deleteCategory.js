@@ -9,7 +9,7 @@ export default async function handle(req, res) {
         })
 
         res.status(200).json({})
-    } catch (e) {
-        res.status(500).json(e)
+    } catch (err) {
+        res.status(500).json(err)
     }
 }
