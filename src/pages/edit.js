@@ -1,6 +1,6 @@
 import React from "react"
 import {useRouter} from "next/router"
-import {withSessionSsr} from "../../lib/ironSession"
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
 import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
 
 export default function Edit(props) {
@@ -11,20 +11,4 @@ export default function Edit(props) {
     )
 }
 
-export const getServerSideProps = withSessionSsr(async function getServerSideProps({req}) {
-    const user = req.session.user
-
-    if (!user?.isLoggedIn) {
-        return {
-            redirect: {
-                permanent: false, destination: "/login"
-            }
-        }
-    }
-
-    return {
-        props: {
-            user: user.id
-        }
-    }
-})
+export const getServerSideProps = withSessionSsr(checkIfUserIsLoggedIn)

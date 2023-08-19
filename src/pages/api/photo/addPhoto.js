@@ -9,7 +9,7 @@ export const config = {
     }
 }
 
-export default async function handler(req, res) {
+export default async function handle(req, res) {
     try {
         const form = formidable({ uploadDir: "./public/uploads", keepExtensions: true, maxFileSize: 50 * 1024 * 1024 })
 

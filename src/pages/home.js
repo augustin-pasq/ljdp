@@ -1,6 +1,6 @@
 import React, {useRef} from "react"
 import {Card} from "primereact/card"
-import {withSessionSsr} from "../../lib/ironSession"
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
 import {useRouter} from "next/router"
 import {Toast} from "primereact/toast"
 
@@ -32,6 +32,8 @@ export default function Home(props) {
 
     const navigateUpload = async () => { await router.push("/upload") }
 
+    const navigateAccount = async () => { await router.push("/account") }
+
     return (
         <div className="grid">
             <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-end scale-in-br scale-in-center-1">
@@ -56,30 +58,15 @@ export default function Home(props) {
             </div>
 
             <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-start scale-in-tl scale-in-center-4">
-                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center">
+                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center" onClick={navigateAccount}>
                     <h1 className="text-4xl text-center">Mon<br/>compte</h1>
                     <span className="text-4xl">🕵️</span>
                 </Card>
             </div>
 
             <Toast ref={toastErr}/>
-        </div>)
+        </div>
+    )
 }
 
-export const getServerSideProps = withSessionSsr(async function getServerSideProps({req}) {
-    const user = req.session.user
-
-    if (!user?.isLoggedIn) {
-        return {
-            redirect: {
-                permanent: false, destination: "/login"
-            }
-        }
-    }
-
-    return {
-        props: {
-            user: user.id
-        }
-    }
-})
+export const getServerSideProps = withSessionSsr(checkIfUserIsLoggedIn)

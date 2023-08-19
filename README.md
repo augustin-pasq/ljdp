@@ -11,7 +11,7 @@ En famille ou entre amis, décidez de plusieurs catégories : votre repas préf�
 ### Fonctionnalités
 Le projet en est à ses balbutiements. Voici les fonctionnalités actuellement disponibles :
 - Inscription sur l'application
-- Connexion à l'application
+- Connexion/Déconnexion à l'application
 - Session utilisateur
 - Création d'une partie et de ses catégories
 - Formulaire d'accès à une partie (modification et participation)
