@@ -114,7 +114,4 @@ export default function PhotoUploader(props) {
             <Toast ref={toastEmpty}/>
         </>
     )
-
-
-
 }
