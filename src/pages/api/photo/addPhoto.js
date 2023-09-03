@@ -15,21 +15,43 @@ export default async function handle(req, res) {
 
         await form.parse(req, async (err, fields, files) => {
             if (err) throw err
+            let filePath = ""
+            const category = parseInt(fields.category[0])
+            const user = parseInt(fields.user[0])
+            const game = parseInt(fields.game[0])
 
             for (const file of files.file) {
-                const filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.${file.originalFilename.split(".").pop()}`
+                filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.${file.originalFilename.split(".").pop()}`
                 fs.rename(file.filepath, `./public/${filePath}`, err => err)
 
                 await prisma.photo.create({
                     data: {
                         link: filePath,
-                        category: parseInt(fields.category[0]),
-                        user: parseInt(fields.user[0])
+                        category: category,
+                        user: user
                     }
                 })
+
+                const participant = await prisma.participant.findFirst({
+                    where: {
+                        game: game,
+                        user: user
+                    }
+                })
+
+                if (participant === null) {
+                    await prisma.participant.create({
+                        data: {
+                            game: game,
+                            user: user,
+                            score: 0,
+                            hasJoined: false
+                        }
+                    })
+                }
             }
 
-            return res.status(200).json({})
+            return res.status(200).json({link: filePath})
         })
     } catch (err) {
         res.status(500).json(err)

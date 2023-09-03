@@ -14,7 +14,7 @@ export default function Uploader(props) {
             const results = await fetch("/api/photo/getPhoto", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({category: category.id, user: props.user}),
+                body: JSON.stringify({category: category.categoryId, user: props.user}),
             })
 
             switch(results.status) {
@@ -35,7 +35,7 @@ export default function Uploader(props) {
     }
     
     const updateCheck = (categoryId, display) => {
-        document.querySelector(`#\\3${categoryId.toString().charAt(0)} ${categoryId.toString().slice(1)} > button`).style.visibility = display ? "visible" : "hidden"
+        document.querySelector(`#\\3${categoryId.toString().charAt(0)} ${categoryId.toString().slice(1)} > span > button`).style.visibility = display ? "visible" : "hidden"
     };
 
     return (
@@ -49,10 +49,10 @@ export default function Uploader(props) {
                             <div className="flex flex-column gap-3 p-3 no-scroll" id="photos-container">
                                 {props.categories.map((category, index) => {
                                     return (
-                                        <div key={index} id={category.id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center" onClick={() => selectCategory(category)}>
+                                        <div key={index} id={category.categoryId} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center" onClick={() => selectCategory(category)}>
                                             <span className="col-8">{category.title}</span>
                                             <span className="col-3">{category.type}</span>
-                                            <Button className="w-2rem h-2rem m-2 cursor-pointer" icon="pi pi-check" rounded disabled outlined severity="success" style={{visibility: category.link !== null ? 'visible' : 'hidden' }} />
+                                            <span className="col-1"><Button className="cursor-pointer" icon="pi pi-check" rounded disabled outlined severity="success" style={{visibility: category.link !== null ? 'visible' : 'hidden' }} /></span>
                                         </div>
                                     )
                                 })}
@@ -60,7 +60,7 @@ export default function Uploader(props) {
                         }
                     </div>
 
-                    <div className={`col-5 pr-3 pl-6 py-3 flex flex-column align-items-center ${selectedCategory ? "justify-content-between" : ""}`}>
+                    <div className={`col-5 pr-3 pl-6 py-3 flex flex-column full-height-card-upload align-items-center ${selectedCategory ? "justify-content-between" : ""}`}>
                         <h2 className="text-3xl text-center pb-2">Ma photo</h2>
                         {
                             selectedCategory ?

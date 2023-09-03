@@ -48,11 +48,24 @@ CREATE TABLE Photo
 
 CREATE TABLE Participant
 (
-    game  INTEGER,
-    user  INTEGER,
-    score INTEGER,
+    game      INTEGER,
+    user      INTEGER,
+    score     INTEGER,
+    hasJoined BOOLEAN NOT NULL,
 
     PRIMARY KEY (game, user),
     FOREIGN KEY (game) REFERENCES Game (id),
     FOREIGN KEY (user) REFERENCES User (id)
+);
+
+CREATE TABLE Response
+(
+    id       INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user     INTEGER NOT NULL,
+    category INTEGER NOT NULL,
+    value    INTEGER NOT NULL,
+
+    FOREIGN KEY (user) REFERENCES User (id),
+    FOREIGN KEY (category) REFERENCES Category (id),
+    FOREIGN KEY (value) REFERENCES User (id)
 );

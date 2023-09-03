@@ -126,6 +126,14 @@ label > span {
     opacity: 1 !important;
 }
 
+.full-height-card-upload {
+    height: calc(93vh - 250px);
+}
+
+.full-height-card-edit {
+    height: calc(93vh - 373px);
+}
+
 #categories-container {
     max-height: calc(93vh - 474px);
 }

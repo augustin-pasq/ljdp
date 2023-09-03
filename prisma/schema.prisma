@@ -8,23 +8,26 @@ datasource db {
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  username       String        @unique(map: "username") @db.VarChar(32)
-  displayedName  String?       @db.VarChar(32)
-  profilePicture String?       @db.Text
-  password       String        @db.Text
-  Game           Game[]
-  Participant    Participant[]
-  Photo          Photo[]
+  id                            Int           @id @default(autoincrement())
+  username                      String        @unique(map: "username") @db.VarChar(32)
+  displayedName                 String?       @db.VarChar(32)
+  profilePicture                String?       @db.Text
+  password                      String        @db.Text
+  Game                          Game[]
+  Participant                   Participant[]
+  Photo                         Photo[]
+  Response_Response_userToUser  Response[]    @relation("Response_userToUser")
+  Response_Response_valueToUser Response[]    @relation("Response_valueToUser")
 }
 
 model Category {
-  id    Int     @id @default(autoincrement())
-  title String  @db.Text
-  type  String  @db.Text
-  game  Int
-  Game  Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")
-  Photo Photo[]
+  id       Int        @id @default(autoincrement())
+  title    String     @db.Text
+  type     String     @db.Text
+  game     Int
+  Game     Game       @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")
+  Photo    Photo[]
+  Response Response[]
 
   @@index([game], map: "game")
 }
@@ -42,11 +45,12 @@ model Game {
 }
 
 model Participant {
-  game  Int
-  user  Int
-  score Int?
-  Game  Game @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_1")
-  User  User @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_2")
+  game      Int
+  user      Int
+  score     Int?
+  hasJoined Boolean
+  Game      Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_1")
+  User      User    @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_2")
 
   @@id([game, user])
   @@index([user], map: "user")
@@ -62,4 +66,18 @@ model Photo {
 
   @@index([category], map: "category")
   @@index([user], map: "user")
+}
+
+model Response {
+  id                        Int      @id @default(autoincrement())
+  user                      Int
+  category                  Int
+  value                     Int
+  User_Response_userToUser  User     @relation("Response_userToUser", fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_1")
+  Category                  Category @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_2")
+  User_Response_valueToUser User     @relation("Response_valueToUser", fields: [value], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_3")
+
+  @@index([category], map: "category")
+  @@index([user], map: "user")
+  @@index([value], map: "value")
 }

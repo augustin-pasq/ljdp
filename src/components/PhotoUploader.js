@@ -12,7 +12,7 @@ export default function PhotoUploader(props) {
     useEffect(() => {
         setPhoto(null)
         setPhotoLink(props.photo)
-    }, [props.category.id])
+    }, [props.category.categoryId])
 
     const uploadPhoto = async () => {
         if (photo === null) {
@@ -20,8 +20,9 @@ export default function PhotoUploader(props) {
         } else {
             const formData = new FormData()
             formData.append("file", photo)
-            formData.append("category", props.category.id)
+            formData.append("category", props.category.categoryId)
             formData.append("user", props.user)
+            formData.append("game", props.category.game)
 
             const results = await fetch("/api/photo/addPhoto", {
                 method: "POST",
@@ -31,7 +32,7 @@ export default function PhotoUploader(props) {
             switch(results.status) {
                 case 200:
                     toastSuccess.current.show({severity:"success", summary: "Ton fichier a été uplaodé !", detail:"Tu pourras toujours le changer ou le supprimer plus tard.", life: 3000})
-                    props.updateCheck(props.category.id, true)
+                    props.updateCheck(props.category.categoryId, true)
                     break
                 case 500:
                     toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
@@ -50,8 +51,11 @@ export default function PhotoUploader(props) {
 
             switch(results.status) {
                 case 200:
-                    toastSuccess.current.show({severity:"success", summary: "Le fichier a été supprimé !", detail:`Tu pourras toujours en réuploader un plus tard.`, life: 3000})
-                    props.updateCheck(props.category.id, false)
+                    const content = await results.json()
+                    setPhotoLink(content.link)
+
+                    toastSuccess.current.show({severity:"success", summary: "Le fichier a été supprimé !", detail:"Tu pourras toujours en réuploader un plus tard.", life: 3000})
+                    props.updateCheck(props.category.categoryId, false)
                     break
                 case 500:
                     toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})

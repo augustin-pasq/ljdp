@@ -131,10 +131,10 @@ export default function GameEditor(props) {
                             <div className="flex flex-column gap-3 p-3 no-scroll" id="categories-container">
                                 {categories.map((category, index) => {
                                     return (
-                                        <div key={index} id={category.id} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
+                                        <div key={index} id={category.categoryId} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center">
                                             <span className="col-8">{category.title}</span>
                                             <span className="col-3">{category.type}</span>
-                                            <span className="col-1"><Button className="h-3rem" icon="pi pi-trash" onClick={() => handleDelete(category.id)}/></span>
+                                            <span className="col-1"><Button className="h-3rem" icon="pi pi-trash" onClick={() => handleDelete(category.categoryId)}/></span>
                                         </div>
                                     )
                                 })}
@@ -144,90 +144,92 @@ export default function GameEditor(props) {
 
                     <div className="col-5 pr-3 pl-6 py-3 flex-column align-items-center">
                         <h2 className="text-3xl text-center pb-2">Jouer avec des amis</h2>
-
-                        {checked &&
-                            <div className="flex flex-column justify-content-center text-lg text-center pb-6">
-                                <p>Demande à tes amis d'aller sur <span
-                                    className="text-xl text-primary">ljdp.augustinpasquier.com/upload</span> et de
-                                    saisir ce code :</p>
-                                <div className="flex flex-row align-items-center justify-content-center">
-                                    <span className="game-access">{props.accessCode}</span>
-                                    <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: "success",
-                                            summary: "Le code a été copié",
-                                            detail: "Partage-le avec tes amis !",
-                                            life: 3000
-                                        }))
-                                    }}/>
-                                </div>
-                                <Divider layout="horizontal" align="center">
-                                    <b>OU</b>
-                                </Divider>
-                                <p>Envoie-leur ce lien :</p>
-                                <div className="flex flex-row align-items-center justify-content-center">
-                                    <span
-                                        className="game-access">ljdp.augustinpasquier.com/upload/{props.accessCode}</span>
-                                    <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: "success",
-                                            summary: "Le lien a été copié",
-                                            detail: "Partage-le avec tes amis !",
-                                            life: 3000
-                                        }))
-                                    }}/>
-                                </div>
-                            </div>
-                        }
-
-                        {!checked &&
-                            <div className="flex flex-column justify-content-center text-lg text-center pb-6">
-                                <p>Demande à tes amis d'aller sur <span
-                                    className="text-xl text-primary">ljdp.augustinpasquier.com/join</span> et de saisir
-                                    ce code :</p>
-                                <div className="flex flex-row align-items-center justify-content-center">
-                                    <span className="game-access">{props.accessCode}</span>
-                                    <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: "success",
-                                            summary: "Le code a été copié",
-                                            detail: "Partage-le avec tes amis !",
-                                            life: 3000
-                                        }))
-                                    }}/>
-                                </div>
-                                <Divider layout="horizontal" align="center">
-                                    <b>OU</b>
-                                </Divider>
-                                <p>Envoie-leur ce lien :</p>
-                                <div className="flex flex-row align-items-center justify-content-center">
-                                    <span
-                                        className="game-access">ljdp.augustinpasquier.com/join/{props.accessCode}</span>
-                                    <Button icon="pi pi-copy" rounded text onClick={() => {
-                                        navigator.clipboard.writeText(`ljdp.augustinpasquier.com/join/${props.accessCode}`).then(toastCopy.current.show({
-                                            severity: "success",
-                                            summary: "Le lien a été copié",
-                                            detail: "Partage-le avec tes amis !",
-                                            life: 3000
-                                        }))
-                                    }}/>
-                                </div>
-                            </div>
-                        }
-
-                        <div className="flex flex-wrap flex-column align-items-center">
-                            <ToggleButton onLabel="Démarrer la partie"
-                                          offLabel="Arrêter la partie"
-                                          checked={checked}
-                                          onChange={(e) => handleGameStatus(e.value)}/>
+                        <div className="flex flex-column justify-content-center full-height-card-edit">
 
                             {checked &&
-                                <small className="pt-3 text-700">(Toi et tes amis ne pourrez plus uploader de fichiers une fois la partie commencée.)</small>
+                                <div className="flex flex-column justify-content-center text-lg text-center pb-6">
+                                    <p>Demande à tes amis d'aller sur <span
+                                        className="text-xl text-primary">ljdp.augustinpasquier.com/upload</span> et de
+                                        saisir ce code :</p>
+                                    <div className="flex flex-row align-items-center justify-content-center">
+                                        <span className="game-access">{props.accessCode}</span>
+                                        <Button icon="pi pi-copy" rounded text onClick={() => {
+                                            navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
+                                                severity: "success",
+                                                summary: "Le code a été copié",
+                                                detail: "Partage-le avec tes amis !",
+                                                life: 3000
+                                            }))
+                                        }}/>
+                                    </div>
+                                    <Divider layout="horizontal" align="center">
+                                        <b>OU</b>
+                                    </Divider>
+                                    <p>Envoie-leur ce lien :</p>
+                                    <div className="flex flex-row align-items-center justify-content-center">
+                                        <span
+                                            className="game-access">ljdp.augustinpasquier.com/upload/{props.accessCode}</span>
+                                        <Button icon="pi pi-copy" rounded text onClick={() => {
+                                            navigator.clipboard.writeText(`ljdp.augustinpasquier.com/play/${props.accessCode}`).then(toastCopy.current.show({
+                                                severity: "success",
+                                                summary: "Le lien a été copié",
+                                                detail: "Partage-le avec tes amis !",
+                                                life: 3000
+                                            }))
+                                        }}/>
+                                    </div>
+                                </div>
                             }
 
                             {!checked &&
-                                <small className="pt-3 text-700">(La partie reprendra depuis le début et les scores seront réinitialisés.)</small>
+                                <div className="flex flex-column justify-content-center text-lg text-center pb-6">
+                                    <p>Demande à tes amis d'aller sur <span
+                                        className="text-xl text-primary">ljdp.augustinpasquier.com/play</span> et de saisir
+                                        ce code :</p>
+                                    <div className="flex flex-row align-items-center justify-content-center">
+                                        <span className="game-access">{props.accessCode}</span>
+                                        <Button icon="pi pi-copy" rounded text onClick={() => {
+                                            navigator.clipboard.writeText(`${props.accessCode}`).then(toastCopy.current.show({
+                                                severity: "success",
+                                                summary: "Le code a été copié",
+                                                detail: "Partage-le avec tes amis !",
+                                                life: 3000
+                                            }))
+                                        }}/>
+                                    </div>
+                                    <Divider layout="horizontal" align="center">
+                                        <b>OU</b>
+                                    </Divider>
+                                    <p>Envoie-leur ce lien :</p>
+                                    <div className="flex flex-row align-items-center justify-content-center">
+                                        <span
+                                            className="game-access">ljdp.augustinpasquier.com/play/{props.accessCode}</span>
+                                        <Button icon="pi pi-copy" rounded text onClick={() => {
+                                            navigator.clipboard.writeText(`ljdp.augustinpasquier.com/play/${props.accessCode}`).then(toastCopy.current.show({
+                                                severity: "success",
+                                                summary: "Le lien a été copié",
+                                                detail: "Partage-le avec tes amis !",
+                                                life: 3000
+                                            }))
+                                        }}/>
+                                    </div>
+                                </div>
                             }
+
+                            <div className="flex flex-wrap flex-column align-items-center">
+                                <ToggleButton onLabel="Démarrer la partie"
+                                              offLabel="Arrêter la partie"
+                                              checked={checked}
+                                              onChange={(e) => handleGameStatus(e.value)}/>
+
+                                {checked &&
+                                    <small className="pt-3 text-700">(Toi et tes amis ne pourrez plus uploader de fichiers une fois la partie commencée.)</small>
+                                }
+
+                                {!checked &&
+                                    <small className="pt-3 text-700">(La partie reprendra depuis le début et les scores seront réinitialisés.)</small>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
