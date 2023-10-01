@@ -6,15 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prisma studio": "npx prisma studio"
+    "prisma studio": "npx prisma studio",
+    "socket": "node src/server/socket.mjs"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
     "@types/node": "^18.15.11",
     "bcrypt": "^5.1.0",
+    "chalk": "^5.3.0",
     "formidable": "^3.5.0",
     "formik": "^2.2.9",
+    "http": "^0.0.1-security",
     "iron-session": "^6.3.1",
     "next": "13.3.0",
     "primeflex": "^3.3.0",
@@ -23,6 +25,8 @@
     "prisma": "^4.12.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "uuid": "^9.0.0"
   }
 }
