@@ -89,7 +89,7 @@ export default function PhotoUploader(props) {
             :
                 <>
                     <div className="flex flex-column align-items-center justify-content-center w-full h-full photo-area">
-                        <img className="uploaded-image" src={photoLink} alt={"Fichier Joueur LJDP"}/>
+                        <img className="uploaded-image" src={photoLink} alt="Fichier Joueur LJDP"/>
                     </div>
                 </>
             }

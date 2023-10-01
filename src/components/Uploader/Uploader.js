@@ -1,6 +1,6 @@
 import React, {useRef, useState} from "react"
 import {Card} from "primereact/card"
-import PhotoUploader from "@/components/PhotoUploader"
+import PhotoUploader from "@/components/Uploader/PhotoUploader"
 import {Toast} from "primereact/toast"
 import {Button} from "primereact/button"
 
@@ -36,7 +36,7 @@ export default function Uploader(props) {
     
     const updateCheck = (categoryId, display) => {
         document.querySelector(`#\\3${categoryId.toString().charAt(0)} ${categoryId.toString().slice(1)} > span > button`).style.visibility = display ? "visible" : "hidden"
-    };
+    }
 
     return (
         <>
@@ -52,7 +52,7 @@ export default function Uploader(props) {
                                         <div key={index} id={category.categoryId} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center" onClick={() => selectCategory(category)}>
                                             <span className="col-8">{category.title}</span>
                                             <span className="col-3">{category.type}</span>
-                                            <span className="col-1"><Button className="cursor-pointer" icon="pi pi-check" rounded disabled outlined severity="success" style={{visibility: category.link !== null ? 'visible' : 'hidden' }} /></span>
+                                            <span className="col-1"><Button className="cursor-pointer" icon="pi pi-check" rounded disabled outlined severity="success" style={{visibility: category.link !== null ? "visible" : "hidden" }} /></span>
                                         </div>
                                     )
                                 })}

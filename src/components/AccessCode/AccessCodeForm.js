@@ -34,7 +34,7 @@ export default function AccessCodeForm(props) {
                     const content = await results.json()
                     await router.push({
                         pathname: `${props.redirect}`,
-                        query: {accessCode: content.accessCode},
+                        query: content,
                     }, `${props.redirect}`)
                     break
                 case 404:
@@ -52,7 +52,7 @@ export default function AccessCodeForm(props) {
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
     const getFormErrorMessage = (value) => {
-        return isFormFieldInvalid(value) ? <small className="p-error max-w-20rem text-center">{formik.errors[value]}</small> : ""
+        return isFormFieldInvalid(value) ? <small className="p-error max-w-28rem text-center">{formik.errors[value]}</small> : ""
     }
 
     return (
@@ -66,12 +66,12 @@ export default function AccessCodeForm(props) {
                     {getFormErrorMessage("code")}
 
                     {errorMessage === "badAccessCode" &&
-                        <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-20rem">
+                        <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-28rem">
                             <span className="p-error">Aucune partie n'existe pour ce code ou cette action n'est pas disponible pour la partie.</span>
                         </div>
                     }
                     {errorMessage === "undefinedError" &&
-                        <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-20rem">
+                        <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-28rem">
                             <span className="p-error">Une erreur s'est produite. Réessaye pour voir ?</span>
                         </div>
                     }

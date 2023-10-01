@@ -1,8 +1,9 @@
-import GameEditor from "@/components/GameEditor"
-import React, {useState, useEffect, useRef} from "react"
-import AccessCodeForm from "@/components/AccessCodeForm"
-import Uploader from "@/components/Uploader"
+import GameEditor from "@/components/Editor/GameEditor"
+import React, {useEffect, useRef, useState} from "react"
+import AccessCodeForm from "@/components/AccessCode/AccessCodeForm"
+import Uploader from "@/components/Uploader/Uploader"
 import {Toast} from "primereact/toast"
+import GameContainer from "@/components/Game/GameContainer";
 
 export default function AccessCodeDispatcher(props) {
     const [categories, setCategories] = useState([])
@@ -36,7 +37,8 @@ export default function AccessCodeDispatcher(props) {
                 <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action} user={props.user}/>
                 :
                 props.action === "edit" && <GameEditor accessCode={props.accessCode} categories={categories}/> ||
-                props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/>}
+                props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/> ||
+                props.action === "play" && <GameContainer accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>}
             <Toast ref={toastErr}/>
         </>
     )
