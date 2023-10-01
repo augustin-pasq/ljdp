@@ -21,13 +21,12 @@ model User {
 }
 
 model Category {
-  id       Int        @id @default(autoincrement())
-  title    String     @db.Text
-  type     String     @db.Text
-  game     Int
-  Game     Game       @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")
-  Photo    Photo[]
-  Response Response[]
+  id    Int     @id @default(autoincrement())
+  title String  @db.Text
+  type  String  @db.Text
+  game  Int
+  Game  Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")
+  Photo Photo[]
 
   @@index([game], map: "game")
 }
@@ -57,27 +56,28 @@ model Participant {
 }
 
 model Photo {
-  id       Int      @id @default(autoincrement())
-  link     String   @db.Text
+  id       Int        @id @default(autoincrement())
+  link     String     @db.Text
   category Int
   user     Int
-  Category Category @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_1")
-  User     User     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_2")
+  Category Category   @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_1")
+  User     User       @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Photo_ibfk_2")
+  Response Response[]
 
   @@index([category], map: "category")
   @@index([user], map: "user")
 }
 
 model Response {
-  id                        Int      @id @default(autoincrement())
+  id                        Int   @id @default(autoincrement())
   user                      Int
-  category                  Int
+  photo                     Int
   value                     Int
-  User_Response_userToUser  User     @relation("Response_userToUser", fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_1")
-  Category                  Category @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_2")
-  User_Response_valueToUser User     @relation("Response_valueToUser", fields: [value], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_3")
+  User_Response_userToUser  User  @relation("Response_userToUser", fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_1")
+  Photo                     Photo @relation(fields: [photo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_2")
+  User_Response_valueToUser User  @relation("Response_valueToUser", fields: [value], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Response_ibfk_3")
 
-  @@index([category], map: "category")
   @@index([user], map: "user")
   @@index([value], map: "value")
+  @@index([photo], map: "photo")
 }

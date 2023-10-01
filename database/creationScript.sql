@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Response;
 DROP TABLE IF EXISTS Participant;
 DROP TABLE IF EXISTS Photo;
 DROP TABLE IF EXISTS Category;
@@ -8,8 +9,8 @@ CREATE TABLE User
 (
     id             INTEGER PRIMARY KEY AUTO_INCREMENT,
     username       VARCHAR(32) NOT NULL UNIQUE,
-    displayedName  VARCHAR(32),
-    profilePicture TEXT,
+    displayedName  VARCHAR(32) NOT NULL,
+    profilePicture TEXT        NOT NULL,
     password       TEXT        NOT NULL
 );
 
@@ -60,12 +61,12 @@ CREATE TABLE Participant
 
 CREATE TABLE Response
 (
-    id       INTEGER PRIMARY KEY AUTO_INCREMENT,
-    user     INTEGER NOT NULL,
-    category INTEGER NOT NULL,
-    value    INTEGER NOT NULL,
+    id    INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user  INTEGER NOT NULL,
+    photo INTEGER NOT NULL,
+    value INTEGER NOT NULL,
 
     FOREIGN KEY (user) REFERENCES User (id),
-    FOREIGN KEY (category) REFERENCES Category (id),
+    FOREIGN KEY (photo) REFERENCES Photo (id),
     FOREIGN KEY (value) REFERENCES User (id)
 );
