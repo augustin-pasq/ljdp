@@ -127,7 +127,7 @@ export default function GameEditor(props) {
                                 </div>
                             </form>
                         </div>
-                        {categories.length > 0 &&
+                        {categories && categories.length > 0 &&
                             <div className="flex flex-column gap-3 p-3 no-scroll" id="categories-container">
                                 {categories.map((category, index) => {
                                     return (

@@ -7,6 +7,7 @@ import GameContainer from "@/components/Game/GameContainer";
 
 export default function AccessCodeDispatcher(props) {
     const [categories, setCategories] = useState([])
+    const [readyToRender, setReadyToRender] = useState(false)
     const toastErr = useRef(null)
 
     useEffect(() => {
@@ -26,9 +27,12 @@ export default function AccessCodeDispatcher(props) {
             }
         }
 
-        getCategories()
-            .then((content) => { setCategories(content) })
-            .catch(error => console.error(error))
+        if (props.accessCode !== undefined) {
+            getCategories()
+                .then((content) => { setCategories(content) })
+                .then(() => setReadyToRender(true))
+                .catch(error => console.error(error))
+        }
     }, [props.accessCode])
 
     return (
@@ -36,10 +40,16 @@ export default function AccessCodeDispatcher(props) {
             {props.accessCode === undefined ?
                 <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action} user={props.user}/>
                 :
-                props.action === "edit" && <GameEditor accessCode={props.accessCode} categories={categories}/> ||
-                props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/> ||
-                props.action === "play" && <GameContainer accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>}
-            <Toast ref={toastErr}/>
+                readyToRender && (
+                    <>
+                        {props.action === "edit" && <GameEditor accessCode={props.accessCode} categories={categories}/>}
+                        {props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/>}
+                        {props.action === "play" && <GameContainer accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>}
+                    </>
+                )
+            }
+            <Toast ref={toastErr} />
         </>
-    )
+    );
+
 }
