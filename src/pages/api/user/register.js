@@ -11,7 +11,9 @@ async function handle(req, res) {
         const results = await prisma.user.create({
             data: {
                 username: req.body.username,
-                password: hash
+                displayedName: req.body.username,
+                password: hash,
+                profilePicture: `profile_pictures/default_profile_picture_${Math.floor(Math.random() * (8 - 1) + 1)}.png`
             }
         })
 

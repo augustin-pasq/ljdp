@@ -1,7 +1,7 @@
 import React from "react"
 import {useRouter} from "next/router"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
-import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
+import AccessCodeDispatcher from "@/components/AccessCode/AccessCodeDispatcher"
 
 export default function Edit(props) {
     const router = useRouter()

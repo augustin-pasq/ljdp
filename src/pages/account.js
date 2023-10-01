@@ -1,8 +1,8 @@
 import React, {useRef} from "react"
 import {Card} from "primereact/card"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
-import {useRouter} from "next/router";
-import {Toast} from "primereact/toast";
+import {useRouter} from "next/router"
+import {Toast} from "primereact/toast"
 
 export default function Account() {
     const router = useRouter()
