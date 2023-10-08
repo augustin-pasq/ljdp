@@ -1,5 +1,5 @@
 import formidable from "formidable"
-import { v4 as uuidv4 } from "uuid"
+import {v4 as uuidv4} from "uuid"
 import fs from "fs"
 import prisma from "../../../../lib/prisma"
 
@@ -10,6 +10,8 @@ export const config = {
 }
 
 export default async function handle(req, res) {
+    let results = {link: ""}
+
     try {
         const form = formidable({ uploadDir: "./public/uploads", keepExtensions: true, maxFileSize: 50 * 1024 * 1024 })
 
@@ -45,14 +47,17 @@ export default async function handle(req, res) {
                             game: game,
                             user: user,
                             score: 0,
-                            hasJoined: false
+                            hasJoined: false,
+                            hasPhotos: true
                         }
                     })
                 }
             }
 
-            return res.status(200).json({link: filePath})
+            results.link = filePath
         })
+
+        return res.status(200).json(results)
     } catch (err) {
         res.status(500).json(err)
     }

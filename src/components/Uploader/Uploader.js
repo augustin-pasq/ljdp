@@ -50,8 +50,7 @@ export default function Uploader(props) {
                                 {props.categories.map((category, index) => {
                                     return (
                                         <div key={index} id={category.categoryId} className="grid flex category-item pl-4 pr-2 py-2 shadow-3 border-round-lg align-items-center" onClick={() => selectCategory(category)}>
-                                            <span className="col-8">{category.title}</span>
-                                            <span className="col-3">{category.type}</span>
+                                            <span className="col-11">{category.title}</span>
                                             <span className="col-1"><Button className="cursor-pointer" icon="pi pi-check" rounded disabled outlined severity="success" style={{visibility: category.link !== null ? "visible" : "hidden" }} /></span>
                                         </div>
                                     )

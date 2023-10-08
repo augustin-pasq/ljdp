@@ -10,8 +10,8 @@ datasource db {
 model User {
   id                            Int           @id @default(autoincrement())
   username                      String        @unique(map: "username") @db.VarChar(32)
-  displayedName                 String?       @db.VarChar(32)
-  profilePicture                String?       @db.Text
+  displayedName                 String        @db.VarChar(32)
+  profilePicture                String        @db.Text
   password                      String        @db.Text
   Game                          Game[]
   Participant                   Participant[]
@@ -23,7 +23,6 @@ model User {
 model Category {
   id    Int     @id @default(autoincrement())
   title String  @db.Text
-  type  String  @db.Text
   game  Int
   Game  Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")
   Photo Photo[]
@@ -34,7 +33,6 @@ model Category {
 model Game {
   id          Int           @id @default(autoincrement())
   accessCode  String        @unique(map: "accessCode") @db.VarChar(4)
-  status      String        @db.Text
   owner       Int
   Category    Category[]
   User        User          @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Game_ibfk_1")
@@ -48,6 +46,7 @@ model Participant {
   user      Int
   score     Int?
   hasJoined Boolean
+  hasPhotos Boolean
   Game      Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_1")
   User      User    @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_2")
 

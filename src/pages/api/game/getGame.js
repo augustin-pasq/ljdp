@@ -4,18 +4,10 @@ export default async function handle(req, res) {
     let results = {}
 
     try {
-        if (req.body.action === "play") {
+        if (req.body.action === "play" || req.body.action === "upload") {
             results = await prisma.game.findFirst({
                 where: {
                     accessCode: req.body.code,
-                    status: "Commencée"
-                }
-            })
-        } else if (req.body.action === "upload") {
-            results = await prisma.game.findFirst({
-                where: {
-                    accessCode: req.body.code,
-                    status: "Créée"
                 }
             })
         } else if (req.body.action === "edit") {

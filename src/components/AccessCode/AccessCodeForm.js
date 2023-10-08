@@ -67,7 +67,7 @@ export default function AccessCodeForm(props) {
 
                     {errorMessage === "badAccessCode" &&
                         <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-28rem">
-                            <span className="p-error">Aucune partie n'existe pour ce code ou cette action n'est pas disponible pour la partie.</span>
+                            <span className="p-error">Aucune partie n'existe pour ce code ou tu essayes de modifier une partie que tu n'as pas créée.</span>
                         </div>
                     }
                     {errorMessage === "undefinedError" &&

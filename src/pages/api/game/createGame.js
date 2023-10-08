@@ -16,7 +16,6 @@ export default async function handle(req, res) {
         const results = await prisma.game.create({
             data: {
                 accessCode: accessCode,
-                status: "Créée",
                 owner: req.body.user
             }
         })

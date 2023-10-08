@@ -11,7 +11,6 @@ export default async function handle(req, res) {
         const results = await prisma.category.create({
             data: {
                 title: req.body.title,
-                type: req.body.type,
                 game: game.id,
             }
         })

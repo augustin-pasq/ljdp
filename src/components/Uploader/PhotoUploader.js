@@ -70,28 +70,15 @@ export default function PhotoUploader(props) {
     return (
         <>
             {photoLink === "" ?
-                (props.category.type === "Photo" &&
-                    <>
-                        <div className="flex flex-column align-items-center justify-content-center w-full h-full photo-drop-area">
-                            <i className="pi pi-upload p-5 text-300 surface-50 text-4xl border-circle"></i>
-                            <span className="p-3 text-400 text-center">Clique ou dépose ton fichier ici</span>
-                            <input className="photo-input" id="file" type="file" multiple={false} accept="image/*" onChange={(e) => {setPhoto(e.target.files[0]);  setPhotoLink(URL.createObjectURL(e.target.files[0]))}}/>
-                        </div>
-                    </>
-                ) || props.category.type === "Vidéo" &&
-                    <>
-                        <div className="flex flex-column align-items-center justify-content-center w-full h-full photo-drop-area">
-                            <i className="pi pi-upload p-5 text-300 surface-50 text-4xl border-circle"></i>
-                            <span className="p-3 text-400 text-center">Clique ou dépose ton fichier ici</span>
-                            <input className="photo-input" id="file" type="file" multiple={false} accept="video/*" onChange={(e) => {setPhoto(e.target.files[0]);  setPhotoLink(URL.createObjectURL(e.target.files[0]))}}/>
-                        </div>
-                    </>
+                <div className="flex flex-column align-items-center justify-content-center w-full h-full photo-drop-area">
+                    <i className="pi pi-upload p-5 text-300 surface-50 text-4xl border-circle"></i>
+                    <span className="p-3 text-400 text-center">Clique ou dépose ton fichier ici</span>
+                    <input className="photo-input" id="file" type="file" multiple={false} accept="image/*" onChange={(e) => {setPhoto(e.target.files[0]);  setPhotoLink(URL.createObjectURL(e.target.files[0]))}}/>
+                </div>
             :
-                <>
-                    <div className="flex flex-column align-items-center justify-content-center w-full h-full photo-area">
-                        <img className="uploaded-image" src={photoLink} alt="Fichier Joueur LJDP"/>
-                    </div>
-                </>
+                <div className="flex flex-column align-items-center justify-content-center w-full h-full photo-area">
+                    <img className="uploaded-image" src={photoLink} alt="Fichier Joueur LJDP"/>
+                </div>
             }
 
             {

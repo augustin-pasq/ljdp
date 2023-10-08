@@ -18,10 +18,8 @@ CREATE TABLE Game
 (
     id         INTEGER PRIMARY KEY AUTO_INCREMENT,
     accessCode VARCHAR(4) NOT NULL UNIQUE,
-    status     TEXT       NOT NULL,
     owner      INTEGER    NOT NULL,
 
-    CONSTRAINT ck_hasStarted CHECK (status IN ('Créée', 'Commencée', 'Terminée')),
     FOREIGN KEY (owner) REFERENCES User (id)
 );
 
@@ -29,11 +27,9 @@ CREATE TABLE Category
 (
     id    INTEGER PRIMARY KEY AUTO_INCREMENT,
     title TEXT    NOT NULL,
-    type  TEXT    NOT NULL,
     game  INTEGER NOT NULL,
 
-    FOREIGN KEY (game) REFERENCES Game (id),
-    CONSTRAINT ck_type CHECK (type IN ('Photo', 'Vidéo', 'YouTube'))
+    FOREIGN KEY (game) REFERENCES Game (id)
 );
 
 CREATE TABLE Photo
@@ -53,6 +49,7 @@ CREATE TABLE Participant
     user      INTEGER,
     score     INTEGER,
     hasJoined BOOLEAN NOT NULL,
+    hasPhotos BOOLEAN NOT NULL,
 
     PRIMARY KEY (game, user),
     FOREIGN KEY (game) REFERENCES Game (id),

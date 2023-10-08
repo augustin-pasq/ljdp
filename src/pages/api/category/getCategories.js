@@ -11,7 +11,7 @@ export default async function handle(req, res) {
         // Pour chaque utilisateur (CROSS JOIN User), on sélectionne toutes les catégories avec la photo associée, puis on filtre par utilisateur et par partie
         // Utilisation de $queryRaw pour effectuer une requête SQL, faute de pouvoir faire de même avec Prisma
         const results = await prisma.$queryRaw
-            `SELECT Category.id AS categoryId, Category.title, Category.type, Photo.link, game, User.id AS userId
+            `SELECT Category.id AS categoryId, Category.title, Photo.link, game, User.id AS userId
              FROM Category
                       CROSS JOIN User
                       LEFT JOIN Photo ON User.id = Photo.user AND Category.id = Photo.category
