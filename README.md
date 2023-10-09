@@ -15,7 +15,8 @@ Le projet en est à ses balbutiements. Voici les fonctionnalités actuellement d
 - Session utilisateur
 - Création d'une partie et de ses catégories
 - Formulaire d'accès à une partie (modification et participation)
-- Upload des photos (vidéos en théorie possible mais générera des bugs, liens à faire)
+- Upload des photos
+- Système de jeu : affichage des questions et soummission des réponses
 
 ### Stack technologique
 - Next.js / React (JavaScript)
@@ -35,4 +36,4 @@ Le projet en est à ses balbutiements. Voici les fonctionnalités actuellement d
 6. Lancer la commande ``npm run dev`` pour lancer le projet
 
 ## Auteurs
-- Augustin Pasquier ([@augustin-pasq])
+- Augustin Pasquier [@augustin-pasq](https://github.com/augustin-pasq)
