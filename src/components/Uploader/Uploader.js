@@ -3,11 +3,13 @@ import {Card} from "primereact/card"
 import PhotoUploader from "@/components/Uploader/PhotoUploader"
 import {Toast} from "primereact/toast"
 import {Button} from "primereact/button"
+import {useRouter} from "next/router";
 
 export default function Uploader(props) {
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [photo, setPhoto] = useState(null)
     const toastErr = useRef(null)
+    const router = useRouter()
 
     const selectCategory = (category) => {
         async function getPhoto() {
@@ -72,6 +74,7 @@ export default function Uploader(props) {
                         }
                     </div>
                 </div>
+                <Button label="Retourner à l'accueil" type="submit" size="large" className="mt-5 align-self-center" rounded onClick={() => router.push("/home")}/>
             </Card>
 
             <Toast ref={toastErr}/>

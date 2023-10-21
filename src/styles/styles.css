@@ -39,7 +39,7 @@ body {
     background: linear-gradient(180deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
 }
 
-h1, h2 {
+h1, h2, .main-font {
     font-family: 'Mikado', sans-serif !important;
 }
 
@@ -127,11 +127,11 @@ label > span {
 }
 
 .full-height-card-upload {
-    height: calc(93vh - 250px);
+    height: calc(86vh - 250px);
 }
 
 .full-height-card-edit {
-    height: calc(93vh - 373px);
+    height: calc(86vh - 373px);
 }
 
 .button-proposition {
@@ -166,12 +166,32 @@ label > span {
     width: 37rem;
 }
 
+.background-first {
+    background-color: #FFD700;
+}
+
+.background-second {
+    background-color: #C0C0C0;
+}
+
+.background-third {
+    background-color: #CD7F32;
+}
+.no-background {
+    background-color: #6E6E6E;
+}
+
+.p-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
 #categories-container {
-    max-height: calc(93vh - 474px);
+    max-height: calc(86vh - 474px);
 }
 
 #photos-container {
-    max-height: calc(93vh - 373px);
+    max-height: calc(86vh - 373px);
 }
 
 #game-photo-container {

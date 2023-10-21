@@ -21,7 +21,7 @@ export default async function handle(req, res) {
                     user: req.body.user,
                     score: 0,
                     hasJoined: false,
-                    hasePhotos: false
+                    hasPhotos: false
                 }
             })
         } else {

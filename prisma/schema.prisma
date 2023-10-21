@@ -34,6 +34,7 @@ model Game {
   id          Int           @id @default(autoincrement())
   accessCode  String        @unique(map: "accessCode") @db.VarChar(4)
   owner       Int
+  status      Int
   Category    Category[]
   User        User          @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Game_ibfk_1")
   Participant Participant[]

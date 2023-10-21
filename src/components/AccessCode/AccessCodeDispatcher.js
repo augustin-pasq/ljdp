@@ -4,9 +4,11 @@ import AccessCodeForm from "@/components/AccessCode/AccessCodeForm"
 import Uploader from "@/components/Uploader/Uploader"
 import {Toast} from "primereact/toast"
 import GameContainer from "@/components/Game/GameContainer";
+import GameScores from "@/components/Game/GameScores";
 
 export default function AccessCodeDispatcher(props) {
     const [categories, setCategories] = useState([])
+    const [scores, setScores] = useState([])
     const [readyToRender, setReadyToRender] = useState(false)
     const toastErr = useRef(null)
 
@@ -27,26 +29,54 @@ export default function AccessCodeDispatcher(props) {
             }
         }
 
+        async function getScores() {
+            const results = await fetch("/api/participant/getScores", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({accessCode: props.accessCode}),
+            })
+
+            switch(results.status) {
+                case 200:
+                    return await results.json()
+                case 500:
+                    toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
+                    break
+            }
+        }
+
         if (props.accessCode !== undefined) {
-            getCategories()
-                .then((content) => { setCategories(content) })
-                .then(() => setReadyToRender(true))
-                .catch(error => console.error(error))
+            if(props.action === "scores") {
+                getScores()
+                    .then((content) => { setScores(content) })
+                    .then(() => {
+                        getCategories()
+                            .then((content) => { setCategories(content) })
+                            .catch(error => console.error(error))
+                    })
+                    .then(() => setReadyToRender(true))
+                    .catch(error => console.error(error))
+
+            } else {
+                getCategories()
+                    .then((content) => { setCategories(content) })
+                    .then(() => setReadyToRender(true))
+                    .catch(error => console.error(error))
+            }
         }
     }, [props.accessCode])
 
     return (
         <>
-            {props.accessCode === undefined ?
-                <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action} user={props.user}/>
+            {props.accessCode !== undefined && readyToRender ?
+                {
+                    "edit":     <GameEditor accessCode={props.accessCode} categories={categories}/>,
+                    "upload":   <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/>,
+                    "play":     <GameContainer accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>,
+                    "scores":   <GameScores accessCode={props.accessCode} categories={categories} scores={scores} user={props.user}/>
+                }[props.action]
                 :
-                readyToRender && (
-                    <>
-                        {props.action === "edit" && <GameEditor accessCode={props.accessCode} categories={categories}/>}
-                        {props.action === "upload" && <Uploader accessCode={props.accessCode} categories={categories} user={props.user}/>}
-                        {props.action === "play" && <GameContainer accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>}
-                    </>
-                )
+                <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action} user={props.user}/>
             }
             <Toast ref={toastErr} />
         </>

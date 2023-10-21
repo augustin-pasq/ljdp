@@ -17,6 +17,7 @@ Le projet en est à ses balbutiements. Voici les fonctionnalités actuellement d
 - Formulaire d'accès à une partie (modification et participation)
 - Upload des photos
 - Système de jeu : affichage des questions et soummission des réponses
+- Système de jeu avancé : scores et gestion de fin de partie
 
 ### Stack technologique
 - Next.js / React (JavaScript)

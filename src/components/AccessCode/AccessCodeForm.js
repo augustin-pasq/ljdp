@@ -26,7 +26,7 @@ export default function AccessCodeForm(props) {
             const results = await fetch("/api/game/getGame", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({code: data.code, action: props.action, owner: props.user}),
+                body: JSON.stringify({code: data.code, action: props.action, owner: props.user, status: 1}),
             })
 
             switch(results.status) {
@@ -37,11 +37,17 @@ export default function AccessCodeForm(props) {
                         query: content,
                     }, `${props.redirect}`)
                     break
+                case 403:
+                    setErrorMessage("Tu ne peux pas modifier une partie que tu n'as pas créée.")
+                    break
                 case 404:
-                    setErrorMessage("badAccessCode")
+                    setErrorMessage("Aucune partie n'existe pour ce code.")
+                    break
+                case 423:
+                    setErrorMessage("Tu ne peux pas rejouer à une partie déjà terminée, désolé !")
                     break
                 case 500:
-                    setErrorMessage("undefinedError")
+                    setErrorMessage("Une erreur s'est produite. Réessaye pour voir ?")
                     break
             }
 
@@ -65,16 +71,9 @@ export default function AccessCodeForm(props) {
                     <InputText id="code" name="code" maxLength={4} value={formik.values.code} onChange={(e) => {formik.setFieldValue("code", e.target.value.toUpperCase())}} className={`p-inputtext-lg access-code-field w-12rem h-6rem ${classNames({"p-invalid": isFormFieldInvalid("code")})}`} />
                     {getFormErrorMessage("code")}
 
-                    {errorMessage === "badAccessCode" &&
-                        <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-28rem">
-                            <span className="p-error">Aucune partie n'existe pour ce code ou tu essayes de modifier une partie que tu n'as pas créée.</span>
-                        </div>
-                    }
-                    {errorMessage === "undefinedError" &&
-                        <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-28rem">
-                            <span className="p-error">Une erreur s'est produite. Réessaye pour voir ?</span>
-                        </div>
-                    }
+                    <div className="flex flex-row align-items-center justify-content-center mt-3 text-center max-w-28rem">
+                        <span className="p-error">{errorMessage}</span>
+                    </div>
 
                     <Button label={props.button} type="submit" size="large" className="mt-6 mb-3" rounded/>
                 </form>

@@ -19,6 +19,7 @@ CREATE TABLE Game
     id         INTEGER PRIMARY KEY AUTO_INCREMENT,
     accessCode VARCHAR(4) NOT NULL UNIQUE,
     owner      INTEGER    NOT NULL,
+    status     INTEGER    NOT NULL, /* 1: created; 2: opened; 3: started; 4: ended */
 
     FOREIGN KEY (owner) REFERENCES User (id)
 );

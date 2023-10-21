@@ -5,12 +5,14 @@ import {Button} from "primereact/button"
 import {useFormik} from "formik"
 import {classNames} from "primereact/utils"
 import {Toast} from "primereact/toast"
+import {useRouter} from "next/router";
 
 export default function GameEditor(props) {
     const [categories, setCategories] = useState([])
     const toastCopy = useRef(null)
     const toastErr = useRef(null)
     const [hasToScroll, setHasToScroll] = useState(false)
+    const router = useRouter()
 
     useEffect(() => {
         if (hasToScroll) {
@@ -129,6 +131,7 @@ export default function GameEditor(props) {
                         </div>
                     </div>
                 </div>
+                <Button label="Retourner à l'accueil" type="submit" size="large" className="mt-5 align-self-center" rounded onClick={() => router.push("/home")}/>
             </Card>
             <Toast ref={toastErr}/>
             <Toast ref={toastCopy}/>
