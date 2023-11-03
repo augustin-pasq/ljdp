@@ -1,6 +1,10 @@
 import prisma from "../../../../lib/prisma"
+import {io} from "socket.io-client";
+
+const socket = io.connect("http://localhost:4000")
 
 export default async function handle(req, res) {
+
     try {
         await prisma.response.create({
             data: {
@@ -40,6 +44,32 @@ export default async function handle(req, res) {
             })
         }
 
+        const participantsNumber = await prisma.participant.count({
+            where: {
+                game: game.id,
+                hasJoined: true
+            }
+        })
+
+        const responseNumber = await prisma.response.count({
+            where: {
+                photo: req.body.photo
+            }
+        })
+
+        const user = await prisma.user.findUnique({
+            select: {
+                id: true,
+                username: true,
+                displayedName: true,
+                profilePicture: true
+            },
+            where: {
+                id: req.body.user
+            }
+        })
+
+        socket.emit("addResponse", {completed: responseNumber >= participantsNumber, user: user})
         res.status(200).json({})
     } catch (err) {
         res.status(500).json(err)

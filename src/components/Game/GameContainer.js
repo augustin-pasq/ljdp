@@ -37,7 +37,7 @@ export default function GameContainer(props) {
     }
 
     const setGameModeHandler = (gameMode) => {
-        socket.emit("gameModeHasChanged", {accessCode: props.accessCode, gameMode: gameMode})
+        socket.emit("setGameMode", {accessCode: props.accessCode, gameMode: gameMode})
     }
 
     return (

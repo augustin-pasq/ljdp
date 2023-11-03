@@ -26,7 +26,7 @@ export default function GameLauncher(props) {
         switch (results.status) {
             case 200:
                 const content = await results.json()
-                socket.emit("userHasJoined", content)
+                socket.emit("setHasJoined", content)
                 break
             case 500:
                 toastErr.current.show({severity: "error", summary: "Erreur", detail: "Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})

@@ -195,8 +195,8 @@ label > span {
 }
 
 #game-photo-container {
-    height: 36rem;
-    width: 48rem;
+    height: 30rem;
+    width: 40rem;
     display: flex;
     align-items: center;
     justify-content: center;
