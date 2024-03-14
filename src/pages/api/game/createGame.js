@@ -13,15 +13,15 @@ export default async function handle(req, res) {
 
         while(existingAccessCodes.find(obj => obj.accessCode === accessCode) !== undefined) accessCode = require("crypto").randomBytes(2).toString("hex").toUpperCase()
 
-        const results = await prisma.game.create({
+        const response = await prisma.game.create({
             data: {
                 accessCode: accessCode,
-                owner: req.body.user,
+                owner: req.body.user.id,
                 status: 1
             }
         })
 
-        res.status(200).json(results)
+        res.status(200).json({content: response})
     } catch (err) {
         res.status(500).json(err)
     }

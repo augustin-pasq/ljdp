@@ -39,7 +39,7 @@ export default async function handle(req, res) {
             }
         })
 
-        const results = {
+        const response = {
             categories: [],
             propositions: []
         }
@@ -51,18 +51,18 @@ export default async function handle(req, res) {
                 index = insertedCategories[element.Category.title]
             } else {
                 index = Object.keys(insertedCategories).length
-                results.categories[index] = ({title: element.Category.title, photos: []})
+                response.categories[index] = ({title: element.Category.title, photos: []})
                 insertedCategories[element.Category.title] = index
             }
 
-            results.categories[index]["photos"].push({id: element.id, link: element.link})
+            response.categories[index]["photos"].push({id: element.id, link: element.link})
         })
 
         participants.forEach(element => {
-            results.propositions.push({id: element.User.id, displayedName: element.User.displayedName, profilePicture: element.User.profilePicture})
+            response.propositions.push({id: element.User.id, displayedName: element.User.displayedName, profilePicture: element.User.profilePicture})
         })
 
-        res.status(200).json(results)
+        res.status(200).json({content: response})
     } catch (err) {
         console.log(err)
         res.status(500).json(err)

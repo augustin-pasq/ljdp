@@ -1,72 +1,49 @@
-import React, {useRef} from "react"
-import {Card} from "primereact/card"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
+import Navbar from "@/components/Navbar"
+import React from "react"
 import {useRouter} from "next/router"
-import {Toast} from "primereact/toast"
 
 export default function Home(props) {
     const router = useRouter()
-    const toastErr = useRef(null)
 
     const navigateNewGame = async () => {
-        const results = await fetch("/api/game/createGame", {
+        const request = await fetch("/api/game/createGame", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(props),
         })
 
-        switch(results.status) {
-            case 200:
-                const content = await results.json()
-                await router.push({
-                    pathname: "/edit",
-                    query: {accessCode: content.accessCode},
-                }, "/edit")
-                break
-            case 500:
-                toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
-                break
+        if(request.status === 200) {
+            const data = await request.json()
+            await router.push({
+                pathname: "/categories",
+                query: {accessCode: data.content.accessCode},
+            }, "/categories")
         }
-
     }
 
-    const navigateUpload = async () => { await router.push("/upload") }
-
-    const navigateAccount = async () => { await router.push("/account") }
-
     return (
-        <div className="grid">
-            <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-end scale-in-br scale-in-center-1">
-                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center" onClick={navigateNewGame}>
-                    <h1 className="text-4xl text-center">Nouvelle partie</h1>
-                    <span className="text-4xl">🚀</span>
-                </Card>
-            </div>
-
-            <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-start scale-in-bl scale-in-center-2">
-                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center" onClick={navigateUpload}>
-                    <h1 className="text-4xl text-center">Uploader des photos</h1>
-                    <span className="text-4xl">📷</span>
-                </Card>
-            </div>
-
-            <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-end scale-in-tr scale-in-center-3">
-                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center">
-                    <h1 className="text-4xl text-center">Mes<br/>parties</h1>
-                    <span className="text-4xl">🏆</span>
-                </Card>
-            </div>
-
-            <div className="col-12 md:col-6 p-3 flex justify-content-center md:justify-content-start scale-in-tl scale-in-center-4">
-                <Card className="card-home flex square border-round-4xl w-screen md:w-16rem justify-content-center align-items-center text-center" onClick={navigateAccount}>
-                    <h1 className="text-4xl text-center">Mon<br/>compte</h1>
-                    <span className="text-4xl">🕵️</span>
-                </Card>
-            </div>
-
-            <Toast ref={toastErr}/>
-        </div>
-    )
+        <>
+            <Navbar user={props.user}/>
+            <main id="home">
+                <div className="item" onClick={navigateNewGame}>
+                    <span className="item-title">Créer une partie</span>
+                    <span className="item-emoji">🚀</span>
+                </div>
+                <div className="item" onClick={async () => {await router.push("/categories")}}>
+                    <span className="item-title">Gérer les catégories</span>
+                    <span className="item-emoji">✏️</span>
+                </div>
+                <div className="item" onClick={async () => {await router.push("/upload")}}>
+                    <span className="item-title">Uploader des photos</span>
+                    <span className="item-emoji">📷</span>
+                </div>
+                <div className="item" onClick={async () => {await router.push("/play")}}>
+                    <span className="item-title">Rejoindre une partie</span>
+                    <span className="item-emoji">🎮</span>
+                </div>
+            </main>
+        </>)
 }
 
 export const getServerSideProps = withSessionSsr(checkIfUserIsLoggedIn)

@@ -14,7 +14,7 @@ export default async function handle(req, res) {
             }
         })
 
-        res.status(200).json({})
+        res.status(200).json({content: {}})
     } catch (err) {
         res.status(500).json(err)
     }

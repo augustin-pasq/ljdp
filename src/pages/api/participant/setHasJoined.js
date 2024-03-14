@@ -47,7 +47,7 @@ export default async function handle(req, res) {
             }
         })
 
-        res.status(200).json({user: user, game: game})
+        res.status(200).json({content: {user: user, game: game}})
     } catch (err) {
         res.status(500).json(err)
     }

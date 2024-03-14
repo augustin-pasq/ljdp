@@ -1,8 +1,8 @@
 import React from "react"
-import {Card} from "primereact/card";
-import {Badge} from "primereact/badge";
-import {Button} from "primereact/button";
-import {useRouter} from "next/router";
+import {Card} from "primereact/card"
+import {Badge} from "primereact/badge"
+import {Button} from "primereact/button"
+import {useRouter} from "next/router"
 
 export default function GameScores(props) {
     const router = useRouter()

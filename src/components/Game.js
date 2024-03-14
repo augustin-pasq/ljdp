@@ -2,9 +2,8 @@ import React, {useRef, useState} from "react"
 import {ToggleButton} from "primereact/togglebutton"
 import {Button} from "primereact/button"
 import {Card} from "primereact/card"
-import {Toast} from "primereact/toast";
-import {useRouter} from "next/router";
-import {io} from "socket.io-client";
+import {useRouter} from "next/router"
+import {io} from "socket.io-client"
 
 const socket = io.connect("http://localhost:4000")
 
@@ -41,28 +40,18 @@ export default function Game(props) {
     }
 
     const getSolution = async () => {
-        const results = await fetch("/api/game/getSolution", {
+        const request = await fetch("/api/game/getSolution", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user: props.user, accessCode: props.accessCode}),
+            body: JSON.stringify({user: props.user.id, accessCode: props.accessCode}),
         })
 
-        switch (results.status) {
-            case 200:
-                const content = await results.json()
-                setGameData(content)
-                setCategory(0)
-                setPhoto(0)
-                setQuestionMode(false)
-                break
-            case 500:
-                toastErr.current.show({
-                    severity: "error",
-                    summary: "Erreur",
-                    detail: "Une erreur s\'est produite. Réessaye pour voir ?",
-                    life: 3000
-                })
-                break
+        if (request.status === 200) {
+            const data = await request.json()
+            setGameData(data)
+            setCategory(0)
+            setPhoto(0)
+            setQuestionMode(false)
         }
     }
 
@@ -78,19 +67,14 @@ export default function Game(props) {
 
         if(questionMode) {
             if (propositionChecked !== "") {
-                const results = await fetch("/api/response/addResponse", {
+                const request = await fetch("/api/response/addResponse", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({user: props.user, accessCode: props.accessCode, photo: gameData.categories[category].photos[photo].id, response: propositionChecked.id}),
+                    body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.categories[category].photos[photo].id, response: propositionChecked.id}),
                 })
 
-                switch(results.status) {
-                    case 200:
-                        handleNext(getSolution)
-                        break
-                    case 500:
-                        toastErr.current.show({severity:"error", summary: "Erreur", detail:"Une erreur s\'est produite. Réessaye pour voir ?", life: 3000})
-                        break
+                if (request.status === 200) {
+                    handleNext(getSolution)
                 }
             } else {
                 toastErr.current.show({severity:"warn", summary: "T'aurais pas oublié quelque chose ?", detail:"Tu dois choisir l'une des propositions !", life: 3000})
@@ -143,8 +127,6 @@ export default function Game(props) {
                     </div>
                 </div>
             </Card>
-
-            <Toast ref={toastErr}/>
         </>
     )
 }

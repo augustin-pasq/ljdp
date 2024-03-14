@@ -17,11 +17,9 @@ export default async function handle(req, res) {
                         profilePicture: true,
                     }
                 },
-                score: true
             },
             where: {
                 game: game.id,
-                hasJoined: true
             },
             orderBy: {
                 score: "desc"

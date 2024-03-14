@@ -29,7 +29,7 @@ export default async function handle(req, res) {
              WHERE Response.user = ${req.body.user};
             `
 
-        const results = {
+        const response = {
             categories: []
         }
 
@@ -40,11 +40,11 @@ export default async function handle(req, res) {
                 index = insertedCategories[element.title]
             } else {
                 index = Object.keys(insertedCategories).length
-                results.categories[index] = ({title: element.title, photos: []})
+                response.categories[index] = ({title: element.title, photos: []})
                 insertedCategories[element.title] = index
             }
 
-            results.categories[index]["photos"].push({id: element.id, link: element.link, response: {id: element.ResponseUserId, displayedName: element.ResponseUserDisplayedName, profilePicture: element.ResponseUserProfilePicture}, solution: {id: element.ResponseSolutionId, displayedName: element.ResponseSolutionDisplayedName, profilePicture: element.ResponseSolutionProfilePicture}})
+            response.categories[index]["photos"].push({id: element.id, link: element.link, response: {id: element.ResponseUserId, displayedName: element.ResponseUserDisplayedName, profilePicture: element.ResponseUserProfilePicture}, solution: {id: element.ResponseSolutionId, displayedName: element.ResponseSolutionDisplayedName, profilePicture: element.ResponseSolutionProfilePicture}})
         })
 
         await prisma.game.update({
@@ -56,7 +56,7 @@ export default async function handle(req, res) {
             }
         })
 
-        res.status(200).json(results)
+        res.status(200).json({content: response})
     } catch (err) {
         res.status(500).json(err)
     }

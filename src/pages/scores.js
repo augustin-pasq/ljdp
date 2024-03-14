@@ -1,5 +1,5 @@
 import React from "react"
-import AccessCodeDispatcher from "@/components/AccessCode/AccessCodeDispatcher"
+import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
 import {useRouter} from "next/router"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
 

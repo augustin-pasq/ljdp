@@ -8,14 +8,14 @@ export default async function handle(req, res) {
             }
         })
 
-        const results = await prisma.category.create({
+        const response = await prisma.category.create({
             data: {
                 title: req.body.title,
                 game: game.id,
             }
         })
 
-        res.status(200).json(results)
+        res.status(200).json({content: response})
     } catch (err) {
         res.status(500).json(err)
     }

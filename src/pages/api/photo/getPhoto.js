@@ -2,7 +2,7 @@ import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
     try {
-        const results = await prisma.photo.findFirst({
+        const response = await prisma.photo.findFirst({
             select: {
                 link: true
             },
@@ -12,7 +12,7 @@ export default async function handle(req, res) {
             }
         })
 
-        results !== null ? res.status(200).json(results) : res.status(404).json({})
+        res.status(200).json({content: response ?? {}})
     } catch (err) {
         res.status(500).json(err)
     }

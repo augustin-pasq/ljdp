@@ -1,31 +1,27 @@
 import prisma from "../../../../lib/prisma"
 
 export default async function handle(req, res) {
-    let results = {}
-    let code = 200
-
     try {
-        if (req.body.action === "edit") {
-            results = await prisma.game.findFirst({
-                where: {
-                    accessCode: req.body.code,
-                    owner: req.body.owner
-                }
-            })
+        let response = await prisma.game.findFirst({
+            where: {
+                accessCode: req.body.code
+            }
+        })
 
-            if(results === null) { code = 403; results = {} }
+        let success = false
+        let message = ""
+
+        if (response === null) {
+            message = "not_found"
+        } else if (req.body.action === "edit" && response.owner !== req.body.owner) {
+            message = "unauthorized"
+        } else if (response.status === 4) {
+            message = "ended"
         } else {
-            results = await prisma.game.findFirst({
-                where: {
-                    accessCode: req.body.code
-                }
-            })
-
-            if(results === null) { code = 404; results = {} }
-            if(results.status === 4) { code = 423; results = {} }
+            success = true
         }
 
-        res.status(code).json(results)
+        res.status(200).json({success: success, message: message, content: response})
     } catch (err) {
         res.status(500).json(err)
     }

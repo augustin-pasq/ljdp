@@ -1,5 +1,5 @@
 import prisma from "../../../../lib/prisma"
-import {io} from "socket.io-client";
+import {io} from "socket.io-client"
 
 const socket = io.connect("http://localhost:4000")
 
@@ -70,7 +70,7 @@ export default async function handle(req, res) {
         })
 
         socket.emit("addResponse", {completed: responseNumber >= participantsNumber, user: user})
-        res.status(200).json({})
+        res.status(200).json({content: {}})
     } catch (err) {
         res.status(500).json(err)
     }
