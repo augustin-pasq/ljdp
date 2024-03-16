@@ -1,7 +1,7 @@
 import prisma from "../../../../lib/prisma"
 import {io} from "socket.io-client"
 
-const socket = io.connect("http://localhost:4000")
+const socket = io.connect("http://192.168.1.12:4000")
 
 export default async function handle(req, res) {
 

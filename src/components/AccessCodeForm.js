@@ -65,7 +65,7 @@ export default function AccessCodeForm(props) {
             <Navbar user={props.user}/>
             <main id="accesscodeform">
                 <div id="container">
-                    <div id="header">
+                    <div className="header">
                         <span id="title">Le code de la partie, s'il vous plait ?</span>
                         <span>{props.subtitle}</span>
                     </div>

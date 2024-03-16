@@ -73,7 +73,6 @@ export default function GameMaker(props) {
                 setPhoto(result)
                 setSelectedCategory(category)
             })
-            .catch(error => console.error(error))
     }
 
     const deleteCategory = async (id) => {
@@ -137,7 +136,7 @@ export default function GameMaker(props) {
                 <h1>{props.action === "edit" ? "Gérer les catégories" : "Uploader des photos"}</h1>
 
                 <div id="container">
-                    <section id="categories-container" style={{width: props.action === "edit" ? "66%" : "60%"}}>
+                    <section className="list-container" style={{width: props.action === "edit" ? "66%" : "60%"}}>
                         {props.action === "edit" &&
                             <form onSubmit={formik.handleSubmit}>
                                 <InputText id="title" className={isFormFieldInvalid("title") ? "p-invalid" : ""} name="title" placeholder="Titre" value={formik.values.title} onChange={formik.handleChange}/>
@@ -145,11 +144,11 @@ export default function GameMaker(props) {
                             </form>
                         }
 
-                        <li id="categories-list" ref={categoriesNode}>
+                        <li ref={categoriesNode}>
                             {categories.map(category => {
                                 return (
                                     <ul key={category.id} onClick={() => props.action === "upload" && selectCategory(category)}>
-                                        <span className="category-title">{category.title}</span>
+                                        <span className="title">{category.title}</span>
                                         {props.action === "edit" ?
                                             <Button icon="pi pi-trash" rounded onClick={() => deleteCategory(category.id)}/>
                                         :

@@ -5,6 +5,10 @@
         flex-direction: column-reverse;
     }
 
+    section {
+        width: 100% !important;
+    }
+
 
 
     /** PAGES AND COMPONENTS **/
@@ -15,7 +19,7 @@
             padding: 2.5rem;
             width: 100%;
 
-            #header {
+            .header {
                 #title {
                     font-size: 2rem;
                 }
@@ -69,9 +73,14 @@
             height: unset;
             width: 100%;
 
-            #categories-container {
+            .list-container {
                 gap: 0.75rem;
                 width: 100% !important;
+
+                .header {
+                    font-size: 1.45rem;
+                    margin-bottom: 0.5rem;
+                }
 
                 form {
                     gap: 0.5rem;
@@ -79,7 +88,6 @@
 
                     .p-inputtext {
                         height: 2.5rem;
-                        width: 83%
                     }
 
                     button {
@@ -96,11 +104,11 @@
                     gap: 0.75rem;
 
                     ul {
-                        gap: 0.5rem;
+                        gap: 1rem;
                         margin: 0;
                         padding: 0.5rem 0.75rem;
 
-                        .category-title {
+                        .title {
                             font-size: 1rem;
                             width: 78%
                         }
@@ -120,10 +128,11 @@
             .side-container {
                 gap: 0.75rem;
                 padding: 1.5rem;
-                width: 100% !important;
             }
 
             #instructions-container {
+                gap: 0.75rem;
+
                 #title {
                     font-size: 1.1rem;
                 }

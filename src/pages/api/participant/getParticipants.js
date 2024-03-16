@@ -13,10 +13,12 @@ export default async function handle(req, res) {
                 User: {
                     select: {
                         id: true,
+                        username: true,
                         displayedName: true,
                         profilePicture: true,
                     }
                 },
+                hasJoined: true
             },
             where: {
                 game: game.id,

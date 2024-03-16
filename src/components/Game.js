@@ -5,7 +5,7 @@ import {Card} from "primereact/card"
 import {useRouter} from "next/router"
 import {io} from "socket.io-client"
 
-const socket = io.connect("http://localhost:4000")
+const socket = io.connect("http://192.168.1.12:4000")
 
 export default function Game(props) {
     const wide = props.gameData.propositions.length > 4
