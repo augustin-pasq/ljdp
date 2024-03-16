@@ -1,11 +1,12 @@
+import {Avatar} from "primereact/avatar"
 import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
+import {io} from "socket.io-client"
 import Navbar from "@/components/Navbar"
 import React, {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
-import {io} from "socket.io-client";
-import {Avatar} from "primereact/avatar";
+import {useRouter} from "next/router";
 
 const socket = io.connect("http://192.168.1.12:4000")
 
@@ -22,24 +23,25 @@ export default function Dashboard(props) {
     const [selectedCategory, setSelectedCategory] = useState(null)
     const categoriesNode = useRef(null)
     const mainNode = useRef(null)
+    const router = useRouter()
     const isMobile = useMediaQuery({maxWidth: 1280})
 
     useEffect(() => {
         if (!rendered) {
-            switch(props.action) {
-                case "edit":
+            switch(props.page) {
+                case "/edit":
                     setLayoutSettings({
-                        title: "Gérer les catégories",
+                        title: "Éditer la partie",
                         listContainerWidth: "66%",
                     })
                     break
-                case "upload":
+                case "/upload":
                     setLayoutSettings({
-                        title: "Gérer les catégories",
-                        listContainerWidth: "66%",
+                        title: "Uploader des photos",
+                        listContainerWidth: "60%",
                     })
                     break
-                case "play":
+                case "/join":
                     setLayoutSettings({
                         title: "Rejoindre une partie",
                         listContainerWidth: "47%",
@@ -54,6 +56,12 @@ export default function Dashboard(props) {
 
         socket.on("userHasJoined", (data) => {
             setPlayers([...players, data.user])
+        })
+
+        socket.on("gameHasBeenLaunched", async () => {
+            await router.push({
+                pathname: "/play", query: {accessCode: props.accessCode},
+            }, "/play")
         })
     }, [categories, players])
 
@@ -176,9 +184,8 @@ export default function Dashboard(props) {
         }
     }
 
-    const handleStart = async () => {
-        await handleJoin()
-        props.setGameModeHandler("gameStarted")
+    const handleLaunch = () => {
+        handleJoin().then(() => socket.emit("launchGame", {accessCode: props.accessCode}))
     }
 
     return (
@@ -187,27 +194,27 @@ export default function Dashboard(props) {
             <main id="gamemaker" ref={mainNode}>
                 <h1>{layoutSettings.title}</h1>
 
-                <div id="container" style={{flexDirection: props.action === "play" && isMobile ? "column" : ""}}>
-                    {props.action === "play" &&
+                <div id="container" style={{flexDirection: props.page === "/join" && isMobile ? "column" : ""}}>
+                    {props.page === "/join" &&
                         <section id="instructions-container" style={{width: "31%"}}>
                             <div className="side-container">
                                 <span id="title">Voici le code d'accès de la partie :</span>
                                 <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={props.accessCode} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
                                 <div id="links-container">
                                     <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
-                                    <span><a href="https://ljdp.augustinpasquier.fr/play" target="_blank">ljdp.augustinpasquier.fr/play</a> pour commencer la partie</span>
+                                    <span><a href="https://ljdp.augustinpasquier.fr/join" target="_blank">ljdp.augustinpasquier.fr/join</a> pour commencer la partie</span>
                                     <small>(Les joueurs n'ayant pas envoyé de photos peuvent quand même participer.)</small>
                                 </div>
                             </div>
 
                             <div className="side-down-container">
-                                <Button label={hasJoined ? "En attente du lancement de la partie..." : props.gameOwner === props.user.id ? "Lancer la partie" : "Rejoindre"} rounded disabled={hasJoined} onClick={props.gameOwner === props.user.id ? handleStart : handleJoin}/>
+                                <Button label={hasJoined ? "En attente du lancement de la partie..." : props.gameOwner === props.user.id ? "Lancer la partie" : "Rejoindre"} rounded disabled={hasJoined} onClick={props.gameOwner === props.user.id ? handleLaunch : handleJoin}/>
                             </div>
                         </section>
                     }
 
                     <section className="list-container" style={{width: layoutSettings.listContainerWidth}}>
-                        {props.action === "edit" &&
+                        {props.page === "/edit" &&
                             <form onSubmit={formik.handleSubmit}>
                                 <InputText id="title" className={isFormFieldInvalid("title") ? "p-invalid" : ""} name="title" placeholder="Titre" value={formik.values.title} onChange={formik.handleChange}/>
                                 <Button type="submit" icon="pi pi-plus" rounded/>
@@ -215,16 +222,16 @@ export default function Dashboard(props) {
                         }
 
                         <li ref={categoriesNode}>
-                            {props.action === "play" && <span className="header">Catégories</span>}
+                            {props.page === "/join" && <span className="header">Catégories</span>}
                             {categories.map(category => {
                                 return (
-                                    <ul key={category.id} onClick={() => props.action === "upload" && selectCategory(category)}>
+                                    <ul key={category.id} onClick={() => props.page === "/upload" && selectCategory(category)}>
                                         <span className="title">{category.title}</span>
                                         {{
-                                            "edit": <Button icon="pi pi-trash" rounded onClick={() => deleteCategory(category.id)}/>,
-                                            "upload": <Button className="cursor-pointer" icon={`pi ${category.link === null ? "pi-cloud-upload" : "pi-check"}`} rounded severity={category.link === null ? "" : "success"} onClick={() => selectCategory(category)}/>,
-                                            "play": <></>
-                                        }[props.action]}
+                                            "/edit": <Button icon="pi pi-trash" rounded onClick={() => deleteCategory(category.id)}/>,
+                                            "/upload": <Button className="cursor-pointer" icon={`pi ${category.link === null ? "pi-cloud-upload" : "pi-check"}`} rounded severity={category.link === null ? "" : "success"} onClick={() => selectCategory(category)}/>,
+                                            "/join": <></>
+                                        }[props.page]}
                                     </ul>
                                 )
                             })}
@@ -232,18 +239,18 @@ export default function Dashboard(props) {
                     </section>
 
                     {{
-                        "edit":
+                        "/edit":
                             <section id="instructions-container" className="side-container" style={{width: "33%"}}>
                                 <span id="title">Voici le code d'accès de la partie :</span>
                                 <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={props.accessCode} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
                                 <div id="links-container">
                                     <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
                                     <span><a href="https://ljdp.augustinpasquier.fr/upload" target="_blank">ljdp.augustinpasquier.fr/upload</a> pour uploader des photos</span>
-                                    <span><a href="https://ljdp.augustinpasquier.fr/play" target="_blank">ljdp.augustinpasquier.fr/play</a> pour commencer la partie</span>
+                                    <span><a href="https://ljdp.augustinpasquier.fr/join" target="_blank">ljdp.augustinpasquier.fr/join</a> pour commencer la partie</span>
                                 </div>
                             </section>,
 
-                        "upload":
+                        "/upload":
                             <section id="uploader-container" className="side-container" style={{width: "40%"}}>
                                 {selectedCategory ? <>
                                     {photo === "" ? <div id="drop-area">
@@ -257,7 +264,7 @@ export default function Dashboard(props) {
                                 </> : <span id="instructions">Sélectionne une catégorie pour uploader un fichier.</span>}
                             </section>,
 
-                        "play":
+                        "/join":
                             <section className="list-container" style={{width: "22%"}}>
                                 <span className="header">Participants</span>
                                 <li>
@@ -274,7 +281,7 @@ export default function Dashboard(props) {
                                     })}
                                 </li>
                             </section>
-                    }[props.action]}
+                    }[props.page]}
                 </div>
             </main>
         </>)

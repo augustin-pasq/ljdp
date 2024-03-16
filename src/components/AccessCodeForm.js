@@ -1,13 +1,49 @@
 import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
 import Navbar from "@/components/Navbar"
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {useFormik} from "formik"
 import {useRouter} from "next/router"
 
 export default function AccessCodeForm(props) {
     const [errorMessage, setErrorMessage] = useState("")
+    const [rendered, setRendered] = useState(false)
+    const [formText, setFormText] = useState({})
     const router = useRouter()
+
+    useEffect(() => {
+        switch (router.pathname) {
+            case "/edit":
+                setFormText( {
+                    subtitle: "Entre ici le code de la partie que tu veux éditer :",
+                    button: "Éditer la partie"
+                })
+                break
+            case "/upload":
+                setFormText( {
+                    subtitle: "Entre ici le code qu'on t'a envoyé pour uploader tes photos :",
+                    button: "Uploader mes photos"
+                })
+                break
+            case "/join":
+                setFormText( {
+                    subtitle: "Entre ici le code qu'on t'a envoyé pour rejoindre tes amis :",
+                    button: "Rejoindre mes amis"
+                })
+                break
+            case "/play":
+                setFormText( {
+                    subtitle: "Entre ici le code qu'on t'a envoyé pour jouer avec tes amis :",
+                    button: "Jouer avec mes amis"
+                })
+                break
+            case "/scores":
+                setFormText( {
+                    subtitle: "Entre ici le code de la partie dont tu veux consulter les scores :",
+                    button: "Consulter les scores"
+                })
+        }
+    }, [])
 
     const formik = useFormik({
         initialValues: {
@@ -25,7 +61,7 @@ export default function AccessCodeForm(props) {
             const request = await fetch("/api/game/getGame", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({code: data.code, action: props.action, owner: props.user.id}),
+                body: JSON.stringify({code: data.code, target: props.redirect, owner: props.user.id}),
             })
 
             if (request.status === 200) {
@@ -67,7 +103,7 @@ export default function AccessCodeForm(props) {
                 <div id="container">
                     <div className="header">
                         <span id="title">Le code de la partie, s'il vous plait ?</span>
-                        <span>{props.subtitle}</span>
+                        <span>{formText.subtitle}</span>
                     </div>
 
                     {errorMessage && <span className="p-error">{errorMessage}</span>}
@@ -78,7 +114,7 @@ export default function AccessCodeForm(props) {
                             {getFormErrorMessage("code")}
                         </div>
 
-                        <Button label={props.button} type="submit" rounded/>
+                        <Button label={formText.button} type="submit" rounded/>
                     </form>
                 </div>
             </main>

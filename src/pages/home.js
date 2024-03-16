@@ -16,9 +16,9 @@ export default function Home(props) {
         if(request.status === 200) {
             const data = await request.json()
             await router.push({
-                pathname: "/categories",
+                pathname: "/edit",
                 query: {accessCode: data.content.accessCode},
-            }, "/categories")
+            }, "/edit")
         }
     }
 
@@ -30,7 +30,7 @@ export default function Home(props) {
                     <span className="item-title">Créer une partie</span>
                     <span className="item-emoji">🚀</span>
                 </div>
-                <div className="item" onClick={async () => {await router.push("/categories")}}>
+                <div className="item" onClick={async () => {await router.push("/edit")}}>
                     <span className="item-title">Gérer les catégories</span>
                     <span className="item-emoji">✏️</span>
                 </div>
@@ -38,7 +38,7 @@ export default function Home(props) {
                     <span className="item-title">Uploader des photos</span>
                     <span className="item-emoji">📷</span>
                 </div>
-                <div className="item" onClick={async () => {await router.push("/play")}}>
+                <div className="item" onClick={async () => {await router.push("/join")}}>
                     <span className="item-title">Rejoindre une partie</span>
                     <span className="item-emoji">🎮</span>
                 </div>

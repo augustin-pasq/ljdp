@@ -1,29 +1,74 @@
 import AccessCodeForm from "@/components/AccessCodeForm"
-import GameDispatcher from "@/components/GameDispatcher"
 import Dashboard from "@/components/Dashboard"
+import Game from "@/components/Game"
 import GameScores from "@/components/GameScores"
 import React, {useEffect, useState} from "react"
+import {useRouter} from "next/router"
 
 export default function AccessCodeDispatcher(props) {
     const [categories, setCategories] = useState([])
+    const [formText, setFormText] = useState({})
+    const [gameData, setGameData] = useState([])
+    const [participants, setParticipants] = useState([])
     const [rendered, setRendered] = useState(false)
     const [scores, setScores] = useState([])
+    const router = useRouter()
 
     useEffect(() => {
         if (props.accessCode !== undefined) {
-            if(props.action === "scores") {
-                getScores()
-                    .then((result) => { setScores(result) })
-                    .then(() => {
-                        getCategories()
-                            .then((result) => { setCategories(result) })
-                            .then(() => setRendered(true))
-                    })
-
-            } else {
-                getCategories()
-                    .then((result) => { setCategories(result) })
-                    .then(() => setRendered(true))
+            switch(router.pathname) {
+                case "/edit":
+                    getCategories()
+                        .then((result) => { setCategories(result) })
+                        .then(() => setFormText({
+                            subtitle: "Entre ici le code de la partie que tu veux éditer :",
+                            button: "Éditer la partie"
+                        }))
+                        .then(() => setRendered(true))
+                    break
+                case "/upload":
+                    getCategories()
+                        .then((result) => { setCategories(result) })
+                        .then(() => setFormText({
+                            subtitle: "Entre ici le code qu'on t'a envoyé pour uploader tes photos :",
+                            button: "Uploader mes photos"
+                        }))
+                        .then(() => setRendered(true))
+                    break
+                case "/join":
+                    getCategories()
+                        .then((result) => { setCategories(result) })
+                        .then(() => {
+                            getParticipants()
+                                .then((result) => setParticipants(result.content))
+                                .then(() => setFormText({
+                                    subtitle: "Entre ici le code qu'on t'a envoyé pour rejoindre tes amis :",
+                                    button: "Rejoindre mes amis"
+                                }))
+                                .then(() => setRendered(true))
+                        })
+                    break
+                case "/play":
+                    getGameData()
+                        .then((result) => setGameData(result))
+                        .then(() => setFormText({
+                            subtitle: "Entre ici le code qu'on t'a envoyé pour jouer avec tes amis :",
+                            button: "Jouer avec mes amis"
+                        }))
+                        .then(() => setRendered(true))
+                    break
+                case "/scores":
+                    getScores()
+                        .then((result) => { setScores(result) })
+                        .then(() => {
+                            getCategories()
+                                .then((result) => { setCategories(result) })
+                                .then(() => setFormText({
+                                    subtitle: "Entre ici le code de la partie dont tu veux consulter les scores :",
+                                    button: "Consulter les scores"
+                                }))
+                                .then(() => setRendered(true))
+                        })
             }
         }
     }, [props.accessCode])
@@ -33,6 +78,29 @@ export default function AccessCodeDispatcher(props) {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({accessCode: props.accessCode, user: props.user.id}),
+        })
+
+        if (request.status === 200) {
+            const data = await request.json()
+            return data.content
+        }
+    }
+
+    const getParticipants = async () => {
+        const request = await fetch("/api/participant/getParticipants", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({accessCode: props.accessCode}),
+        })
+
+        return request.status === 200 ? await request.json() : []
+    }
+
+    const getGameData = async () => {
+        const request = await fetch("/api/game/getGameData", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({accessCode: props.accessCode}),
         })
 
         if (request.status === 200) {
@@ -58,13 +126,14 @@ export default function AccessCodeDispatcher(props) {
         <>
             {props.accessCode !== undefined && rendered ?
                 {
-                    "edit":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} action={props.action}/>,
-                    "upload":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} action={props.action}/>,
-                    "play":     <GameDispatcher accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>,
-                    "scores":   <GameScores accessCode={props.accessCode} categories={categories} scores={scores} user={props.user}/>
-                }[props.action]
+                    "/edit":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
+                    "/upload":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
+                    "/join":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname} gameOwner={parseInt(props.gameOwner)} participants={participants}/>,
+                    "/play":     <Game accessCode={props.accessCode} user={props.user} gameData={gameData}/>,
+                    "/scores":   <GameScores accessCode={props.accessCode} categories={categories} scores={scores} user={props.user}/>
+                }[router.pathname]
                 :
-                <AccessCodeForm subtitle={props.subtitle} button={props.button} redirect={props.redirect} action={props.action} user={props.user}/>
+                <AccessCodeForm subtitle={formText.subtitle} button={formText.button} redirect={router.pathname} user={props.user}/>
             }
         </>
     )

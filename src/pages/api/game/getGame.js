@@ -13,7 +13,7 @@ export default async function handle(req, res) {
 
         if (response === null) {
             message = "not_found"
-        } else if (req.body.action === "edit" && response.owner !== req.body.owner) {
+        } else if (req.body.target === "edit" && response.owner !== req.body.owner) {
             message = "unauthorized"
         } else if (response.status === 4) {
             message = "ended"

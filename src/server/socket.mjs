@@ -18,8 +18,8 @@ io.on("connection", (socket) => {
         io.emit("userHasJoined", data)
     })
 
-    socket.on("setGameMode", (data) => {
-        io.emit("gameModeHasChanged", data.gameMode)
+    socket.on("launchGame", () => {
+        io.emit("gameHasBeenLaunched")
     })
 
     socket.on("addResponse", (data) => {

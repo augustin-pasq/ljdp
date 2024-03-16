@@ -1,13 +1,13 @@
-import React from "react"
 import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
-import {useRouter} from "next/router"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
+import React from "react"
+import {useRouter} from "next/router"
 
-export default function Upload(props) {
+export default function Scores(props) {
     const router = useRouter()
 
     return (
-        <AccessCodeDispatcher subtitle="Entre ici le code de la partie dont tu veux consulter les scores :" button="Voir les scores" accessCode={router.query.accessCode} user={props.user} redirect="/scores" action="scores"/>
+        <AccessCodeDispatcher accessCode={router.query.accessCode} user={props.user} />
     )
 }
 
