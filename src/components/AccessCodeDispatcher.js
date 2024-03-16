@@ -1,6 +1,6 @@
 import AccessCodeForm from "@/components/AccessCodeForm"
 import GameDispatcher from "@/components/GameDispatcher"
-import GameMaker from "@/components/GameMaker"
+import Dashboard from "@/components/Dashboard"
 import GameScores from "@/components/GameScores"
 import React, {useEffect, useState} from "react"
 
@@ -58,8 +58,8 @@ export default function AccessCodeDispatcher(props) {
         <>
             {props.accessCode !== undefined && rendered ?
                 {
-                    "edit":     <GameMaker accessCode={props.accessCode} categories={categories} user={props.user} action={props.action}/>,
-                    "upload":   <GameMaker accessCode={props.accessCode} categories={categories} user={props.user} action={props.action}/>,
+                    "edit":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} action={props.action}/>,
+                    "upload":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} action={props.action}/>,
                     "play":     <GameDispatcher accessCode={props.accessCode} gameOwner={parseInt(props.gameOwner)} categories={categories} user={props.user}/>,
                     "scores":   <GameScores accessCode={props.accessCode} categories={categories} scores={scores} user={props.user}/>
                 }[props.action]

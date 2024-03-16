@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import Game from "@/components/Game"
-import GameLauncher from "@/components/GameLauncher"
 import {io} from "socket.io-client"
+import Dashboard from "@/components/Dashboard";
 
 const socket = io.connect("http://192.168.1.12:4000")
 
@@ -53,7 +53,7 @@ export default function GameDispatcher(props) {
     return (
         <>
             {rendered &&
-                gameMode === "awaitingPlayers" && <GameLauncher accessCode={props.accessCode} categories={props.categories} user={props.user} gameOwner={props.gameOwner} participants={participants} setGameModeHandler={setGameModeHandler}/> ||
+                gameMode === "awaitingPlayers" && <Dashboard accessCode={props.accessCode} categories={props.categories} user={props.user} gameOwner={props.gameOwner} participants={participants} setGameModeHandler={setGameModeHandler} action="play"/> ||
                 gameMode === "gameStarted" && <Game accessCode={props.accessCode} user={props.user.id} gameData={gameData} />
             }
         </>
