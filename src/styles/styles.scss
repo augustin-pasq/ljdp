@@ -170,34 +170,7 @@ main {
     }
 }
 
-#gamelauncher {
-    flex-direction: column;
-    gap: 5rem;
-    padding: 3rem;
-
-    h1 {
-        color: #FFFFFF;
-        font-size: 3.5rem;
-        text-align: center;
-        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-        margin: 1rem 0;
-    }
-
-    #container {
-        display: flex;
-        gap: 6rem;
-        height: calc(100vh - 19.5rem - 3px);
-
-        #game-informations {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            height: 100%;
-        }
-    }
-}
-
-#gamemaker {
+#dashboard {
     flex-direction: column;
     gap: 5rem;
     padding: 3rem;
@@ -238,7 +211,7 @@ main {
                 justify-content: space-between;
                 padding: 1rem;
                 width: 100%;
-                
+
                 .p-inputtext {
                     height: 3rem;
                     width: calc(100% - 4rem);
@@ -430,6 +403,33 @@ main {
                 width: 100%;
                 object-fit: contain;
             }
+        }
+    }
+}
+
+#gamelauncher {
+    flex-direction: column;
+    gap: 5rem;
+    padding: 3rem;
+
+    h1 {
+        color: #FFFFFF;
+        font-size: 3.5rem;
+        text-align: center;
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+        margin: 1rem 0;
+    }
+
+    #container {
+        display: flex;
+        gap: 6rem;
+        height: calc(100vh - 19.5rem - 3px);
+
+        #game-informations {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
         }
     }
 }

@@ -191,7 +191,7 @@ export default function Dashboard(props) {
     return (
         <>
             <Navbar user={props.user}/>
-            <main id="gamemaker" ref={mainNode}>
+            <main id="dashboard" ref={mainNode}>
                 <h1>{layoutSettings.title}</h1>
 
                 <div id="container" style={{flexDirection: props.page === "/join" && isMobile ? "column" : ""}}>
