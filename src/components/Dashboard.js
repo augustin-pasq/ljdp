@@ -252,16 +252,24 @@ export default function Dashboard(props) {
 
                         "/upload":
                             <section id="uploader-container" className="side-container" style={{width: "40%"}}>
-                                {selectedCategory ? <>
-                                    {photo === "" ? <div id="drop-area">
-                                        <i className="pi pi-cloud-upload"></i>
-                                        <span>Clique ou dépose ton fichier ici</span>
-                                        <input className="photo-input" id="file" type="file" multiple={false} accept="image/*" onChange={uploadPhoto}/>
-                                    </div> : <>
-                                        <img src={photo} alt="Fichier Joueur LJDP"/>
-                                        <Button rounded severity="danger" label="Supprimer le fichier" onClick={() => deletePhoto(photo)}/>
-                                    </>}
-                                </> : <span id="instructions">Sélectionne une catégorie pour uploader un fichier.</span>}
+                                {selectedCategory ?
+                                    <>
+                                        {photo === "" ?
+                                            <div id="drop-area">
+                                                <i className="pi pi-cloud-upload"></i>
+                                                <span>Clique ou dépose ton fichier ici</span>
+                                                <input className="photo-input" id="file" type="file" multiple={false} accept="image/*" onChange={uploadPhoto}/>
+                                            </div>
+                                            :
+                                            <>
+                                                <img src={photo} alt="Fichier Joueur LJDP"/>
+                                                <Button rounded severity="danger" label="Supprimer le fichier" onClick={() => deletePhoto(photo)}/>
+                                            </>
+                                        }
+                                    </>
+                                    :
+                                    <span id="instructions">Sélectionne une catégorie pour uploader un fichier.</span>
+                                }
                             </section>,
 
                         "/join":
