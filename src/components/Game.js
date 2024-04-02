@@ -1,23 +1,21 @@
-import React, {useRef, useState} from "react"
-import {ToggleButton} from "primereact/togglebutton"
+import React, {useState} from "react"
 import {Button} from "primereact/button"
-import {Card} from "primereact/card"
 import {useRouter} from "next/router"
 import {io} from "socket.io-client"
+import {Avatar} from "primereact/avatar";
+import {useMediaQuery} from "react-responsive";
 
 const socket = io.connect("http://192.168.1.12:4000")
 
 export default function Game(props) {
-    const wide = props.gameData.propositions.length > 4
     const [gameData, setGameData] = useState(props.gameData)
     const [questionMode, setQuestionMode] = useState(true)
-    const [propositionChecked, setPropositionChecked] = useState("")
+    const [propositionChecked, setPropositionChecked] = useState(null)
     const [preventValidation, setPreventValidation] = useState(false)
     const [category, setCategory] = useState(0)
     const [photo, setPhoto] = useState(0)
-    const [players, setPlayers] = useState([])
-    const toastErr = useRef(null)
     const router = useRouter()
+    const isMobile = useMediaQuery({maxWidth: 1280})
 
     const handleNext = (endFunction) => {
         socket.on("responseHasBeenAdded", (data) => {
@@ -33,7 +31,7 @@ export default function Game(props) {
                     }
                 }
 
-                setPropositionChecked("")
+                setPropositionChecked(null)
                 setPreventValidation(false)
             }
         })
@@ -70,63 +68,58 @@ export default function Game(props) {
                 const request = await fetch("/api/response/addResponse", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.categories[category].photos[photo].id, response: propositionChecked.id}),
+                    body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.categories[category].photos[photo].id, response: propositionChecked}),
                 })
 
                 if (request.status === 200) {
                     handleNext(getSolution)
                 }
-            } else {
-                toastErr.current.show({severity:"warn", summary: "T'aurais pas oublié quelque chose ?", detail:"Tu dois choisir l'une des propositions !", life: 3000})
             }
         } else {
             handleNext(getScoresView)
         }
     }
 
-    return (
-        <>
-            <Card className="panel-size shadow-7 border-round-4xl px-4 py-2 flex align-items-center justify-content-center">
-                <h1 className="text-6xl text-center pb-4">{gameData.categories[category].title}</h1>
-                <div className="grid md:flex-row flex-column">
-                    <div className="col-7 pr-6 pl-3 py-3 flex-column justify-content-start">
-                        <div className="flex flex-column gap-3 p-3" id="photos-container">
-                            <img src={gameData.categories[category].photos[photo].link} alt="Photo"/>
-                        </div>
-                    </div>
+    return (<main id="game">
+            <h1>{gameData.categories[category].title}</h1>
 
-                    <div className="col-5 pr-3 pl-6 py-3 flex flex-column full-height-card-upload align-items-center">
-                        <div className={`flex flex-column justify-content-around pr-5 ${wide ? "w-37rem" : "w-30rem"}`}>
-                            <div className={`button-group m-0 gap-4 ${questionMode ? `grid ${(wide ? "justify-content-center" : "flex-column")}` : "h-full justify-content-around"}`}>
-                                {questionMode ?
-                                    gameData.propositions.map((proposition, index) => {
-                                        return(
-                                            gameData.propositions.length <= 4 ?
-                                                <ToggleButton key={index} className="button-proposition" onLabel={proposition.displayedName} offLabel={proposition.displayedName} onIcon={(options) => <img src={proposition.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} offIcon={(options) => <img src={proposition.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} checked={proposition.displayedName === propositionChecked.displayedName} onChange={() => setPropositionChecked(proposition)} />
-                                                :
-                                                <ToggleButton key={index} className="button-proposition small" onLabel={proposition.displayedName} offLabel={proposition.displayedName} onIcon={(options) => <img src={proposition.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} offIcon={(options) => <img src={proposition.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} checked={proposition.displayedName === propositionChecked.displayedName} onChange={() => setPropositionChecked(proposition)} />
-                                        )
-                                    })
-                                    :
-                                    <div className="flex flex-column gap-7">
-                                        <div className="flex flex-column gap-4">
-                                            <span className="text-xl font-bold text-center">Tu as sélectionné :</span>
-                                            <Button text raised disabled className="button-proposition" severity={gameData.categories[category].photos[photo].response.id === gameData.categories[category].photos[photo].solution.id ? "success" : "danger" } label={gameData.categories[category].photos[photo].response.displayedName} icon={(options) => <img src={gameData.categories[category].photos[photo].response.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} alt="Photo de profil du joueur" />
-                                        </div>
+            <div id="container">
+                <section id="photo-container">
+                    <img src={gameData.categories[category].photos[photo].link} alt="Photo"/>
+                </section>
 
-                                        <div className="flex flex-column gap-4">
-                                            <span className="text-xl font-bold text-center">Et la bonne réponse était :</span>
-                                            <Button text raised disabled className="button-proposition" severity="success" label={gameData.categories[category].photos[photo].solution.displayedName} icon={(options) => <img src={gameData.categories[category].photos[photo].solution.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} alt="Photo de profil du joueur" />
-                                        </div>
+                <section id="propositions-container">
+                    <div id="propositions">
+                        {questionMode ?
+                            gameData.propositions.map(proposition =>
+                                <div key={proposition.id} className={`proposition${!preventValidation ? " hover" : ""}${propositionChecked === proposition.id ? " checked" : ""}`} onClick={() => !preventValidation && setPropositionChecked(proposition.id)}>
+                                    <Avatar image={proposition.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
+                                    <div className="username-wrapper">
+                                        <span className="displayedname">{proposition.username}</span>
+                                        <span className="username">{proposition.displayedName}</span>
                                     </div>
-                                }
-                            </div>
+                                </div>
+                            )
+                            :
+                            <>
+                                <div>
+                                    <span>Tu as sélectionné :</span>
+                                    <Button text raised disabled severity={gameData.categories[category].photos[photo].response.id === gameData.categories[category].photos[photo].solution.id ? "success" : "danger" } label={gameData.categories[category].photos[photo].response.displayedName} icon={(options) => <img src={gameData.categories[category].photos[photo].response.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} alt="Photo de profil du joueur" />
+                                </div>
 
-                            <Button className="button-proposition text-center w-full" label="Valider" disabled={preventValidation} onClick={() => handleValidation()}/>
-                        </div>
+                                <div>
+                                    <span>Et la bonne réponse était :</span>
+                                    <Button text raised disabled severity="success" label={gameData.categories[category].photos[photo].solution.displayedName} icon={(options) => <img src={gameData.categories[category].photos[photo].solution.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} alt="Photo de profil du joueur" />
+                                </div>
+                            </>
+                        }
                     </div>
-                </div>
-            </Card>
-        </>
+
+                    <div id="validate-container">
+                        <Button label={preventValidation ? "En attente des autres joueurs..." : "Valider"} disabled={preventValidation || propositionChecked === null} onClick={() => handleValidation()} rounded/>
+                    </div>
+                </section>
+            </div>
+        </main>
     )
 }

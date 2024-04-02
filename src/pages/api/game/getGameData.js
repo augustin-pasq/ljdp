@@ -26,6 +26,7 @@ export default async function handle(req, res) {
                 User: {
                     select: {
                         id: true,
+                        username: true,
                         displayedName: true,
                         profilePicture: true,
                     }
@@ -59,7 +60,7 @@ export default async function handle(req, res) {
         })
 
         participants.forEach(element => {
-            response.propositions.push({id: element.User.id, displayedName: element.User.displayedName, profilePicture: element.User.profilePicture})
+            response.propositions.push({id: element.User.id, username: element.User.username, displayedName: element.User.displayedName, profilePicture: element.User.profilePicture})
         })
 
         res.status(200).json({content: response})

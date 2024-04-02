@@ -234,10 +234,9 @@ main {
                 ul {
                     align-items: center;
                     background: rgba(255, 255, 255, 0.66);
-                    border-radius: 3rem;
+                    border-radius: 100rem;
                     display: flex;
-                    gap: 1.5rem;
-                    justify-content: space-between;
+                    gap: 1.25rem;
                     margin: 0;
                     padding: 0.75rem 1rem;
                     transition: 0.2s;
@@ -254,20 +253,27 @@ main {
                     }
 
                     .username-wrapper {
+                        align-items: flex-start;
                         display: flex;
                         flex-direction: column;
-                        gap: 0.5rem;
+                        gap: 0.75rem;
 
-                        .username {
-                            font-size: 1.1rem;
+                        .displayedname {
+                            font-size: 1.15rem;
                             font-weight: bold;
                             margin: 0;
                         }
                     }
                 }
 
+                .categories-hover:hover {
+                    background: rgba(255, 255, 255, 1);
+                    cursor: pointer;
+                }
+
                 .participant {
                     justify-content: flex-start;
+                    padding: 1rem;
                 }
 
                 .background-white {
@@ -402,6 +408,97 @@ main {
                 aspect-ratio: 4 / 3;
                 width: 100%;
                 object-fit: contain;
+            }
+        }
+    }
+}
+
+#game {
+    align-items: center;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 3rem;
+
+    h1 {
+        color: #FFFFFF;
+        font-size: 3.5rem;
+        text-align: center;
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+        margin: 1rem 0;
+    }
+
+    #container {
+        display: flex;
+        gap: 8rem;
+        width: fit-content;
+
+        #photo-container {
+            background: rgba(255, 255, 255, 0.66);
+            border-radius: 2rem;
+            height: 31vw;
+            padding: 2vw;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        #propositions-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width: 24vw;
+
+            #propositions {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+
+                .proposition {
+                    align-items: center;
+                    background: rgba(255, 255, 255, 0.66);
+                    border-radius: 100rem;
+                    display: flex;
+                    gap: 1.25rem;
+                    padding: 1rem;
+                    transition: 0.2s;
+
+                    .username-wrapper {
+                        align-items: flex-start;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.75rem;
+
+                        .displayedname {
+                            font-size: 1.15rem;
+                            font-weight: bold;
+                            margin: 0;
+                        }
+                    }
+
+                    &.hover:hover {
+                        background: rgba(255, 255, 255, 1);
+                        cursor: pointer;
+                    }
+
+                    &.checked {
+                        background: rgba(255, 255, 255, 1);
+                        box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
+                    }
+                }
+            }
+
+            #validate-container {
+                align-self: center;
+                background: rgba(255, 255, 255, 0.66);
+                border-radius: 100rem;
+                margin-top: 2rem;
+                padding: 0.75rem;
+
+                .p-button {
+                    width: fit-content;
+                }
             }
         }
     }

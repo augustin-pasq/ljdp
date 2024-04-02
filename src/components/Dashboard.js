@@ -225,7 +225,7 @@ export default function Dashboard(props) {
                             {props.page === "/join" && <span className="header">Catégories</span>}
                             {categories.map(category => {
                                 return (
-                                    <ul key={category.id} onClick={() => props.page === "/upload" && selectCategory(category)}>
+                                    <ul key={category.id} className={props.page === "/upload" && "categories-hover"} onClick={() => props.page === "/upload" && selectCategory(category)}>
                                         <span className="title">{category.title}</span>
                                         {{
                                             "/edit": <Button icon="pi pi-trash" rounded onClick={() => deleteCategory(category.id)}/>,
@@ -279,10 +279,10 @@ export default function Dashboard(props) {
                                     {participants.map(participant => {
                                         return (
                                             <ul key={participant.User.id} className={`participant ${players.find(player => player.id === participant.User.id) !== undefined ? "background-white" : "background-dark"}`}>
-                                                <Avatar image={participant.User.profilePicture} size="large" shape="circle"/>
+                                                <Avatar image={participant.User.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
                                                 <div className="username-wrapper">
-                                                    <span className="username">{participant.User.username}</span>
-                                                    <span>{participant.User.displayedName}</span>
+                                                    <span className="displayedname">{participant.User.username}</span>
+                                                    <span className="username">{participant.User.displayedName}</span>
                                                 </div>
                                             </ul>
                                         )
