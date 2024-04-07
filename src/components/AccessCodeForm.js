@@ -7,7 +7,6 @@ import {useRouter} from "next/router"
 
 export default function AccessCodeForm(props) {
     const [errorMessage, setErrorMessage] = useState("")
-    const [rendered, setRendered] = useState(false)
     const [formText, setFormText] = useState({})
     const router = useRouter()
 
