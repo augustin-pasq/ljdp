@@ -1,6 +1,5 @@
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
 import Navbar from "@/components/Navbar"
-import React from "react"
 import {useRouter} from "next/router"
 
 export default function Home(props) {

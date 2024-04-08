@@ -2,9 +2,9 @@ import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
 import Link from "next/link"
 import {Password} from "primereact/password"
-import React, {useState} from "react"
 import {useFormik} from "formik"
 import {useRouter} from "next/router"
+import {useState} from "react"
 
 export default function Register() {
     const [errorMessage, setErrorMessage] = useState("")

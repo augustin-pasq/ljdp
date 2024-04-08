@@ -1,6 +1,5 @@
 import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
-import React from "react"
 import {useRouter} from "next/router"
 
 export default function Scores(props) {

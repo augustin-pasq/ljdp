@@ -1,5 +1,5 @@
-import prisma from "../../../../lib/prisma"
 import {io} from "socket.io-client"
+import prisma from "../../../../lib/prisma"
 
 const socket = io.connect("http://192.168.1.12:4000")
 

@@ -1,5 +1,5 @@
 import {Avatar} from "primereact/avatar"
-import React, {useEffect, useState} from "react"
+import {useEffect, useState} from "react"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 

@@ -1,7 +1,7 @@
 import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
 import Navbar from "@/components/Navbar"
-import React, {useEffect, useState} from "react"
+import {useEffect, useState} from "react"
 import {useFormik} from "formik"
 import {useRouter} from "next/router"
 

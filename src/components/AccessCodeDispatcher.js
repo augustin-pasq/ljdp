@@ -2,7 +2,7 @@ import AccessCodeForm from "@/components/AccessCodeForm"
 import Dashboard from "@/components/Dashboard"
 import Game from "@/components/Game"
 import GameScores from "@/components/GameScores"
-import React, {useEffect, useState} from "react"
+import {useEffect, useState} from "react"
 import {useRouter} from "next/router"
 
 export default function AccessCodeDispatcher(props) {

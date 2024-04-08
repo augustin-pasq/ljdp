@@ -3,10 +3,10 @@ import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
 import {io} from "socket.io-client"
 import Navbar from "@/components/Navbar"
-import React, {useEffect, useRef, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
-import {useRouter} from "next/router";
+import {useRouter} from "next/router"
 
 const socket = io.connect("http://192.168.1.12:4000")
 

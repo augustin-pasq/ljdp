@@ -1,9 +1,9 @@
-import React, {useState} from "react"
+import {Avatar} from "primereact/avatar"
 import {Button} from "primereact/button"
-import {useRouter} from "next/router"
 import {io} from "socket.io-client"
-import {Avatar} from "primereact/avatar";
-import {useMediaQuery} from "react-responsive";
+import {useMediaQuery} from "react-responsive"
+import {useRouter} from "next/router"
+import {useState} from "react"
 
 const socket = io.connect("http://192.168.1.12:4000")
 
