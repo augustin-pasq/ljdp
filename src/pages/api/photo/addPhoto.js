@@ -9,7 +9,7 @@ export const config = {
     }
 }
 
-export default async function handle(req, res) {
+export default async function addPhoto(req, res) {
     let response = {link: ""}
 
     try {

@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function handle(req, res) {
+export default async function getGameData(req, res) {
     try {
         const gameData = await prisma.photo.findMany({
             select: {

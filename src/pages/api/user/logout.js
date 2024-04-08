@@ -1,8 +1,8 @@
 import {withSessionRoute} from "../../../../lib/ironSession"
 
-export default withSessionRoute(handle)
+export default withSessionRoute(logout)
 
-async function handle(req, res) {
+async function logout(req, res) {
     try {
         req.session.destroy()
         res.status(200).json({content: {}})

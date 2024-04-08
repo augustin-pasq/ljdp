@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function handle(req, res) {
+export default async function deletePhoto(req, res) {
     try {
         const photo = await prisma.photo.findFirst({
             where: {

@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function handle(req, res) {
+export default async function getCategories(req, res) {
     try {
         const game = await prisma.game.findFirst({
             where: {

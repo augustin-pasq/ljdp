@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function handle(req, res) {
+export default async function createGame(req, res) {
     let accessCode = require("crypto").randomBytes(2).toString("hex").toUpperCase()
     let existingAccessCodes = {}
 

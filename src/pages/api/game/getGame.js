@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function handle(req, res) {
+export default async function getGame(req, res) {
     try {
         let response = await prisma.game.findFirst({
             where: {

@@ -2,9 +2,9 @@ import prisma from "../../../../lib/prisma"
 import bcrypt from "bcrypt"
 import {withSessionRoute} from "../../../../lib/ironSession"
 
-export default withSessionRoute(handle)
+export default withSessionRoute(login)
 
-async function handle(req, res) {
+async function login(req, res) {
     try {
         const user = await prisma.user.findUnique({
             where: {

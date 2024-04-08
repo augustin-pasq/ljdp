@@ -3,7 +3,7 @@ import prisma from "../../../../lib/prisma"
 
 const socket = io.connect("http://192.168.1.12:4000")
 
-export default async function handle(req, res) {
+export default async function addResponse(req, res) {
 
     try {
         await prisma.response.create({

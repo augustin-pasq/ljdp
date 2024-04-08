@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function handle(req, res) {
+export default async function getPhoto(req, res) {
     try {
         const response = await prisma.photo.findFirst({
             select: {
