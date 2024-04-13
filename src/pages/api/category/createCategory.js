@@ -1,4 +1,5 @@
 import prisma from "../../../../lib/prisma"
+import {randomBytes} from "node:crypto"
 
 export default async function createCategory(req, res) {
     try {
@@ -11,6 +12,7 @@ export default async function createCategory(req, res) {
         const response = await prisma.category.create({
             data: {
                 title: req.body.title,
+                shuffleSeed: randomBytes(32).toString("hex"),
                 game: game.id,
             }
         })

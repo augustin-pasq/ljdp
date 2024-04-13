@@ -22,8 +22,20 @@ io.on("connection", (socket) => {
         io.emit("gameHasBeenLaunched")
     })
 
-    socket.on("addResponse", (data) => {
-        io.emit("responseHasBeenAdded", data)
+    socket.on("changePhoto", (lastPhoto = false) => {
+        if (lastPhoto) {
+            socket.emit("getScores")
+        } else {
+            io.emit("changePhoto")
+        }
+    })
+
+    socket.on("getSolution", () => {
+        io.emit("getSolution")
+    })
+
+    socket.on("getScores", () => {
+        io.emit("getScores")
     })
 })
 

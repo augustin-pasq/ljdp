@@ -243,6 +243,18 @@
                             }
                         }
                     }
+
+                    #solution-container {
+                        gap: 3rem;
+
+                        .solution-wrapper {
+                            gap: 0.75rem;
+
+                            .label {
+                                font-size: 1.3rem;
+                            }
+                        }
+                    }
                 }
 
                 #validate-container {

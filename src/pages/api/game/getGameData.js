@@ -1,23 +1,27 @@
 import prisma from "../../../../lib/prisma"
+import {shuffle} from "shuffle-seed"
 
 export default async function getGameData(req, res) {
     try {
-        const gameData = await prisma.photo.findMany({
+        const game = await prisma.game.findUnique({
+            where: {
+                accessCode: req.body.accessCode,
+            }
+        })
+
+        const categories = await prisma.category.findMany({
             select: {
-                id: true,
-                link: true,
-                Category: {
+                title: true,
+                shuffleSeed: true,
+                Photo: {
                     select: {
-                        title: true,
+                        id: true,
+                        link: true
                     }
                 }
             },
             where: {
-                Category: {
-                    Game: {
-                        accessCode: req.body.accessCode
-                    }
-                }
+                game: game.id
             }
         })
 
@@ -34,33 +38,25 @@ export default async function getGameData(req, res) {
             },
             where: {
                 hasPhotos: true,
-                Game: {
-                    accessCode: req.body.accessCode
-                }
+                game: game.id
             }
         })
 
         const response = {
-            categories: [],
+            photos: [],
             propositions: []
         }
 
-        const insertedCategories = {}
-        let index
-        gameData.forEach((element) => {
-            if(element.Category.title in insertedCategories) {
-                index = insertedCategories[element.Category.title]
-            } else {
-                index = Object.keys(insertedCategories).length
-                response.categories[index] = ({title: element.Category.title, photos: []})
-                insertedCategories[element.Category.title] = index
-            }
-
-            response.categories[index]["photos"].push({id: element.id, link: element.link})
+        categories.forEach(category => {
+            const shuffledPhotos = shuffle(category.Photo, category.shuffleSeed)
+            const formattedShuffledPhotos = shuffledPhotos.map(photo => {
+                return {...photo, category: category.title}
+            })
+            response.photos = response.photos.concat(formattedShuffledPhotos)
         })
 
-        participants.forEach(element => {
-            response.propositions.push({id: element.User.id, username: element.User.username, displayedName: element.User.displayedName, profilePicture: element.User.profilePicture})
+        participants.forEach(participant => {
+            response.propositions.push({ id: participant.User.id, username: participant.User.username, displayedName: participant.User.displayedName, profilePicture: participant.User.profilePicture })
         })
 
         res.status(200).json({content: response})

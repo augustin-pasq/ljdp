@@ -44,32 +44,27 @@ export default async function addResponse(req, res) {
             })
         }
 
-        const participantsNumber = await prisma.participant.count({
+        const participantsCount = await prisma.participant.count({
             where: {
                 game: game.id,
                 hasJoined: true
             }
         })
 
-        const responseNumber = await prisma.response.count({
+        const responsesCount = await prisma.response.count({
             where: {
                 photo: req.body.photo
             }
         })
 
-        const user = await prisma.user.findUnique({
-            select: {
-                id: true,
-                username: true,
-                displayedName: true,
-                profilePicture: true
-            },
-            where: {
-                id: req.body.user
+        if(responsesCount === participantsCount) {
+            if (req.body.lastPhoto) {
+                socket.emit("getSolution")
+            } else {
+                socket.emit("changePhoto")
             }
-        })
+        }
 
-        socket.emit("addResponse", {completed: responseNumber >= participantsNumber, user: user})
         res.status(200).json({content: {}})
     } catch (err) {
         res.status(500).json(err)

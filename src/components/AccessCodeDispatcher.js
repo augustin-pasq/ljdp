@@ -129,7 +129,7 @@ export default function AccessCodeDispatcher(props) {
                     "/edit":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
                     "/upload":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
                     "/join":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname} gameOwner={parseInt(props.gameOwner)} participants={participants}/>,
-                    "/play":     <Game accessCode={props.accessCode} user={props.user} gameData={gameData}/>,
+                    "/play":     <Game accessCode={props.accessCode} user={props.user} gameData={gameData} gameOwner={parseInt(props.gameOwner)}/>,
                     "/scores":   <GameScores accessCode={props.accessCode} categories={categories} scores={scores} user={props.user}/>
                 }[router.pathname]
                 :

@@ -26,9 +26,10 @@ CREATE TABLE Game
 
 CREATE TABLE Category
 (
-    id    INTEGER PRIMARY KEY AUTO_INCREMENT,
-    title TEXT    NOT NULL,
-    game  INTEGER NOT NULL,
+    id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    title       TEXT        NOT NULL,
+    shuffleSeed VARCHAR(64) NOT NULL,
+    game        INTEGER     NOT NULL,
 
     FOREIGN KEY (game) REFERENCES Game (id)
 );

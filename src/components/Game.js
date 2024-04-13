@@ -3,89 +3,67 @@ import {Button} from "primereact/button"
 import {io} from "socket.io-client"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 
 const socket = io.connect("http://192.168.1.12:4000")
 
 export default function Game(props) {
     const [gameData, setGameData] = useState(props.gameData)
+    const [index, setIndex] = useState(0)
     const [questionMode, setQuestionMode] = useState(true)
     const [propositionChecked, setPropositionChecked] = useState(null)
     const [preventValidation, setPreventValidation] = useState(false)
-    const [category, setCategory] = useState(0)
-    const [photo, setPhoto] = useState(0)
     const router = useRouter()
     const isMobile = useMediaQuery({maxWidth: 1280})
 
-    const handleNext = (endFunction) => {
-        socket.on("responseHasBeenAdded", (data) => {
-            if(data.completed) {
-                if (gameData.categories[category].photos[photo + 1] !== undefined) {
-                    setPhoto(photo + 1)
-                } else {
-                    if (gameData.categories[category + 1] !== undefined) {
-                        setCategory(category + 1)
-                        setPhoto(0)
-                    } else {
-                        endFunction()
-                    }
-                }
+    useEffect(() => {
+        socket.on("changePhoto", async () => {
+            setIndex(index + 1)
+        })
 
-                setPropositionChecked(null)
-                setPreventValidation(false)
+        socket.on("getSolution", async () => {
+            const request = await fetch("/api/game/getSolution", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({user: props.user.id, accessCode: props.accessCode}),
+            })
+
+            if (request.status === 200) {
+                const data = await request.json()
+                setGameData(data.content)
+                setIndex(0)
+                setQuestionMode(false)
             }
         })
-    }
 
-    const getSolution = async () => {
-        const request = await fetch("/api/game/getSolution", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user: props.user.id, accessCode: props.accessCode}),
+        socket.on("getScores", async () => {
+            await router.push({
+                pathname: "/scores", query: {accessCode: props.accessCode},
+            }, "/scores")
         })
-
-        if (request.status === 200) {
-            const data = await request.json()
-            setGameData(data)
-            setCategory(0)
-            setPhoto(0)
-            setQuestionMode(false)
-        }
-    }
-
-    const getScoresView = async () => {
-        await router.push({
-            pathname: "/scores",
-            query: {accessCode: props.accessCode},
-        }, "/scores")
-    }
+    }, [index])
 
     const handleValidation = async () => {
         setPreventValidation(true)
 
-        if(questionMode) {
-            if (propositionChecked !== "") {
-                const request = await fetch("/api/response/addResponse", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.categories[category].photos[photo].id, response: propositionChecked}),
-                })
+        const request = await fetch("/api/response/addResponse", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.photos[index].id, response: propositionChecked, lastPhoto: index === gameData.photos.length - 1}),
+        })
 
-                if (request.status === 200) {
-                    handleNext(getSolution)
-                }
-            }
-        } else {
-            handleNext(getScoresView)
+        if(request.status === 200) {
+            setPropositionChecked(null)
+            setPreventValidation(false)
         }
     }
 
     return (<main id="game">
-            <h1>{gameData.categories[category].title}</h1>
+            <h1>{gameData.photos[index].category}</h1>
 
             <div id="container">
                 <section id="photo-container">
-                    <img src={gameData.categories[category].photos[photo].link} alt="Photo"/>
+                    <img src={gameData.photos[index].link} alt="Photo"/>
                 </section>
 
                 <section id="propositions-container">
@@ -101,23 +79,42 @@ export default function Game(props) {
                                 </div>
                             )
                             :
-                            <>
-                                <div>
-                                    <span>Tu as sélectionné :</span>
-                                    <Button text raised disabled severity={gameData.categories[category].photos[photo].response.id === gameData.categories[category].photos[photo].solution.id ? "success" : "danger" } label={gameData.categories[category].photos[photo].response.displayedName} icon={(options) => <img src={gameData.categories[category].photos[photo].response.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} alt="Photo de profil du joueur" />
+                            <div id="solution-container">
+                                <div className="solution-wrapper">
+                                    <span className="label">Tu as sélectionné :</span>
+                                    <div className="proposition" style={{color: gameData.photos[index].response.id === gameData.photos[index].solution.id ? "#188a42" : "#d9342b"}}>
+                                        <Avatar image={gameData.photos[index].response.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
+                                        <div className="username-wrapper">
+                                            <span className="displayedname">{gameData.photos[index].response.username}</span>
+                                            <span className="username">{gameData.photos[index].response.displayedName}</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <span>Et la bonne réponse était :</span>
-                                    <Button text raised disabled severity="success" label={gameData.categories[category].photos[photo].solution.displayedName} icon={(options) => <img src={gameData.categories[category].photos[photo].solution.profilePicture} alt="Photo de profil du joueur" {...options.iconProps} />} alt="Photo de profil du joueur" />
+                                <div className="solution-wrapper">
+                                    <span className="label">Et la bonne réponse est :</span>
+                                    <div className="proposition">
+                                        <Avatar image={gameData.photos[index].solution.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
+                                        <div className="username-wrapper">
+                                            <span className="displayedname">{gameData.photos[index].solution.username}</span>
+                                            <span className="username">{gameData.photos[index].solution.displayedName}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </>
+                            </div>
                         }
                     </div>
 
-                    <div id="validate-container">
-                        <Button label={preventValidation ? "En attente des autres joueurs..." : "Valider"} disabled={preventValidation || propositionChecked === null} onClick={() => handleValidation()} rounded/>
-                    </div>
+                    {questionMode ?
+                        <div id="validate-container">
+                            <Button label={preventValidation ? "En attente des autres joueurs..." : "Valider"} disabled={preventValidation || propositionChecked === null} onClick={() => handleValidation()} rounded/>
+                        </div>
+                        :
+                        props.gameOwner === props.user.id &&
+                            <div id="validate-container">
+                                <Button label="Photo suivante" onClick={() => {socket.emit("changePhoto", index === gameData.photos.length - 1)}} rounded/>
+                            </div>
+                    }
                 </section>
             </div>
         </main>

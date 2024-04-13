@@ -13,8 +13,8 @@ export default async function getCategories(req, res) {
         const response = await prisma.$queryRaw
             `SELECT Category.id, Category.title, Photo.link
              FROM Category
-                      CROSS JOIN User
-                      LEFT JOIN Photo ON User.id = Photo.user AND Category.id = Photo.category
+                  CROSS JOIN User
+                  LEFT JOIN Photo ON User.id = Photo.user AND Category.id = Photo.category
              WHERE game = ${game.id} AND User.id = ${req.body.user};
             `
 

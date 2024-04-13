@@ -1,7 +1,8 @@
 import prisma from "../../../../lib/prisma"
+import {randomBytes} from "node:crypto"
 
 export default async function createGame(req, res) {
-    let accessCode = require("crypto").randomBytes(2).toString("hex").toUpperCase()
+    let accessCode = randomBytes(2).toString("hex").toUpperCase()
     let existingAccessCodes = {}
 
     try {
@@ -11,7 +12,7 @@ export default async function createGame(req, res) {
             }
         })
 
-        while(existingAccessCodes.find(obj => obj.accessCode === accessCode) !== undefined) accessCode = require("crypto").randomBytes(2).toString("hex").toUpperCase()
+        while(existingAccessCodes.find(obj => obj.accessCode === accessCode) !== undefined) accessCode = randomBytes(2).toString("hex").toUpperCase()
 
         const response = await prisma.game.create({
             data: {

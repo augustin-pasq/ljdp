@@ -20,7 +20,7 @@ export default async function setHasJoined(req, res) {
                     game: game.id,
                     user: req.body.user,
                     score: 0,
-                    hasJoined: false,
+                    hasJoined: true,
                     hasPhotos: false
                 }
             })
