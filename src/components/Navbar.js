@@ -48,8 +48,7 @@ export default function Navbar(props) {
             {!isMobile &&
                 <div id="avatar-container">
                     <Avatar image={props.user.profilePicture} size="xlarge" shape="circle" onClick={handleLogout}/>
-                    <span id="displayed-name">{props.user.username}</span>
-                    <span>{props.user.displayedName}</span>
+                    <span id="username">{props.user.username}</span>
                 </div>
             }
         </div>

@@ -31,7 +31,6 @@ export default async function getGameData(req, res) {
                     select: {
                         id: true,
                         username: true,
-                        displayedName: true,
                         profilePicture: true,
                     }
                 }
@@ -56,7 +55,7 @@ export default async function getGameData(req, res) {
         })
 
         participants.forEach(participant => {
-            response.propositions.push({ id: participant.User.id, username: participant.User.username, displayedName: participant.User.displayedName, profilePicture: participant.User.profilePicture })
+            response.propositions.push({ id: participant.User.id, username: participant.User.username, profilePicture: participant.User.profilePicture })
         })
 
         res.status(200).json({content: response})

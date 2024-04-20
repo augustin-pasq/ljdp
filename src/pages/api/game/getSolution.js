@@ -14,7 +14,6 @@ export default async function getSolution(req, res) {
                             select: {
                                 id: true,
                                 username: true,
-                                displayedName: true,
                                 profilePicture: true
                             }
                         },
@@ -24,7 +23,6 @@ export default async function getSolution(req, res) {
                                     select: {
                                         id: true,
                                         username: true,
-                                        displayedName: true,
                                         profilePicture: true
                                     }
                                 }
@@ -63,13 +61,11 @@ export default async function getSolution(req, res) {
                     response: {
                         id: photo.User.id,
                         username: photo.User.username,
-                        displayedName: photo.User.displayedName,
                         profilePicture: photo.User.profilePicture,
                     },
                     solution: {
                         id: photo.Response[0].User_Response_valueToUser.id,
                         username: photo.Response[0].User_Response_valueToUser.username,
-                        displayedName: photo.Response[0].User_Response_valueToUser.displayedName,
                         profilePicture: photo.Response[0].User_Response_valueToUser.profilePicture,
                     }
                 }

@@ -39,7 +39,6 @@ export default async function setHasJoined(req, res) {
             select: {
                 id: true,
                 username: true,
-                displayedName: true,
                 profilePicture: true
             },
             where: {

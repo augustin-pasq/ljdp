@@ -1,6 +1,6 @@
-import {Avatar} from "primereact/avatar"
 import {Button} from "primereact/button"
 import {io} from "socket.io-client"
+import PlayerCard from "@/components/PlayerCard"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 import {useEffect, useState} from "react"
@@ -70,35 +70,23 @@ export default function Game(props) {
                     <div id="propositions">
                         {questionMode ?
                             gameData.propositions.map(proposition =>
-                                <div key={proposition.id} className={`proposition${!preventValidation ? " hover" : ""}${propositionChecked === proposition.id ? " checked" : ""}`} onClick={() => !preventValidation && setPropositionChecked(proposition.id)}>
-                                    <Avatar image={proposition.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
-                                    <div className="username-wrapper">
-                                        <span className="displayedname">{proposition.username}</span>
-                                        <span className="username">{proposition.displayedName}</span>
-                                    </div>
+                                <div key={proposition.id} className={`playercard_container${!preventValidation ? " hover" : ""}${propositionChecked === proposition.id ? " checked" : ""}`} onClick={() => !preventValidation && setPropositionChecked(proposition.id)}>
+                                    <PlayerCard user={proposition.User} isMobile={isMobile} />
                                 </div>
                             )
                             :
                             <div id="solution-container">
                                 <div className="solution-wrapper">
                                     <span className="label">Tu as sélectionné :</span>
-                                    <div className="proposition" style={{color: gameData.photos[index].response.id === gameData.photos[index].solution.id ? "#188a42" : "#d9342b"}}>
-                                        <Avatar image={gameData.photos[index].response.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
-                                        <div className="username-wrapper">
-                                            <span className="displayedname">{gameData.photos[index].response.username}</span>
-                                            <span className="username">{gameData.photos[index].response.displayedName}</span>
-                                        </div>
+                                    <div className="playercard_container" style={{color: gameData.photos[index].response.id === gameData.photos[index].solution.id ? "#188a42" : "#d9342b"}}>
+                                        <PlayerCard user={gameData.photos[index].response.User} isMobile={isMobile} />
                                     </div>
                                 </div>
 
                                 <div className="solution-wrapper">
                                     <span className="label">Et la bonne réponse est :</span>
-                                    <div className="proposition">
-                                        <Avatar image={gameData.photos[index].solution.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
-                                        <div className="username-wrapper">
-                                            <span className="displayedname">{gameData.photos[index].solution.username}</span>
-                                            <span className="username">{gameData.photos[index].solution.displayedName}</span>
-                                        </div>
+                                    <div className="playercard_container">
+                                        <PlayerCard user={gameData.photos[index].solution.User} isMobile={isMobile} />
                                     </div>
                                 </div>
                             </div>

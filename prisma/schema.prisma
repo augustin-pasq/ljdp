@@ -10,7 +10,6 @@ datasource db {
 model User {
   id                            Int           @id @default(autoincrement())
   username                      String        @unique(map: "username") @db.VarChar(32)
-  displayedName                 String        @db.VarChar(32)
   profilePicture                String        @db.Text
   password                      String        @db.Text
   Game                          Game[]

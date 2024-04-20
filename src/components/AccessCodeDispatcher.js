@@ -1,7 +1,6 @@
 import AccessCodeForm from "@/components/AccessCodeForm"
 import Dashboard from "@/components/Dashboard"
 import Game from "@/components/Game"
-import GameScores from "@/components/GameScores"
 import {useEffect, useState} from "react"
 import {useRouter} from "next/router"
 
@@ -130,7 +129,7 @@ export default function AccessCodeDispatcher(props) {
                     "/upload":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
                     "/join":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname} gameOwner={parseInt(props.gameOwner)} participants={participants}/>,
                     "/play":     <Game accessCode={props.accessCode} user={props.user} gameData={gameData} gameOwner={parseInt(props.gameOwner)}/>,
-                    "/scores":   <GameScores accessCode={props.accessCode} categories={categories} scores={scores} user={props.user}/>
+                    "/scores":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname} scores={scores}/>
                 }[router.pathname]
                 :
                 <AccessCodeForm subtitle={formText.subtitle} button={formText.button} redirect={router.pathname} user={props.user}/>

@@ -14,7 +14,6 @@ export default async function getParticipants(req, res) {
                     select: {
                         id: true,
                         username: true,
-                        displayedName: true,
                         profilePicture: true,
                     }
                 },

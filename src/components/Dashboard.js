@@ -1,8 +1,9 @@
-import {Avatar} from "primereact/avatar"
+import {Badge} from "primereact/badge"
 import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
 import {io} from "socket.io-client"
 import Navbar from "@/components/Navbar"
+import PlayerCard from "@/components/PlayerCard"
 import {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
@@ -18,6 +19,7 @@ export default function Dashboard(props) {
     const [layoutSettings, setLayoutSettings] = useState({})
     const [lastPerformedAction, setLastPerformedAction] = useState("")
     const [photo, setPhoto] = useState("")
+    const [photos, setPhotos] = useState([])
     const [players, setPlayers] = useState(participants !== undefined ? participants.filter(participant => participant.hasJoined).map(participant => participant.User) : [])
     const [rendered, setRendered] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState(null)
@@ -44,7 +46,13 @@ export default function Dashboard(props) {
                 case "/join":
                     setLayoutSettings({
                         title: "Rejoindre une partie",
-                        listContainerWidth: "47%",
+                        listContainerWidth: "36%",
+                    })
+                    break
+                case "/scores":
+                    setLayoutSettings({
+                        title: "Récap' de la partie",
+                        listContainerWidth: "36%",
                     })
                     break
             }
@@ -95,25 +103,27 @@ export default function Dashboard(props) {
 
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
-    const selectCategory = (category) => {
-        async function getPhoto() {
-            const request = await fetch("/api/photo/getPhoto", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({category: category.id, user: props.user.id}),
-            })
-
-            if (request.status === 200) {
-                const data = await request.json()
-                return data.content.link ?? ""
-            }
-        }
-
-        getPhoto()
-            .then((result) => {
-                setPhoto(result)
+    const selectCategory = (category, page) => {
+        switch(page) {
+            case "/upload":
+                setPhoto(category.link ?? "")
                 setSelectedCategory(category)
-            })
+                break
+            case "/scores":
+                fetch("/api/photo/getPhotos", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({category: category.id, user: props.user.id}),
+                }).then(result => {
+                    if (result.status === 200) {
+                        result.json().then(data => {
+                            setPhotos(data.content)
+                            setSelectedCategory(category)
+                            mainNode.current.scrollTo({top: categoriesNode.current.scrollHeight + categories.length * 92, behavior: "smooth"})
+                        })
+                    }
+                })
+        }
     }
 
     const deleteCategory = async (id) => {
@@ -194,24 +204,40 @@ export default function Dashboard(props) {
             <main id="dashboard" ref={mainNode}>
                 <h1>{layoutSettings.title}</h1>
 
-                <div id="container" style={{flexDirection: props.page === "/join" && isMobile ? "column" : ""}}>
-                    {props.page === "/join" &&
-                        <section id="instructions-container" style={{width: "31%"}}>
-                            <div className="side-container">
-                                <span id="title">Voici le code d'accès de la partie :</span>
-                                <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={props.accessCode} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
-                                <div id="links-container">
-                                    <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
-                                    <span><a href="https://ljdp.augustinpasquier.fr/join" target="_blank">ljdp.augustinpasquier.fr/join</a> pour commencer la partie</span>
-                                    <small>(Les joueurs n'ayant pas envoyé de photos peuvent quand même participer.)</small>
+                <div id="container" style={{flexDirection: (props.page === "/join" || props.page === "/scores") && isMobile ? "column" : ""}}>
+                    {{
+                        "/join":
+                            <section id="instructions-container" style={{width: "34%"}}>
+                                <div className="side-container">
+                                    <span id="title">Voici le code d'accès de la partie :</span>
+                                    <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={props.accessCode} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
+                                    <div id="links-container">
+                                        <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
+                                        <span><a href="https://ljdp.augustinpasquier.fr/join" target="_blank">ljdp.augustinpasquier.fr/join</a> pour commencer la partie</span>
+                                        <small>(Les joueurs n'ayant pas envoyé de photos peuvent quand même participer.)</small>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="side-down-container">
-                                <Button label={hasJoined ? "En attente du lancement de la partie..." : props.gameOwner === props.user.id ? "Lancer la partie" : "Rejoindre"} rounded disabled={hasJoined} onClick={props.gameOwner === props.user.id ? handleLaunch : handleJoin}/>
-                            </div>
-                        </section>
-                    }
+                                <div className="side-down-container">
+                                    <Button label={hasJoined ? "En attente du lancement de la partie..." : props.gameOwner === props.user.id ? "Lancer la partie" : "Rejoindre"} rounded disabled={hasJoined} onClick={props.gameOwner === props.user.id ? handleLaunch : handleJoin}/>
+                                </div>
+                            </section>,
+
+                        "/scores":
+                            <section className="players-container" style={{width: "30%"}}>
+                                <span className="section-header">Classement</span>
+                                <ul>
+                                    {props.scores && props.scores.map((score, index) => {
+                                        return (
+                                            <li key={index + 1} className="playercard_container" style={{padding: isMobile ? "0.75rem 1rem" : "1rem"}}>
+                                                <Badge value={index + 1} size="large" style={{color: "black", border: `1px solid ${index === 0 ? "#AB7A1B" : (index === 1 ? "#838280" : (index === 2 ? "#75563B" : ""))}`, background: index === 0 ? "#EDB738" : (index === 1 ? "#D3D3D9" : (index === 2 ? "#C1834E" : ""))}}/>
+                                                <PlayerCard user={score.User} isMobile={isMobile} complementaryData={`${score.score} point${score.score > 1 ? "s" : ""}`} />
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </section>
+                    }[props.page]}
 
                     <section className="list-container" style={{width: layoutSettings.listContainerWidth}}>
                         {props.page === "/edit" &&
@@ -221,21 +247,21 @@ export default function Dashboard(props) {
                             </form>
                         }
 
-                        <li ref={categoriesNode}>
-                            {props.page === "/join" && <span className="header">Catégories</span>}
+                        <ul ref={categoriesNode}>
+                            {(props.page === "/join" || props.page === "/scores") && <span className="section-header">Catégories</span>}
                             {categories.map(category => {
                                 return (
-                                    <ul key={category.id} className={props.page === "/upload" ? "categories-hover" : ""} onClick={() => props.page === "/upload" && selectCategory(category)}>
+                                    <li key={category.id} className={`category${(props.page === "/upload" || props.page === "/scores") ? " hover" : ""}`} onClick={() => (props.page === "/upload" || props.page === "/scores") && selectCategory(category, props.page)}>
                                         <span className="title">{category.title}</span>
                                         {{
                                             "/edit": <Button icon="pi pi-trash" rounded onClick={() => deleteCategory(category.id)}/>,
-                                            "/upload": <Button className="cursor-pointer" icon={`pi ${category.link === null ? "pi-cloud-upload" : "pi-check"}`} rounded severity={category.link === null ? "" : "success"} onClick={() => selectCategory(category)}/>,
-                                            "/join": <></>
+                                            "/upload": <Button icon={`pi ${category.link === null ? "pi-cloud-upload" : "pi-check"}`} rounded severity={category.link === null ? "" : "success"} onClick={() => selectCategory(category, props.page)}/>,
+                                            "/scores": <Button icon="pi pi-arrow-right" rounded onClick={() => selectCategory(category, props.page)}/>,
                                         }[props.page]}
-                                    </ul>
+                                    </li>
                                 )
                             })}
-                        </li>
+                        </ul>
                     </section>
 
                     {{
@@ -262,7 +288,7 @@ export default function Dashboard(props) {
                                             </div>
                                             :
                                             <>
-                                                <img src={photo} alt="Fichier Joueur LJDP"/>
+                                                <img src={photo} alt="Photo"/>
                                                 <Button rounded severity="danger" label="Supprimer le fichier" onClick={() => deletePhoto(photo)}/>
                                             </>
                                         }
@@ -273,22 +299,36 @@ export default function Dashboard(props) {
                             </section>,
 
                         "/join":
-                            <section className="list-container" style={{width: "22%"}}>
-                                <span className="header">Participants</span>
-                                <li>
+                            <section className="players-container" style={{width: "30%"}}>
+                                <span className="section-header">Participants</span>
+                                <ul>
                                     {participants.map(participant => {
                                         return (
-                                            <ul key={participant.User.id} className={`participant ${players.find(player => player.id === participant.User.id) !== undefined ? "background-white" : "background-dark"}`}>
-                                                <Avatar image={participant.User.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle"/>
-                                                <div className="username-wrapper">
-                                                    <span className="displayedname">{participant.User.username}</span>
-                                                    <span className="username">{participant.User.displayedName}</span>
-                                                </div>
-                                            </ul>
+                                            <li key={participant.User.id} className={`playercard_container ${players.find(player => player.id === participant.User.id) !== undefined ? "background-white" : "background-dark"}`}>
+                                                <PlayerCard user={participant.User} isMobile={isMobile} />
+                                            </li>
                                         )
                                     })}
-                                </li>
-                            </section>
+                                </ul>
+                            </section>,
+
+                        "/scores":
+                            <section id="photos-container" style={{width: "34%"}}>
+                                {selectedCategory ?
+                                    <ul>
+                                        {photos.map(photo =>
+                                            <li className="photo">
+                                                <div className="playercard-wrapper">
+                                                    <PlayerCard user={photo.User} isMobile={isMobile} />
+                                                </div>
+                                                <img src={photo.link} alt="Photo"/>
+                                            </li>
+                                        )}
+                                    </ul>
+                                    :
+                                    <span className="side-container instructions">Sélectionne une catégorie pour voir les photos des joueurs.</span>
+                                }
+                            </section>,
                     }[props.page]}
                 </div>
             </main>

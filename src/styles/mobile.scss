@@ -72,14 +72,14 @@
             height: unset;
             width: 100%;
 
+            .section-header {
+                font-size: 1.45rem;
+                margin-bottom: 0.5rem;
+            }
+
             .list-container {
                 gap: 0.75rem;
                 width: 100% !important;
-
-                .header {
-                    font-size: 1.45rem;
-                    margin-bottom: 0.5rem;
-                }
 
                 form {
                     gap: 0.5rem;
@@ -90,52 +90,31 @@
                     }
 
                     button {
-                        height: 2.75rem;
-                        width: 2.75rem;
+                        height: 2.5rem;
+                        width: 2.5rem;
 
                         .pi {
-                            font-size: 0.9rem;
+                            font-size: 0.8rem;
                         }
                     }
                 }
 
-                li {
-                    gap: 0.75rem;
+                .category {
+                    padding: 0.75rem;
 
-                    ul {
-                        gap: 1rem;
-                        margin: 0;
-                        padding: 0.5rem 0.75rem;
-
-                        .title {
-                            font-size: 1rem;
-                            width: 78%
-                        }
-
-                        button {
-                            height: 2.75rem;
-                            width: 2.75rem;
-
-                            .pi {
-                                font-size: 0.9rem;
-                            }
-                        }
-
-                        .username-wrapper {
-                            gap: 0.5rem;
-
-                            .displayedname {
-                                font-size: 1rem;
-                            }
-
-                            .username {
-                                font-size: 0.9rem;
-                            }
-                        }
+                    .title {
+                        font-size: 1rem;
+                        height: 2.5rem;
+                        margin-left: 0.75rem;
                     }
 
-                    .participant {
-                        padding: 0.75rem;
+                    button {
+                        height: 2.5rem;
+                        width: 2.5rem;
+
+                        .pi {
+                            font-size: 0.8rem;
+                        }
                     }
                 }
             }
@@ -154,7 +133,7 @@
                 gap: 0.75rem;
 
                 #title {
-                    font-size: 1.1rem;
+                    font-size: 1rem;
                 }
 
                 .p-inputtext {
@@ -169,7 +148,7 @@
                     margin-top: 1rem;
 
                     #instruction {
-                        font-size: 1.1rem;
+                        font-size: 1rem;
                         margin-bottom: 0.25rem;
                     }
                 }
@@ -177,12 +156,12 @@
 
             #uploader-container {
                 #instructions {
-                    font-size: 1.1rem;
+                    font-size: 1rem;
                     font-weight: bold;
                 }
 
                 #drop-area {
-                    font-size: 1.1rem;
+                    font-size: 1rem;
                     gap: 1rem;
 
                     i {
@@ -192,6 +171,26 @@
                     span {
                         padding: 0 3rem;
                     }
+                }
+            }
+
+            .players-container {
+                gap: 0.5rem;
+            }
+
+            #photos-container {
+                .photo {
+                    border-radius: 1rem;
+                    gap: 0.75rem;
+                    padding: 1rem;
+
+                    .playercard-wrapper {
+                        gap: 0.75rem;
+                    }
+                }
+
+                span {
+                    font-size: 1rem;
                 }
             }
         }
@@ -314,6 +313,23 @@
 
             .p-avatar {
                 margin-bottom: 0;
+            }
+        }
+    }
+
+    .playercard_container {
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+
+        .playercard_username-wrapper {
+            gap: 0.5rem;
+
+            .playercard_username {
+                font-size: 1rem;
+            }
+
+            .playercard_complementary {
+                font-size: 0.9rem;
             }
         }
     }

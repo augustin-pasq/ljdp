@@ -13,7 +13,7 @@ export default async function getScores(req, res) {
                 User: {
                     select: {
                         id: true,
-                        displayedName: true,
+                        username: true,
                         profilePicture: true,
                     }
                 },
