@@ -28,7 +28,7 @@ export default function Navbar(props) {
             {!isMobile && <img alt="Logo" />}
 
             <div id="items-container">
-                <div className="item" onClick={async () => {await router.push("/home")}}>
+                <div className="item" onClick={async () => {await router.push("/")}}>
                     <span>Jouer</span>
                     <span>▶️</span>
                 </div>

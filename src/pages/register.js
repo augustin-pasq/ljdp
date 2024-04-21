@@ -33,7 +33,7 @@ export default function Register() {
 
             if (request.status === 200) {
                 const data = await request.json()
-                data.success ? await router.push("/home") : setErrorMessage("userAlreadyExists")
+                data.success ? await router.push("/") : setErrorMessage("userAlreadyExists")
             }
 
             formik.resetForm()

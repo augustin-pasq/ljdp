@@ -32,7 +32,7 @@ export default function Login() {
 
             if (request.status === 200) {
                 const data = await request.json()
-                data.success ? await router.push("/home") : setErrorMessage("badCredentials")
+                data.success ? await router.push("/") : setErrorMessage("badCredentials")
             }
 
             formik.resetForm()
