@@ -12,15 +12,15 @@ import {useRouter} from "next/router"
 const socket = io.connect("http://192.168.1.12:4000")
 
 export default function Dashboard(props) {
-    const participants = props.participants !== undefined ? props.participants : []
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
     const [categories, setCategories] = useState(props.categories)
     const [hasJoined, setHasJoined] = useState(false)
     const [layoutSettings, setLayoutSettings] = useState({})
     const [lastPerformedAction, setLastPerformedAction] = useState("")
+    const [participants, setParticipants] = useState(props.participants !== undefined ? props.participants.map(participant => { return ({...participant.User, hasJoined: participant.hasJoined, hasPhotos: true}) }) : [])
     const [photo, setPhoto] = useState("")
     const [photos, setPhotos] = useState([])
-    const [players, setPlayers] = useState(participants !== undefined ? participants.filter(participant => participant.hasJoined).map(participant => participant.User) : [])
+    const [players, setPlayers] = useState(participants !== undefined ? participants.filter(participant => participant.hasJoined) : [])
     const [rendered, setRendered] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState(null)
     const categoriesNode = useRef(null)
@@ -63,6 +63,9 @@ export default function Dashboard(props) {
         }
 
         socket.on("userHasJoined", (data) => {
+            if (participants.find(participant => participant.id === data.user.id) === undefined) {
+                setParticipants([...participants, data.user])
+            }
             setPlayers([...players, data.user])
         })
 
@@ -304,8 +307,8 @@ export default function Dashboard(props) {
                                 <ul>
                                     {participants.map(participant => {
                                         return (
-                                            <li key={participant.User.id} className={`playercard_container ${players.find(player => player.id === participant.User.id) !== undefined ? "background-white" : "background-dark"}`}>
-                                                <PlayerCard user={participant.User} isMobile={isMobile} />
+                                            <li key={participant.id} className={`playercard_container ${players.find(player => player.id === participant.id) !== undefined ? "background-white" : "background-dark"}`}>
+                                                <PlayerCard user={participant} isMobile={isMobile} icon={participant.hasPhotos ? "pi-images" : ""} />
                                             </li>
                                         )
                                     })}
@@ -319,7 +322,7 @@ export default function Dashboard(props) {
                                         {photos.map(photo =>
                                             <li className="photo">
                                                 <div className="playercard-wrapper">
-                                                    <PlayerCard user={photo.User} isMobile={isMobile} />
+                                                    <PlayerCard user={photo} isMobile={isMobile} />
                                                 </div>
                                                 <img src={photo.link} alt="Photo"/>
                                             </li>

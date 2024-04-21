@@ -635,9 +635,17 @@ ul {
         gap: 0.75rem;
 
         .playercard_username {
+            align-items: baseline;
+            display: flex;
+            flex-direction: row;
             font-size: 1.15rem;
             font-weight: bold;
+            gap: 0.75rem;
             margin: 0;
+
+            i {
+                font-size: 1.05rem;
+            }
         }
 
         .playercard_complementary {

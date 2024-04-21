@@ -71,7 +71,7 @@ export default function Game(props) {
                         {questionMode ?
                             gameData.propositions.map(proposition =>
                                 <div key={proposition.id} className={`playercard_container${!preventValidation ? " hover" : ""}${propositionChecked === proposition.id ? " checked" : ""}`} onClick={() => !preventValidation && setPropositionChecked(proposition.id)}>
-                                    <PlayerCard user={proposition.User} isMobile={isMobile} />
+                                    <PlayerCard user={proposition} isMobile={isMobile} />
                                 </div>
                             )
                             :
