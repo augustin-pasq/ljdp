@@ -19,6 +19,8 @@ export default function Game(props) {
     useEffect(() => {
         socket.on("changePhoto", async () => {
             setIndex(index + 1)
+            setPropositionChecked(null)
+            setPreventValidation(false)
         })
 
         socket.on("getSolution", async () => {
@@ -46,16 +48,11 @@ export default function Game(props) {
     const handleValidation = async () => {
         setPreventValidation(true)
 
-        const request = await fetch("/api/response/addResponse", {
+        await fetch("/api/response/addResponse", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.photos[index].id, response: propositionChecked, lastPhoto: index === gameData.photos.length - 1}),
         })
-
-        if(request.status === 200) {
-            setPropositionChecked(null)
-            setPreventValidation(false)
-        }
     }
 
     return (<main id="game">
@@ -79,14 +76,14 @@ export default function Game(props) {
                                 <div className="solution-wrapper">
                                     <span className="label">Tu as sélectionné :</span>
                                     <div className="playercard_container" style={{color: gameData.photos[index].response.id === gameData.photos[index].solution.id ? "#188a42" : "#d9342b"}}>
-                                        <PlayerCard user={gameData.photos[index].response.User} isMobile={isMobile} />
+                                        <PlayerCard user={gameData.photos[index].response} isMobile={isMobile} />
                                     </div>
                                 </div>
 
                                 <div className="solution-wrapper">
                                     <span className="label">Et la bonne réponse est :</span>
                                     <div className="playercard_container">
-                                        <PlayerCard user={gameData.photos[index].solution.User} isMobile={isMobile} />
+                                        <PlayerCard user={gameData.photos[index].solution} isMobile={isMobile} />
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +97,7 @@ export default function Game(props) {
                         :
                         props.gameOwner === props.user.id &&
                             <div id="validate-container">
-                                <Button label="Photo suivante" onClick={() => {socket.emit("changePhoto", index === gameData.photos.length - 1)}} rounded/>
+                                <Button label={index === gameData.photos.length - 1 ? "Voir les scores" : "Photo suivante"} onClick={() => {socket.emit(index === gameData.photos.length - 1 ? "getScores" : "changePhoto")}} rounded/>
                             </div>
                     }
                 </section>
