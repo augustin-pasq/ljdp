@@ -79,7 +79,10 @@ export default function AccessCodeForm(props) {
                             setErrorMessage("Tu ne peux pas gérer les catégories d'une partie que tu n'as pas créée.")
                             break
                         case "ended":
-                            setErrorMessage("Tu ne peux pas rejouer à une partie déjà terminée, désolé !")
+                            setErrorMessage("Tu ne peux pas accéder à une partie terminée, désolé !")
+                            break
+                        case "started":
+                            setErrorMessage("La partie a déjà commencé, il fallait être plus rapide !")
                             break
                     }
                 }

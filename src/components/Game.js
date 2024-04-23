@@ -97,7 +97,7 @@ export default function Game(props) {
                         :
                         props.gameOwner === props.user.id &&
                             <div id="validate-container">
-                                <Button label={index === gameData.photos.length - 1 ? "Voir les scores" : "Photo suivante"} onClick={() => {socket.emit(index === gameData.photos.length - 1 ? "getScores" : "changePhoto")}} rounded/>
+                                <Button label={index === gameData.photos.length - 1 ? "Voir les scores" : "Photo suivante"} onClick={() => {index === gameData.photos.length - 1 ? socket.emit("getScores", {accessCode: props.accessCode}) : socket.emit("changePhoto")}} rounded/>
                             </div>
                     }
                 </section>

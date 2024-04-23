@@ -18,8 +18,12 @@ io.on("connection", (socket) => {
         io.emit("userHasJoined", data)
     })
 
-    socket.on("launchGame", () => {
-        io.emit("gameHasBeenLaunched")
+    socket.on("launchGame", (data) => {
+        fetch("http://localhost:3000/api/game/setStatus", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({accessCode: data.accessCode, status: "started"}),
+        }).then(() => io.emit("gameHasBeenLaunched"))
     })
 
     socket.on("changePhoto", () => {
@@ -30,8 +34,12 @@ io.on("connection", (socket) => {
         io.emit("getSolution")
     })
 
-    socket.on("getScores", () => {
-        io.emit("getScores")
+    socket.on("getScores", (data) => {
+        fetch("http://localhost:3000/api/game/setStatus", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({accessCode: data.accessCode, status: "ended"}),
+        }).then(() => io.emit("getScores"))
     })
 })
 

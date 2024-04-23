@@ -13,9 +13,11 @@ export default async function getGame(req, res) {
 
         if (response === null) {
             message = "not_found"
-        } else if (req.body.target === "edit" && response.owner !== req.body.owner) {
+        } else if (req.body.target === "/edit" && response.owner !== req.body.owner) {
             message = "unauthorized"
-        } else if (response.status === 4) {
+        } else if (req.body.target !== "/play" && response.status === "started") {
+            message = "started"
+        } else if (req.body.target !== "/scores" && response.status === "ended") {
             message = "ended"
         } else {
             success = true

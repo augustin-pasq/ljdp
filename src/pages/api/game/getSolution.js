@@ -1,5 +1,5 @@
 import prisma from "../../../../lib/prisma"
-import {shuffle} from "shuffle-seed";
+import {shuffle} from "shuffle-seed"
 
 export default async function getSolution(req, res) {
     try {
@@ -19,6 +19,7 @@ export default async function getSolution(req, res) {
                         },
                         Response: {
                             select: {
+                                user: true,
                                 User_Response_valueToUser: {
                                     select: {
                                         id: true,
@@ -34,15 +35,6 @@ export default async function getSolution(req, res) {
             where: {
                 Game: {
                     accessCode: req.body.accessCode
-                },
-                Photo: {
-                    some: {
-                        Response: {
-                            some: {
-                                user: req.body.user
-                            }
-                        }
-                    }
                 }
             }
         })
@@ -59,14 +51,14 @@ export default async function getSolution(req, res) {
                     category: category.title,
                     link: photo.link,
                     response: {
+                        id: photo.Response.find(element => element.user === req.body.user).User_Response_valueToUser.id,
+                        username: photo.Response.find(element => element.user === req.body.user).User_Response_valueToUser.username,
+                        profilePicture: photo.Response.find(element => element.user === req.body.user).User_Response_valueToUser.profilePicture,
+                    },
+                    solution: {
                         id: photo.User.id,
                         username: photo.User.username,
                         profilePicture: photo.User.profilePicture,
-                    },
-                    solution: {
-                        id: photo.Response[0].User_Response_valueToUser.id,
-                        username: photo.Response[0].User_Response_valueToUser.username,
-                        profilePicture: photo.Response[0].User_Response_valueToUser.profilePicture,
                     }
                 }
             })
@@ -76,6 +68,7 @@ export default async function getSolution(req, res) {
 
         res.status(200).json({content: response})
     } catch (err) {
+        console.log(err)
         res.status(500).json(err)
     }
 }
