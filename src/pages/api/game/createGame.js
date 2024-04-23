@@ -18,7 +18,7 @@ export default async function createGame(req, res) {
             data: {
                 accessCode: accessCode,
                 owner: req.body.user.id,
-                status: 1
+                status: "created"
             }
         })
 

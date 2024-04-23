@@ -13,7 +13,6 @@ export default async function createCategory(req, res) {
             data: {
                 title: req.body.title,
                 shuffleSeed: randomBytes(32).toString("hex"),
-                status: "created",
                 game: game.id,
             }
         })
