@@ -68,7 +68,6 @@ export default async function getSolution(req, res) {
 
         res.status(200).json({content: response})
     } catch (err) {
-        console.log(err)
         res.status(500).json(err)
     }
 }
