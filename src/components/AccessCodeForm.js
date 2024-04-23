@@ -84,6 +84,9 @@ export default function AccessCodeForm(props) {
                         case "started":
                             setErrorMessage("La partie a déjà commencé, il fallait être plus rapide !")
                             break
+                        case "not_started_yet":
+                            setErrorMessage("La partie n'a pas encore commencé, reviens ici plus tard !")
+                            break
                     }
                 }
             }
