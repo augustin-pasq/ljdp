@@ -66,7 +66,7 @@ export default function Login() {
 
             <footer>
                 <span>Besoin d'un compte ?</span>
-                <Link href="/register">
+                <Link href="/src/pages/register">
                     <Button label="S'inscrire" className="px-2" link/>
                 </Link>
             </footer>

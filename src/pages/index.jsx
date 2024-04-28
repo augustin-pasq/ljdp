@@ -49,10 +49,10 @@ export default function Index(props) {
             </>
         :
             <Card title="LJDP : Le Jeu Des Photos">
-                <Link href="/login">
+                <Link href="/src/pages/login">
                     <Button label="Connexion" size="large" rounded outlined/>
                 </Link>
-                <Link href="/register">
+                <Link href="/src/pages/register">
                     <Button label="Inscription" size="large" rounded outlined/>
                 </Link>
             </Card>

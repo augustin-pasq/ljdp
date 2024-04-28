@@ -4,6 +4,7 @@ import {InputText} from "primereact/inputtext"
 import {io} from "socket.io-client"
 import Navbar from "@/components/Navbar"
 import PlayerCard from "@/components/PlayerCard"
+import {Toast} from "primereact/toast"
 import {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
@@ -26,6 +27,7 @@ export default function Dashboard(props) {
     const categoriesNode = useRef(null)
     const mainNode = useRef(null)
     const router = useRouter()
+    const toast = useRef(null)
     const isMobile = useMediaQuery({maxWidth: 1280})
 
     useEffect(() => {
@@ -151,14 +153,13 @@ export default function Dashboard(props) {
         formData.append("user", props.user.id)
         formData.append("accessCode", props.accessCode)
 
-        const request = await fetch("/api/photo/addPhoto", {
-            method: "POST", body: formData
+        const request = await fetch("/api/photo/addPhoto",{
+            method: "POST",
+            body: formData
         })
 
         if (request.status === 200) {
             const data = await request.json()
-            setPhoto(data.content.link)
-
             let dataCopy = [...categories]
             dataCopy[categories.findIndex(category => category.id === selectedCategory.id)].link = data.content.link
             setCategories(dataCopy)
@@ -198,12 +199,31 @@ export default function Dashboard(props) {
     }
 
     const handleLaunch = () => {
-        handleJoin().then(() => socket.emit("launchGame", {accessCode: props.accessCode}))
+        handleJoin().then(async () => {
+            const request = await fetch("/api/photo/countPhotos", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({accessCode: props.accessCode}),
+            })
+
+            if (request.status === 200) {
+                const data = await request.json()
+
+                if (data.content > 0) {
+                    socket.emit("launchGame", {accessCode: props.accessCode})
+                } else {
+                    setHasJoined(false)
+                    toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun jouer n'a uploadé de photo !", life: 3000})
+                }
+            }
+
+        })
     }
 
     return (
         <>
             <Navbar user={props.user}/>
+            <Toast ref={toast} />
             <main id="dashboard" ref={mainNode}>
                 <h1>{layoutSettings.title}</h1>
 
