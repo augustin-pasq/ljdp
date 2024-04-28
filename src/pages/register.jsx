@@ -67,7 +67,7 @@ export default function Register() {
 
             <footer>
                 <span>Déjà un compte ?</span>
-                <Link href="/src/pages/login">
+                <Link href="/login">
                     <Button label="Se connecter" link/>
                 </Link>
             </footer>
