@@ -12,7 +12,7 @@ async function register(req, res) {
             data: {
                 username: req.body.username,
                 password: hash,
-                profilePicture: `profile_pictures/default_profile_picture_${Math.floor(Math.random() * (8 - 1) + 1)}.png`
+                profilePicture: `https://source.boringavatars.com/beam/256/${req.body.username}`
             }
         })
 
