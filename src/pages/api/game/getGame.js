@@ -13,10 +13,22 @@ export default async function getGame(req, res) {
 
         if (response === null) {
             message = "not_found"
-        } else if (req.body.target === "/edit" && response.owner !== req.body.owner) {
+        } else if (req.body.target === "/edit" && response.owner !== req.body.user.id) {
             message = "unauthorized"
         } else if (req.body.target === "/play" && response.status === "created") {
-                message = "not_started_yet"
+            message = "not_started_yet"
+        } else if (req.body.target === "/play" && response.status === "started") {
+            const participant = await prisma.participant.findUnique({
+                where: {
+                    game_user: {game: response.id, user: req.body.user.id}
+                }
+            })
+
+            if (participant === null) {
+                message = "not_joined"
+            } else {
+                success = true
+            }
         } else if (req.body.target !== "/play" && response.status === "started") {
             message = "started"
         } else if (req.body.target !== "/scores" && response.status === "ended") {

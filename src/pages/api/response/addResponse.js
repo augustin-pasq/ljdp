@@ -1,7 +1,4 @@
-import {io} from "socket.io-client"
 import prisma from "../../../../lib/prisma"
-
-const socket = io.connect("http://192.168.1.12:4000")
 
 export default async function addResponse(req, res) {
 
@@ -57,15 +54,7 @@ export default async function addResponse(req, res) {
             }
         })
 
-        if(responsesCount === participantsCount) {
-            if (req.body.lastPhoto) {
-                socket.emit("getSolution")
-            } else {
-                socket.emit("changePhoto")
-            }
-        }
-
-        res.status(200).json({content: {}})
+        res.status(200).json({content: {participantsCount: participantsCount, responsesCount: responsesCount}})
     } catch (err) {
         res.status(500).json(err)
     }

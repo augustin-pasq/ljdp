@@ -41,7 +41,7 @@ export default async function getGameData(req, res) {
             }
         })
 
-        const response = {
+        const gameData = {
             photos: [],
             propositions: []
         }
@@ -51,14 +51,14 @@ export default async function getGameData(req, res) {
             const formattedShuffledPhotos = shuffledPhotos.map(photo => {
                 return {...photo, category: category.title}
             })
-            response.photos = response.photos.concat(formattedShuffledPhotos)
+            gameData.photos = gameData.photos.concat(formattedShuffledPhotos)
         })
 
         participants.forEach(participant => {
-            response.propositions.push({ id: participant.User.id, username: participant.User.username, profilePicture: participant.User.profilePicture })
+            gameData.propositions.push({ id: participant.User.id, username: participant.User.username, profilePicture: participant.User.profilePicture })
         })
 
-        res.status(200).json({content: response})
+        res.status(200).json({content: {game: game, gameData: gameData}})
     } catch (err) {
         res.status(500).json(err)
     }

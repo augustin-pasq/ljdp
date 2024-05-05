@@ -16,9 +16,8 @@ export default async function countPhotos(req, res) {
             }
         })
 
-        res.status(200).json({content: response})
+        res.status(200).json({content: {count: response, game: game}})
     } catch (err) {
-        console.log(err)
         res.status(500).json(err)
     }
 }

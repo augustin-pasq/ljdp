@@ -1,11 +1,9 @@
 import {Button} from "primereact/button"
-import {io} from "socket.io-client"
 import PlayerCard from "@/components/PlayerCard"
+import {socket} from "lib/socket"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 import {useEffect, useState} from "react"
-
-const socket = io.connect("http://192.168.1.12:4000")
 
 export default function Game(props) {
     const [gameData, setGameData] = useState(props.gameData)
@@ -13,10 +11,16 @@ export default function Game(props) {
     const [questionMode, setQuestionMode] = useState(true)
     const [propositionChecked, setPropositionChecked] = useState(null)
     const [preventValidation, setPreventValidation] = useState(false)
+    const [rendered, setRendered] = useState(false)
     const router = useRouter()
     const isMobile = useMediaQuery({maxWidth: 1280})
 
     useEffect(() => {
+        if (!rendered) {
+            socket.emit("userHasJoinedGame", {game: props.game})
+            setRendered(true)
+        }
+
         socket.on("changePhoto", async () => {
             setIndex(index + 1)
             setPropositionChecked(null)
@@ -46,16 +50,37 @@ export default function Game(props) {
     }, [index])
 
     const handleValidation = async () => {
-        setPreventValidation(true)
+        if (questionMode) {
+            setPreventValidation(true)
 
-        await fetch("/api/response/addResponse", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.photos[index].id, response: propositionChecked, lastPhoto: index === gameData.photos.length - 1}),
-        })
+            const request = await fetch("/api/response/addResponse", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.photos[index].id, response: propositionChecked}),
+            })
+
+            if (request.status === 200) {
+                const data = await request.json()
+
+                if(data.content.responsesCount >= data.content.participantsCount) {
+                    if (index === gameData.photos.length - 1) {
+                        socket.emit("getSolution", {game: props.game})
+                    } else {
+                        socket.emit("changePhoto", {game: props.game})
+                    }
+                }
+            }
+        } else {
+            if (index === gameData.photos.length - 1) {
+                socket.emit("getScores", {game: props.game})
+            } else {
+                socket.emit("changePhoto", {game: props.game})
+            }
+        }
     }
 
-    return (<main id="game">
+    return (
+        <main id="game">
             <h1>{gameData.photos[index].category}</h1>
 
             <div id="container">
@@ -92,12 +117,12 @@ export default function Game(props) {
 
                     {questionMode ?
                         <div id="validate-container">
-                            <Button label={preventValidation ? "En attente des autres joueurs..." : "Valider"} disabled={preventValidation || propositionChecked === null} onClick={() => handleValidation()} rounded/>
+                            <Button label={preventValidation ? "En attente des autres joueurs..." : "Valider"} disabled={preventValidation || propositionChecked === null} onClick={handleValidation} rounded/>
                         </div>
                         :
-                        props.gameOwner === props.user.id &&
+                        props.game.owner === props.user.id &&
                             <div id="validate-container">
-                                <Button label={index === gameData.photos.length - 1 ? "Voir les scores" : "Photo suivante"} onClick={() => {index === gameData.photos.length - 1 ? socket.emit("getScores", {accessCode: props.accessCode}) : socket.emit("changePhoto")}} rounded/>
+                                <Button label={index === gameData.photos.length - 1 ? "Voir les scores" : "Photo suivante"} onClick={handleValidation} rounded/>
                             </div>
                     }
                 </section>

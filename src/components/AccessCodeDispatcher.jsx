@@ -7,6 +7,7 @@ import {useRouter} from "next/router"
 export default function AccessCodeDispatcher(props) {
     const [categories, setCategories] = useState([])
     const [formText, setFormText] = useState({})
+    const [game, setGame] = useState([])
     const [gameData, setGameData] = useState([])
     const [participants, setParticipants] = useState([])
     const [rendered, setRendered] = useState(false)
@@ -49,7 +50,10 @@ export default function AccessCodeDispatcher(props) {
                     break
                 case "/play":
                     getGameData()
-                        .then((result) => setGameData(result))
+                        .then((result) => {
+                            setGame(result.game)
+                            setGameData(result.gameData)
+                        })
                         .then(() => setFormText({
                             subtitle: "Entre ici le code qu'on t'a envoyé pour jouer avec tes amis :",
                             button: "Jouer avec mes amis"
@@ -128,7 +132,7 @@ export default function AccessCodeDispatcher(props) {
                     "/edit":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
                     "/upload":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname}/>,
                     "/join":     <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname} gameOwner={parseInt(props.gameOwner)} participants={participants}/>,
-                    "/play":     <Game accessCode={props.accessCode} user={props.user} gameData={gameData} gameOwner={parseInt(props.gameOwner)}/>,
+                    "/play":     <Game accessCode={props.accessCode} user={props.user} game={game} gameData={gameData} />,
                     "/scores":   <Dashboard accessCode={props.accessCode} categories={categories} user={props.user} page={router.pathname} scores={scores}/>
                 }[router.pathname]
                 :

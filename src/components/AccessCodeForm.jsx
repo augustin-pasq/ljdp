@@ -60,7 +60,7 @@ export default function AccessCodeForm(props) {
             const request = await fetch("/api/game/getGame", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({code: data.code, target: props.redirect, owner: props.user.id}),
+                body: JSON.stringify({code: data.code, target: props.redirect, user: props.user}),
             })
 
             if (request.status === 200) {
@@ -86,6 +86,9 @@ export default function AccessCodeForm(props) {
                             break
                         case "not_started_yet":
                             setErrorMessage("La partie n'a pas encore commencé, reviens plus tard !")
+                            break
+                        case "not_joined":
+                            setErrorMessage("Tu ne peux pas jouer à une partie que tu n'as pas rejointe.")
                             break
                     }
                 }

@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma"
 
-export default async function setHasJoined(req, res) {
+export default async function createParticipant(req, res) {
     try {
         const game = await prisma.game.findUnique({
             where: {
@@ -8,7 +8,7 @@ export default async function setHasJoined(req, res) {
             }
         })
 
-        const participant =  await prisma.participant.findUnique({
+        const participant = await prisma.participant.findUnique({
             where: {
                 game_user: {game: game.id, user: req.body.user}
             },
@@ -46,7 +46,7 @@ export default async function setHasJoined(req, res) {
             }
         })
 
-        res.status(200).json({content: {user: user, game: game}})
+        res.status(200).json({content: {game: game, user: user}})
     } catch (err) {
         res.status(500).json(err)
     }

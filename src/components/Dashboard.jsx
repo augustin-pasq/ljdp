@@ -1,21 +1,18 @@
 import {Badge} from "primereact/badge"
 import {Button} from "primereact/button"
 import {InputText} from "primereact/inputtext"
-import {io} from "socket.io-client"
 import Navbar from "@/components/Navbar"
 import PlayerCard from "@/components/PlayerCard"
+import {socket} from "lib/socket"
 import {Toast} from "primereact/toast"
 import {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 
-const socket = io.connect("http://192.168.1.12:4000")
-
 export default function Dashboard(props) {
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
     const [categories, setCategories] = useState(props.categories)
-    const [hasJoined, setHasJoined] = useState(false)
     const [layoutSettings, setLayoutSettings] = useState({})
     const [lastPerformedAction, setLastPerformedAction] = useState("")
     const [participants, setParticipants] = useState(props.participants !== undefined ? props.participants.map(participant => { return ({...participant.User, hasJoined: participant.hasJoined, hasPhotos: true}) }) : [])
@@ -50,6 +47,19 @@ export default function Dashboard(props) {
                         title: "Rejoindre une partie",
                         listContainerWidth: "36%",
                     })
+
+                    fetch("/api/participant/createParticipant", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({user: props.user.id, accessCode: props.accessCode}),
+                    }).then((request) => {
+                        if (request.status === 200) {
+                            request.json().then((data) => {
+                                socket.emit("userHasJoined", data.content)
+                            })
+                        }
+                    })
+
                     break
                 case "/scores":
                     setLayoutSettings({
@@ -184,40 +194,22 @@ export default function Dashboard(props) {
         }
     }
 
-    const handleJoin = async () => {
-        const request = await fetch("/api/participant/setHasJoined", {
+    const handleLaunch = async () => {
+        const request = await fetch("/api/photo/countPhotos", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user: props.user.id, accessCode: props.accessCode}),
+            body: JSON.stringify({accessCode: props.accessCode}),
         })
 
         if (request.status === 200) {
             const data = await request.json()
-            socket.emit("setHasJoined", data.content)
-            setHasJoined(true)
-        }
-    }
 
-    const handleLaunch = () => {
-        handleJoin().then(async () => {
-            const request = await fetch("/api/photo/countPhotos", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({accessCode: props.accessCode}),
-            })
-
-            if (request.status === 200) {
-                const data = await request.json()
-
-                if (data.content > 0) {
-                    socket.emit("launchGame", {accessCode: props.accessCode})
-                } else {
-                    setHasJoined(false)
-                    toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun jouer n'a uploadé de photo !", life: 3000})
-                }
+            if (data.content.count > 0) {
+                socket.emit("launchGame", {game: data.content.game})
+            } else {
+                toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun jouer n'a uploadé de photo !", life: 3000})
             }
-
-        })
+        }
     }
 
     return (
@@ -241,9 +233,11 @@ export default function Dashboard(props) {
                                     </div>
                                 </div>
 
-                                <div className="side-down-container">
-                                    <Button label={hasJoined ? "En attente du lancement de la partie..." : props.gameOwner === props.user.id ? "Lancer la partie" : "Rejoindre"} rounded disabled={hasJoined} onClick={props.gameOwner === props.user.id ? handleLaunch : handleJoin}/>
-                                </div>
+                                {props.gameOwner === props.user.id &&
+                                    <div className="side-down-container">
+                                        <Button label="Lancer la partie" rounded onClick={handleLaunch}/>
+                                    </div>
+                                }
                             </section>,
 
                         "/scores":
@@ -355,5 +349,6 @@ export default function Dashboard(props) {
                     }[props.page]}
                 </div>
             </main>
-        </>)
+        </>
+    )
 }
