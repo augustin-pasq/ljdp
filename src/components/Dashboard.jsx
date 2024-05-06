@@ -268,7 +268,7 @@ export default function Dashboard(props) {
                             {(props.page === "/join" || props.page === "/scores") && <span className="section-header">Catégories</span>}
                             {categories.map(category => {
                                 return (
-                                    <li key={category.id} className={`category${(props.page === "/upload" || props.page === "/scores") ? " hover" : ""}`} onClick={() => (props.page === "/upload" || props.page === "/scores") && selectCategory(category, props.page)}>
+                                    <li key={category.id} className={`category${(props.page === "/upload" || props.page === "/scores") ? " hover" : ""}${category === selectedCategory ? " selected" : ""}`} onClick={() => (props.page === "/upload" || props.page === "/scores") && selectCategory(category, props.page)}>
                                         <span className="title">{category.title}</span>
                                         {{
                                             "/edit": <Button icon="pi pi-trash" rounded onClick={() => deleteCategory(category.id)}/>,

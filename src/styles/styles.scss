@@ -2,14 +2,21 @@
     font-family: "Mikado";
     src: url("../../fonts/MikadoBlack.otf");
     font-style: normal;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 @font-face {
     font-family: "Linotte";
     src: url("../../fonts/LinotteRegular.otf");
     font-style: normal;
-    font-weight: 400;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Linotte";
+    src: url("../../fonts/LinotteSemiBold.otf");
+    font-style: normal;
+    font-weight: bold;
 }
 
 /** COMMON ITEMS **/
@@ -249,6 +256,11 @@ ul {
                 &.hover:hover {
                     background: rgba(255, 255, 255, 1);
                     cursor: pointer;
+                }
+
+                &.selected {
+                    background: rgba(255, 255, 255, 1);
+                    box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
                 }
 
                 .title {

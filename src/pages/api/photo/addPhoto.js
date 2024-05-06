@@ -44,9 +44,10 @@ export default async function addPhoto(req, res) {
                 let filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.webp`
                 fs.rename(files.file[0].filepath, `./public/${filePath}`, async () => {
                     await sharp(fs.readFileSync(`./public/${filePath}`))
-                        .toFormat('webp')
+                        .toFormat("webp")
                         .resize({width: 960})
-                        .webp({quality: 80})
+                        .webp({quality: 85})
+                        .rotate()
                         .toFile(`./public/${filePath}`)
                 })
 
