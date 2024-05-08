@@ -1,29 +1,10 @@
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../utils/ironSession"
-import {useRouter} from "next/router"
 import {Card} from "primereact/card"
 import {Button} from "primereact/button"
 import Link from "next/link"
 import Home from "@/components/Home";
 
 export default function Index(props) {
-    const router = useRouter()
-
-    const navigateNewGame = async () => {
-        const request = await fetch("/api/game/addGame", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(props),
-        })
-
-        if(request.status === 200) {
-            const data = await request.json()
-            await router.push({
-                pathname: "/edit",
-                query: {accessCode: data.content.accessCode},
-            }, "/edit")
-        }
-    }
-
     return (
         props.user !== null ?
             <Home user={props.user} />
