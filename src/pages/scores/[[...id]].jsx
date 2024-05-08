@@ -2,7 +2,7 @@ import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../lib/ironSession"
 import {useRouter} from "next/router"
 
-export default function Id(props) {
+export default function Scores(props) {
     const router = useRouter()
 
     return (
