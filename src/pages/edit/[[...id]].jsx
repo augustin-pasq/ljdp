@@ -1,8 +1,8 @@
 import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
-import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../lib/ironSession"
 import {useRouter} from "next/router"
 
-export default function Upload(props) {
+export default function Id(props) {
     const router = useRouter()
 
     return (

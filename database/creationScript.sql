@@ -49,8 +49,9 @@ CREATE TABLE Participant
     game      INTEGER,
     user      INTEGER,
     score     INTEGER,
-    hasJoined BOOLEAN NOT NULL,
-    hasPhotos BOOLEAN NOT NULL,
+    hasJoined BOOLEAN  NOT NULL,
+    hasPhotos BOOLEAN  NOT NULL,
+    createdAt DATETIME NOT NULL,
 
     PRIMARY KEY (game, user),
     FOREIGN KEY (game) REFERENCES Game (id),

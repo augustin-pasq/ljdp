@@ -1,8 +1,8 @@
 import AccessCodeDispatcher from "@/components/AccessCodeDispatcher"
-import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../lib/ironSession"
 import {useRouter} from "next/router"
 
-export default function Join(props) {
+export default function Play(props) {
     const router = useRouter()
 
     return (

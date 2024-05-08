@@ -1,7 +1,9 @@
-import {Avatar} from "primereact/avatar"
 import {useEffect, useState} from "react"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
+import {Avatar} from "primereact/avatar";
+import Link from "next/link";
+import {Button} from "primereact/button";
 
 export default function Navbar(props) {
     const router = useRouter()
@@ -25,32 +27,18 @@ export default function Navbar(props) {
 
     return (
         <div id="navbar">
-            {!isMobile && <img alt="Logo" />}
+            <Link className="navbar-item" href="/">
+                <Button icon="pi pi-home" label={isMobile ? "" : "Retourner à l'accueil"} rounded />
+            </Link>
 
-            <div id="items-container">
-                <div className="item" onClick={async () => {await router.push("/")}}>
-                    <span>Jouer</span>
-                    <span>▶️</span>
-                </div>
-                <div className="item">
-                    <span>Amis</span>
-                    <span>🧑</span>
-                </div>
-
-                <div className="item">
-                    <span>Parties</span>
-                    <span>🏆</span>
-                </div>
-
-                {isMobile && <Avatar image={props.user.profilePicture} size="large" shape="circle" onClick={handleLogout}/>}
+            <div className="navbar-item">
+                <img alt="Logo" />
             </div>
 
-            {!isMobile &&
-                <div id="avatar-container">
-                    <Avatar image={props.user.profilePicture} size="xlarge" shape="circle" onClick={handleLogout}/>
-                    <span id="username">{props.user.username}</span>
-                </div>
-            }
+            <div className="navbar-item" onClick={handleLogout}>
+                <Avatar image={props.user.profilePicture} size="large" shape="circle"/>
+                {!isMobile && <span className="username">{props.user.username}</span>}
+            </div>
         </div>
     )
 }

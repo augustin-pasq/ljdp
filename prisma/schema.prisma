@@ -48,8 +48,9 @@ model Participant {
   score     Int?
   hasJoined Boolean
   hasPhotos Boolean
-  Game      Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_1")
-  User      User    @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_2")
+  createdAt DateTime @db.DateTime(0)
+  Game      Game     @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_1")
+  User      User     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Participant_ibfk_2")
 
   @@id([game, user])
   @@index([user], map: "user")

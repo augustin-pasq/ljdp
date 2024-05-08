@@ -29,11 +29,15 @@
     align-items: center;
     color: #212121;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 1rem;
-    height: 100vh;
-    padding: 1rem;
-    width: 100vw;
+    width: 100%;
+}
+
+a:-webkit-any-link {
+    color: unset;
+    cursor: pointer;
+    text-decoration: unset;
 }
 
 body {
@@ -55,8 +59,16 @@ input {
 
 main {
     display: flex;
-    height: 100%;
+    min-height: calc(100vh - 5rem);
     width: 100%;
+}
+
+.p-toast-message-content {
+    align-items: center;
+
+    .p-toast-detail {
+        margin-top: 0;
+    }
 }
 
 .pi {
@@ -69,17 +81,9 @@ ul {
     gap: 1rem;
     height: 100%;
     margin: 0;
-    -ms-overflow-style: none;
-    overflow-y: scroll;
     padding: 0;
-    scrollbar-width: none;
     transition: 0.2s;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
 }
-
 
 
 /** PAGES AND COMPONENTS **/
@@ -523,98 +527,122 @@ ul {
 
 #home {
     align-items: center;
-    flex-direction: column;
     gap: 3rem;
     justify-content: center;
+    padding: 1rem;
 
-    .item {
+    .home-item {
         align-items: center;
-        background: rgba(255, 255, 255, 0.66);
-        border-radius: 100rem;
-        cursor: pointer;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 1rem;
         display: flex;
-        flex-direction: row-reverse;
-        gap: 3rem;
-        height: 8rem;
+        flex-direction: column;
+        gap: 1.5rem;
+        height: 20rem;
         justify-content: center;
-        transition: 0.2s;
+        padding: 3rem;
+        text-align: center;
         user-select: none;
-        width: 34rem;
+        width: 25%;
 
-        &:hover {
-            background: rgba(255, 255, 255, 1);
-        }
-
-        .item-title {
+        .title {
             color: #424242;
             font-family: "Mikado", sans-serif !important;
-            font-size: 2rem;
+            font-size: 1.75rem;
         }
 
-        .item-emoji {
-            font-size: 2.25rem;
+        .description {
+            margin: 0 0 1rem 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            #input-wrapper {
+                align-items: center;
+                display: flex;
+                gap: 1rem;
+
+                input {
+                    font-size: 1.75rem;
+                    font-weight: bold;
+                    height: 3rem;
+                    text-align: center;
+                    width: 7rem;
+                }
+            }
+
+            small {
+                position: fixed;
+            }
+        }
+    }
+
+    #games-list {
+        width: 100%;
+
+        .game-item {
+            align-items: center;
+            background: white;
+            border-radius: 1rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+
+            .data {
+                align-items: center;
+                display: flex;
+                gap: 1rem;
+
+                .p-avatar {
+                    flex-shrink: 0;
+                }
+
+                .details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+
+                    .title {
+                        font-size: 1.25rem;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .actions {
+                display: flex;
+                gap: 0.5rem;
+            }
         }
     }
 }
 
 #navbar {
-    align-items: center;
-    background: rgba(255, 255, 255, 0.66);
-    border-radius: 2rem;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08), 0 3px 4px rgba(0, 0, 0, 0.1), 0 1px 4px -1px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
-    height: calc(100vh - 2rem);
     justify-content: space-between;
     padding: 1rem;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 10;
 
-    #items-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        .item {
-            align-items: center;
-            aspect-ratio: 1 / 1;
-            background: rgba(255, 255, 255, 0.66);
-            border-radius: 2rem;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 0.33rem;
-            justify-content: center;
-            margin: 1rem;
-            transition: 0.2s;
-            user-select: none;
-            width: 8rem;
-
-            &:hover {
-                background: rgba(255, 255, 255, 1);
-            }
-
-            span {
-                color: #424242;
-                font-family: "Mikado", sans-serif !important;
-                font-size: 1.5rem;
-            }
-        }
-    }
-
-    #avatar-container {
+    .navbar-item {
         align-items: center;
         cursor: pointer;
         display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
+        flex-direction: row-reverse;
+        gap: 1rem;
+        user-select: none;
 
-        .p-avatar {
-            margin-bottom: 0.5rem;
-        }
-
-        #username {
+        .username {
+            color: #282828;
+            font-size: 1.1rem;
             font-weight: bold;
-            font-size: 1.25rem;
         }
     }
 }

@@ -1,9 +1,9 @@
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
-import Navbar from "@/components/Navbar"
 import {useRouter} from "next/router"
 import {Card} from "primereact/card"
 import {Button} from "primereact/button"
 import Link from "next/link"
+import Home from "@/components/Home";
 
 export default function Index(props) {
     const router = useRouter()
@@ -26,27 +26,7 @@ export default function Index(props) {
 
     return (
         props.user !== null ?
-            <>
-                <Navbar user={props.user}/>
-                <main id="home">
-                    <div className="item" onClick={navigateNewGame}>
-                        <span className="item-title">Créer une partie</span>
-                        <span className="item-emoji">🚀</span>
-                    </div>
-                    <div className="item" onClick={async () => {await router.push("/edit")}}>
-                        <span className="item-title">Gérer les catégories</span>
-                        <span className="item-emoji">✏️</span>
-                    </div>
-                    <div className="item" onClick={async () => {await router.push("/upload")}}>
-                        <span className="item-title">Uploader des photos</span>
-                        <span className="item-emoji">📷</span>
-                    </div>
-                    <div className="item" onClick={async () => {await router.push("/join")}}>
-                        <span className="item-title">Rejoindre une partie</span>
-                        <span className="item-emoji">🎮</span>
-                    </div>
-                </main>
-            </>
+            <Home user={props.user} />
         :
             <Card title="LJDP : Le Jeu Des Photos">
                 <Link href="/login">
