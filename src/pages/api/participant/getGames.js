@@ -1,5 +1,5 @@
-import prisma from "../../../../lib/prisma"
-import {withSessionRoute} from "../../../../lib/ironSession"
+import prisma from "../../../../utils/prisma"
+import {withSessionRoute} from "../../../../utils/ironSession"
 
 export default withSessionRoute(getGames)
 

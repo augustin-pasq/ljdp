@@ -45,31 +45,33 @@ export default function Login() {
     }
 
     return (
-        <div id="credentials">
-            <h1>Connexion</h1>
+        <main id="credentials">
+            <div id="credentials-container">
+                <h1>Connexion</h1>
 
-            {errorMessage === "badCredentials" && <span className="p-error">Nom d'utilisateur ou mot de passe invalide.</span>}
+                {errorMessage === "badCredentials" && <span className="p-error">Nom d'utilisateur ou mot de passe invalide.</span>}
 
-            <form onSubmit={formik.handleSubmit}>
-                <div>
-                    <InputText id="username" className={isFormFieldInvalid("username") ? "p-invalid" : ""} name="username" placeholder="Nom d'utilisateur" maxLength={32} value={formik.values.username} onChange={formik.handleChange}/>
-                    {getFormErrorMessage("username")}
-                </div>
+                <form onSubmit={formik.handleSubmit}>
+                    <div>
+                        <InputText id="username" className={isFormFieldInvalid("username") ? "p-invalid" : ""} name="username" placeholder="Nom d'utilisateur" maxLength={32} value={formik.values.username} onChange={formik.handleChange}/>
+                        {getFormErrorMessage("username")}
+                    </div>
 
-                <div>
-                    <Password id="password" className={isFormFieldInvalid("password") ? "p-invalid" : ""} name="password" placeholder="Mot de passe" feedback={false} toggleMask value={formik.values.password} onChange={formik.handleChange}/>
-                    {getFormErrorMessage("password")}
-                </div>
+                    <div>
+                        <Password id="password" className={isFormFieldInvalid("password") ? "p-invalid" : ""} name="password" placeholder="Mot de passe" feedback={false} toggleMask value={formik.values.password} onChange={formik.handleChange}/>
+                        {getFormErrorMessage("password")}
+                    </div>
 
-                <Button label="Se connecter" type="submit" rounded/>
-            </form>
+                    <Button label="Se connecter" type="submit" rounded/>
+                </form>
 
-            <footer>
-                <span>Besoin d'un compte ?</span>
-                <Link href="/register">
-                    <Button label="S'inscrire" className="px-2" link/>
-                </Link>
-            </footer>
-        </div>
+                <footer>
+                    <span>Besoin d'un compte ?</span>
+                    <Link href="/register">
+                        <Button label="S'inscrire" className="px-2" link/>
+                    </Link>
+                </footer>
+            </div>
+        </main>
     )
 }

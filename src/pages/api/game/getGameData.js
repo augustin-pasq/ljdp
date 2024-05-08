@@ -1,4 +1,4 @@
-import prisma from "../../../../lib/prisma"
+import prisma from "../../../../utils/prisma"
 import {shuffle} from "shuffle-seed"
 
 export default async function getGameData(req, res) {

@@ -46,31 +46,33 @@ export default function Register() {
     }
 
     return (
-        <div id="credentials">
-            <h1>Inscription</h1>
+        <main id="credentials">
+            <div id="credentials-container">
+                <h1>Inscription</h1>
 
-            {errorMessage === "userAlreadyExists" && <span className="p-error">Ce nom d'utilisateur est déjà pris.</span>}
+                {errorMessage === "userAlreadyExists" && <span className="p-error">Ce nom d'utilisateur est déjà pris.</span>}
 
-            <form onSubmit={formik.handleSubmit}>
-                <div>
-                    <InputText id="username" className={isFormFieldInvalid("username") ? "p-invalid" : ""} name="username" placeholder="Nom d'utilisateur" maxLength={32} value={formik.values.username} onChange={formik.handleChange}/>
-                    {getFormErrorMessage("username")}
-                </div>
+                <form onSubmit={formik.handleSubmit}>
+                    <div>
+                        <InputText id="username" className={isFormFieldInvalid("username") ? "p-invalid" : ""} name="username" placeholder="Nom d'utilisateur" maxLength={32} value={formik.values.username} onChange={formik.handleChange}/>
+                        {getFormErrorMessage("username")}
+                    </div>
 
-                <div>
-                    <Password id="password" className={isFormFieldInvalid("password") ? "p-invalid" : ""} name="password" placeholder="Mot de passe" feedback={false} toggleMask value={formik.values.password} onChange={formik.handleChange}/>
-                    {getFormErrorMessage("password")}
-                </div>
+                    <div>
+                        <Password id="password" className={isFormFieldInvalid("password") ? "p-invalid" : ""} name="password" placeholder="Mot de passe" feedback={false} toggleMask value={formik.values.password} onChange={formik.handleChange}/>
+                        {getFormErrorMessage("password")}
+                    </div>
 
-                <Button label="S'inscrire" type="submit" rounded/>
-            </form>
+                    <Button label="S'inscrire" type="submit" rounded/>
+                </form>
 
-            <footer>
-                <span>Déjà un compte ?</span>
-                <Link href="/login">
-                    <Button label="Se connecter" link/>
-                </Link>
-            </footer>
-        </div>
+                <footer>
+                    <span>Déjà un compte ?</span>
+                    <Link href="/login">
+                        <Button label="Se connecter" link/>
+                    </Link>
+                </footer>
+            </div>
+        </main>
     )
 }

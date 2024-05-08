@@ -1,6 +1,6 @@
-import prisma from "../../../../lib/prisma"
+import prisma from "../../../../utils/prisma"
 import bcrypt from "bcrypt"
-import {withSessionRoute} from "../../../../lib/ironSession"
+import {withSessionRoute} from "../../../../utils/ironSession"
 
 export default withSessionRoute(login)
 

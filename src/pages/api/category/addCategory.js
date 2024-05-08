@@ -1,11 +1,11 @@
-import prisma from "../../../../lib/prisma"
+import prisma from "../../../../utils/prisma"
 import {randomBytes} from "node:crypto"
 
-export default async function createCategory(req, res) {
+export default async function addCategory(req, res) {
     try {
         const game = await prisma.game.findUnique({
             where: {
-                accessCode: req.body.accessCode,
+                id: req.body.gameId,
             }
         })
 

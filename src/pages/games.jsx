@@ -4,7 +4,7 @@ import Link from "next/link"
 import {Tag} from "primereact/tag"
 import {useEffect, useState} from "react"
 import {useMediaQuery} from "react-responsive"
-import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession";
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../utils/ironSession";
 import Navbar from "@/components/Navbar";
 import {Skeleton} from "primereact/skeleton";
 
@@ -32,8 +32,10 @@ export default function Games(props) {
 
     return (
         <>
-            <Navbar user={props.user} />
-            <main id="home">
+            <Navbar user={props.user} isMobile={isMobile} />
+            <main id="games">
+                <h1 className="page-title">Liste des parties</h1>
+
                 <ul id="games-list">
                     {games !== null ?
                         games.map(game => {

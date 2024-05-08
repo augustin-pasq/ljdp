@@ -1,4 +1,4 @@
-import prisma from "../../../../lib/prisma"
+import prisma from "../../../../utils/prisma"
 
 export default async function getScores(req, res) {
     try {

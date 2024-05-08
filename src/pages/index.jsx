@@ -1,4 +1,4 @@
-import {checkIfUserIsLoggedIn, withSessionSsr} from "../../lib/ironSession"
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../utils/ironSession"
 import {useRouter} from "next/router"
 import {Card} from "primereact/card"
 import {Button} from "primereact/button"
@@ -9,7 +9,7 @@ export default function Index(props) {
     const router = useRouter()
 
     const navigateNewGame = async () => {
-        const request = await fetch("/api/game/createGame", {
+        const request = await fetch("/api/game/addGame", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(props),

@@ -4,12 +4,19 @@ import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import {Toast} from "primereact/toast"
 import {useFormik} from "formik"
-import {useRef} from "react"
+import {useEffect, useRef, useState} from "react"
 import {useRouter} from "next/router"
+import {useMediaQuery} from "react-responsive";
 
 export default function Home(props) {
+    const mediaQuery = useMediaQuery({maxWidth: 1280})
     const toast = useRef(null)
     const router = useRouter()
+    const [isMobile, setIsMobile] = useState(false)
+
+    useEffect(() => {
+        setIsMobile(mediaQuery)
+    }, [mediaQuery])
 
     const formik = useFormik({
         initialValues: {
@@ -53,26 +60,20 @@ export default function Home(props) {
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
     const navigateNewGame = async () => {
-        const request = await fetch("/api/game/createGame", {
+        const request = await fetch("/api/game/addGame", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(props),
+            headers: {"Content-Type": "application/json"}
         })
 
         if(request.status === 200) {
             const data = await request.json()
-            await router.push({
-                pathname: "/edit",
-                query: {accessCode: data.content.accessCode},
-            }, "/edit")
+            await router.push(`/edit/${data.content.id}`)
         }
     }
 
-
-
     return(
         <>
-            <Navbar user={props.user} />
+            <Navbar user={props.user} isMobile={isMobile} />
             <main id="home">
                 <div className="home-item">
                     <span className="title">🚀 Créer une partie</span>

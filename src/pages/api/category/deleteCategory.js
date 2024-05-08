@@ -1,10 +1,10 @@
-import prisma from "../../../../lib/prisma"
+import prisma from "../../../../utils/prisma"
 
 export default async function deleteCategory(req, res) {
     try {
         await prisma.category.delete({
             where: {
-                id: req.body.id,
+                id: req.body.categoryId,
             },
         })
 

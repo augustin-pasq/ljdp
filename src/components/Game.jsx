@@ -1,6 +1,6 @@
 import {Button} from "primereact/button"
 import PlayerCard from "@/components/PlayerCard"
-import {socket} from "lib/socket"
+import {socket} from "../../utils/socket"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 import {useEffect, useState} from "react"

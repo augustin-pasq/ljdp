@@ -31,7 +31,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
+    width: 100vw;
 }
 
 a:-webkit-any-link {
@@ -46,10 +46,20 @@ body {
     background-attachment: fixed;
     background-size: cover;
     margin: 0;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 h1 {
     font-family: "Mikado", sans-serif !important;
+    font-size: 3.5rem;
+}
+
+html {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 input {
@@ -59,8 +69,20 @@ input {
 
 main {
     display: flex;
-    min-height: calc(100vh - 5rem);
+    margin: 3rem 0 2rem 0;
+    padding: 0 2rem;
     width: 100%;
+}
+
+.page-title {
+    align-items: center;
+    align-self: center;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    text-align: center;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .p-toast-message-content {
@@ -144,78 +166,73 @@ ul {
 
 #credentials {
     align-items: center;
-    background: white;
-    box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
-    border-radius: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    padding: 0 6rem;
-    width: 30rem;
+    justify-content: center;
+    min-height: 100vh;
 
-    h1 {
-        color: #424242;
-        font-size: 3.5rem;
-        margin: 6rem 0 4rem 0;
-    }
-
-    span {
-        text-align: center;
-    }
-
-    form {
+    #credentials-container {
         align-items: center;
+        background: white;
+        box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
+        border-radius: 2rem;
         display: flex;
         flex-direction: column;
-        gap: 2rem;
-        width: 100%;
+        gap: 3rem;
+        padding: 0 6rem;
+        width: 30rem;
 
-        div {
+        h1 {
+            color: #424242;
+            margin: 6rem 0 4rem 0;
+        }
+
+        span {
+            text-align: center;
+        }
+
+        form {
+            align-items: center;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 2rem;
             width: 100%;
 
-            .p-inputtext {
-                padding: 1rem;
-            }
+            div {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
 
-            small {
-                padding: 0 1rem;
-                margin-bottom: 0.5rem;
+                .p-inputtext {
+                    padding: 1rem;
+                }
+
+                small {
+                    padding: 0 1rem;
+                    margin-bottom: 0.5rem;
+                }
             }
         }
-    }
 
-    footer {
-        align-items: center;
-        display: flex;
-        margin: 4rem 0 2rem 0;
+        footer {
+            align-items: center;
+            display: flex;
+            margin: 4rem 0 2rem 0;
 
-        button {
-            padding: 0.5rem;
+            button {
+                padding: 0.5rem;
+            }
         }
     }
 }
 
 #dashboard {
     flex-direction: column;
-    gap: 5rem;
-    padding: 3rem;
-
-    h1 {
-        align-self: center;
-        color: #FFFFFF;
-        font-size: 3.5rem;
-        text-align: center;
-        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-        margin: 1rem 0;
-    }
+    gap: 3rem;
+    margin-top: 1rem;
 
     #container {
         display: flex;
-        gap: 4rem;
-        height: calc(100vh - 19.5rem - 3px);
+        gap: 2rem;
 
         .section-header {
             color: white;
@@ -301,6 +318,8 @@ ul {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            position: sticky;
+            top: 7rem;
 
             #title {
                 font-size: 1.25rem;
@@ -333,7 +352,6 @@ ul {
             #links-container {
                 display: flex;
                 flex-direction: column;
-                font-size: 1.1rem;
                 gap: 0.75rem;
                 margin-top: 2rem;
 
@@ -455,7 +473,6 @@ ul {
 
     h1 {
         color: #FFFFFF;
-        font-size: 3.5rem;
         text-align: center;
         text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
         margin: 1rem 0;
@@ -525,11 +542,57 @@ ul {
     }
 }
 
+#games {
+    align-items: center;
+    flex-direction: column;
+    gap: 3rem;
+    min-height: calc(100vh - 10rem);
+
+    #games-list {
+        width: 100%;
+
+        .game-item {
+            align-items: center;
+            background: white;
+            border-radius: 1rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+
+            .data {
+                align-items: center;
+                display: flex;
+                gap: 1rem;
+
+                .p-avatar {
+                    flex-shrink: 0;
+                }
+
+                .details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+
+                    .title {
+                        font-size: 1.25rem;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+        }
+    }
+}
+
 #home {
     align-items: center;
     gap: 3rem;
     justify-content: center;
-    padding: 1rem;
+    min-height: calc(100vh - 10rem);
 
     .home-item {
         align-items: center;
@@ -576,45 +639,6 @@ ul {
 
             small {
                 position: fixed;
-            }
-        }
-    }
-
-    #games-list {
-        width: 100%;
-
-        .game-item {
-            align-items: center;
-            background: white;
-            border-radius: 1rem;
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-
-            .data {
-                align-items: center;
-                display: flex;
-                gap: 1rem;
-
-                .p-avatar {
-                    flex-shrink: 0;
-                }
-
-                .details {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.75rem;
-
-                    .title {
-                        font-size: 1.25rem;
-                        font-weight: bold;
-                    }
-                }
-            }
-
-            .actions {
-                display: flex;
-                gap: 0.5rem;
             }
         }
     }

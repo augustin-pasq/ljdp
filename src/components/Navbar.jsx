@@ -1,18 +1,10 @@
-import {useEffect, useState} from "react"
-import {useMediaQuery} from "react-responsive"
+import {Avatar} from "primereact/avatar"
+import {Button} from "primereact/button"
+import Link from "next/link"
 import {useRouter} from "next/router"
-import {Avatar} from "primereact/avatar";
-import Link from "next/link";
-import {Button} from "primereact/button";
 
 export default function Navbar(props) {
     const router = useRouter()
-    const [isMobile, setIsMobile] = useState(false)
-    const mediaQuery = useMediaQuery({maxWidth: 1280})
-
-    useEffect(() => {
-        setIsMobile(mediaQuery)
-    }, [mediaQuery])
 
     const handleLogout = async () => {
         const request = await fetch("/api/user/logout", {
@@ -28,7 +20,7 @@ export default function Navbar(props) {
     return (
         <div id="navbar">
             <Link className="navbar-item" href="/">
-                <Button icon="pi pi-home" label={isMobile ? "" : "Retourner à l'accueil"} rounded />
+                <Button icon="pi pi-home" label={props.isMobile ? "" : "Retourner à l'accueil"} rounded />
             </Link>
 
             <div className="navbar-item">
@@ -37,7 +29,7 @@ export default function Navbar(props) {
 
             <div className="navbar-item" onClick={handleLogout}>
                 <Avatar image={props.user.profilePicture} size="large" shape="circle"/>
-                {!isMobile && <span className="username">{props.user.username}</span>}
+                {!props.isMobile && <span className="username">{props.user.username}</span>}
             </div>
         </div>
     )

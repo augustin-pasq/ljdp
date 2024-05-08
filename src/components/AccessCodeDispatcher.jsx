@@ -76,19 +76,6 @@ export default function AccessCodeDispatcher(props) {
         }
     }, [props.accessCode])
 
-    async function getCategories() {
-        const request = await fetch("/api/category/getCategories", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({accessCode: props.accessCode, user: props.user.id}),
-        })
-
-        if (request.status === 200) {
-            const data = await request.json()
-            return data.content
-        }
-    }
-
     const getParticipants = async () => {
         const request = await fetch("/api/participant/getParticipants", {
             method: "POST",

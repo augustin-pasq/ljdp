@@ -1,4 +1,4 @@
-import {withSessionRoute} from "../../../../lib/ironSession"
+import {withSessionRoute} from "../../../../utils/ironSession"
 
 export default withSessionRoute(logout)
 
