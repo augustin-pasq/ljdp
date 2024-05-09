@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import {Skeleton} from "primereact/skeleton";
 
 export default function Games(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 1280})
+    const mediaQuery = useMediaQuery({maxWidth: 768})
     const [games, setGames] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
 
@@ -34,7 +34,7 @@ export default function Games(props) {
         <>
             <Navbar user={props.user} isMobile={isMobile} />
             <main id="games">
-                <h1 className="page-title">Liste des parties</h1>
+                <h1 id="page-title">Liste des parties</h1>
 
                 <ul id="games-list">
                     {games !== null ?
@@ -67,7 +67,7 @@ export default function Games(props) {
                                     }
                                     {game.Game.status === "ended" &&
                                         <Link href={`/scores/${game.Game.id}`}>
-                                            <Button label={isMobile ? "" : "Id"} icon="pi pi-chart-bar" rounded outlined />
+                                            <Button label={isMobile ? "" : "Scores"} icon="pi pi-chart-bar" rounded outlined />
                                         </Link>
                                     }
                                 </div>

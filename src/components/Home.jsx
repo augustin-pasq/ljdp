@@ -9,7 +9,7 @@ import {useRouter} from "next/router"
 import {useMediaQuery} from "react-responsive";
 
 export default function Home(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 1280})
+    const mediaQuery = useMediaQuery({maxWidth: 768})
     const toast = useRef(null)
     const router = useRouter()
     const [isMobile, setIsMobile] = useState(false)

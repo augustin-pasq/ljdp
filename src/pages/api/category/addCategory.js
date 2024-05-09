@@ -5,7 +5,7 @@ export default async function addCategory(req, res) {
     try {
         const game = await prisma.game.findUnique({
             where: {
-                id: req.body.gameId,
+                id: req.body.game,
             }
         })
 

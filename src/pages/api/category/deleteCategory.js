@@ -4,7 +4,7 @@ export default async function deleteCategory(req, res) {
     try {
         await prisma.category.delete({
             where: {
-                id: req.body.categoryId,
+                id: req.body.category,
             },
         })
 

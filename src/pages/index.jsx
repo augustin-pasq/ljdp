@@ -1,8 +1,8 @@
-import {checkIfUserIsLoggedIn, withSessionSsr} from "../../utils/ironSession"
-import {Card} from "primereact/card"
 import {Button} from "primereact/button"
+import {Card} from "primereact/card"
+import {checkIfUserIsLoggedIn, withSessionSsr} from "../../utils/ironSession"
+import Home from "@/components/Home"
 import Link from "next/link"
-import Home from "@/components/Home";
 
 export default function Index(props) {
     return (

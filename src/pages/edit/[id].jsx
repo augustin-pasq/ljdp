@@ -10,7 +10,7 @@ import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 
 export default function Edit(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 1280})
+    const mediaQuery = useMediaQuery({maxWidth: 768})
     const router = useRouter()
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
     const [categories, setCategories] = useState(null)
@@ -20,8 +20,9 @@ export default function Edit(props) {
     const [rendered, setRendered] = useState(false)
 
     useEffect(() => {
+        setIsMobile(mediaQuery)
+
         if (!rendered) {
-            setIsMobile(mediaQuery)
             getCategories(parseInt(router.query.id))
                 .then(result => {
                     setGame(result.game)
@@ -48,7 +49,7 @@ export default function Edit(props) {
             const request = await (await fetch("/api/category/addCategory", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title: data.title, gameId: game.id}),
+                body: JSON.stringify({title: data.title, game: game.id}),
             }))
 
             if(request.status === 200) {
@@ -63,15 +64,17 @@ export default function Edit(props) {
 
     const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
 
-    const deleteCategory = async (id) => {
+    const deleteCategory = async (category) => {
+        let categoryId = category.id
+
         const request = await fetch("/api/category/deleteCategory", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({categoryId: id}),
+            body: JSON.stringify({category: categoryId}),
         })
 
         if(request.status === 200) {
-            setCategories(categories.filter(category => category.id !== id))
+            setCategories(categories.filter(category => category.id !== categoryId))
             setLastPerformedAction("delete")
         }
     }
@@ -80,9 +83,9 @@ export default function Edit(props) {
         <>
             <Navbar user={props.user} isMobile={isMobile} />
             <main id="dashboard">
-                <h1 className="page-title">Éditer la partie</h1>
+                <h1 id="page-title">Éditer la partie</h1>
 
-                <div id="container" style={{flexDirection: isMobile ? "column-reverse" : "row"}}>
+                <div id="container">
                     <section className="list-container" style={{width: "66%"}}>
                         <span className="section-header">Catégories</span>
                         <form onSubmit={formik.handleSubmit}>

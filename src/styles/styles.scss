@@ -74,7 +74,7 @@ main {
     width: 100%;
 }
 
-.page-title {
+#page-title {
     align-items: center;
     align-self: center;
     color: #FFFFFF;
@@ -228,7 +228,6 @@ ul {
 #dashboard {
     flex-direction: column;
     gap: 3rem;
-    margin-top: 1rem;
 
     #container {
         display: flex;
@@ -374,6 +373,9 @@ ul {
         }
 
         #uploader-container {
+            position: sticky;
+            top: 7rem;
+
             #instructions {
                 font-size: 1.25rem;
                 font-weight: bold;

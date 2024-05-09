@@ -6,7 +6,6 @@ import PlayerCard from "@/components/PlayerCard"
 import {socket} from "lib/socket"
 import {Toast} from "primereact/toast"
 import {useEffect, useRef, useState} from "react"
-import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 
@@ -25,7 +24,7 @@ export default function Dashboard(props) {
     const mainNode = useRef(null)
     const router = useRouter()
     const toast = useRef(null)
-    const isMobile = useMediaQuery({maxWidth: 1280})
+    const isMobile = useMediaQuery({maxWidth: 768})
 
     useEffect(() => {
         if (!rendered) {
@@ -88,36 +87,6 @@ export default function Dashboard(props) {
         })
     }, [categories, players])
 
-    const formik = useFormik({
-        initialValues: {
-            title: "",
-        },
-        validate: (data) => {
-            let errors = {}
-
-            if (!data.title || /^\s*$/.test(data.title)) errors.title = "Requis."
-
-            return errors
-        },
-        onSubmit: async (data) => {
-            const request = await (await fetch("/api/category/createCategory", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title: data.title, accessCode: props.accessCode}),
-            }))
-
-            if(request.status === 200) {
-                const data = await request.json()
-                setCategories([...categories, {id: data.content.id, title: data.content.title}])
-                setLastPerformedAction("create")
-            }
-
-            formik.resetForm()
-        }
-    })
-
-    const isFormFieldInvalid = (value) => !!(formik.touched[value] && formik.errors[value])
-
     const selectCategory = (category, page) => {
         switch(page) {
             case "/upload":
@@ -138,59 +107,6 @@ export default function Dashboard(props) {
                         })
                     }
                 })
-        }
-    }
-
-    const deleteCategory = async (id) => {
-        const request = await fetch("/api/category/deleteCategory", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({id}),
-        })
-
-        if(request.status === 200) {
-            setCategories(categories.filter(category => category.id !== id))
-            setLastPerformedAction("delete")
-        }
-    }
-
-    const uploadPhoto = async (e) => {
-        setPhoto(URL.createObjectURL(e.target.files[0]))
-
-        const formData = new FormData()
-        formData.append("file", e.target.files[0])
-        formData.append("category", selectedCategory.id)
-        formData.append("user", props.user.id)
-        formData.append("accessCode", props.accessCode)
-
-        const request = await fetch("/api/photo/addPhoto",{
-            method: "POST",
-            body: formData
-        })
-
-        if (request.status === 200) {
-            const data = await request.json()
-            let dataCopy = [...categories]
-            dataCopy[categories.findIndex(category => category.id === selectedCategory.id)].link = data.content.link
-            setCategories(dataCopy)
-        }
-    }
-
-    const deletePhoto = async () => {
-        if (photo.startsWith("uploads/ljdp-uploaded_file-")) {
-            const request = await fetch("/api/photo/deletePhoto", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({link: photo}),
-            })
-
-            if (request.status === 200) {
-                setPhoto("")
-
-                let dataCopy = [...categories]
-                dataCopy[categories.findIndex(category => category.id === selectedCategory.id)].link = null
-                setCategories(dataCopy)
-            }
         }
     }
 

@@ -7,7 +7,7 @@ async function getCategories(req, res) {
     try {
         const game = await prisma.game.findUnique({
             where: {
-                id: req.body.gameId,
+                id: req.body.game,
             }
         })
 

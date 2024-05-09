@@ -13,7 +13,7 @@ export default function Game(props) {
     const [preventValidation, setPreventValidation] = useState(false)
     const [rendered, setRendered] = useState(false)
     const router = useRouter()
-    const isMobile = useMediaQuery({maxWidth: 1280})
+    const isMobile = useMediaQuery({maxWidth: 768})
 
     useEffect(() => {
         if (!rendered) {
