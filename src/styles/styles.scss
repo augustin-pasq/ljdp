@@ -168,6 +168,7 @@ ul {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    margin: 0;
 
     #credentials-container {
         align-items: center;
@@ -304,7 +305,9 @@ ul {
             gap: 1.5rem;
             height: fit-content;
             padding: 2rem;
+            position: sticky;
             text-align: center;
+            top: 7rem;
         }
 
         .side-down-container {
@@ -317,8 +320,6 @@ ul {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            position: sticky;
-            top: 7rem;
 
             #title {
                 font-size: 1.25rem;
@@ -373,9 +374,6 @@ ul {
         }
 
         #uploader-container {
-            position: sticky;
-            top: 7rem;
-
             #instructions {
                 font-size: 1.25rem;
                 font-weight: bold;
@@ -404,6 +402,10 @@ ul {
                 &:hover {
                     background: rgba(255, 255, 255, 1);
                 }
+
+                &.disabled {
+                    background: rgba(255, 255, 255, 0.66);
+                }
             }
 
             input {
@@ -414,6 +416,10 @@ ul {
                 width: 100%;
                 opacity: 0;
                 cursor: pointer;
+
+                &.disabled {
+                    cursor: default;
+                }
             }
 
             img {
@@ -591,7 +597,9 @@ ul {
 }
 
 #home {
+    align-content: center;
     align-items: center;
+    flex-wrap: wrap;
     gap: 3rem;
     justify-content: center;
     min-height: calc(100vh - 10rem);
@@ -608,7 +616,7 @@ ul {
         padding: 3rem;
         text-align: center;
         user-select: none;
-        width: 25%;
+        width: 28rem;
 
         .title {
             color: #424242;

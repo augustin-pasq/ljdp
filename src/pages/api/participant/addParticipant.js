@@ -27,7 +27,7 @@ export default async function addParticipant(req, res) {
                         game: game.id,
                         user: req.body.user,
                         score: 0,
-                        hasJoined: true,
+                        hasJoined: false,
                         hasPhotos: false,
                         createdAt: new Date()
                     }

@@ -72,19 +72,6 @@ export default function Dashboard(props) {
         } else if (lastPerformedAction === "create") {
             (isMobile ? mainNode : categoriesNode).current.scrollTo({top: (!isMobile ? mainNode : categoriesNode).current.scrollHeight + 64, behavior: "smooth"})
         }
-
-        socket.on("userHasJoined", (data) => {
-            if (participants.find(participant => participant.id === data.user.id) === undefined) {
-                setParticipants([...participants, data.user])
-            }
-            setPlayers([...players, data.user])
-        })
-
-        socket.on("gameHasBeenLaunched", async () => {
-            await router.push({
-                pathname: "/play", query: {accessCode: props.accessCode},
-            }, "/play")
-        })
     }, [categories, players])
 
     const selectCategory = (category, page) => {
@@ -107,24 +94,6 @@ export default function Dashboard(props) {
                         })
                     }
                 })
-        }
-    }
-
-    const handleLaunch = async () => {
-        const request = await fetch("/api/photo/countPhotos", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({accessCode: props.accessCode}),
-        })
-
-        if (request.status === 200) {
-            const data = await request.json()
-
-            if (data.content.count > 0) {
-                socket.emit("launchGame", {game: data.content.game})
-            } else {
-                toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun jouer n'a uploadé de photo !", life: 3000})
-            }
         }
     }
 

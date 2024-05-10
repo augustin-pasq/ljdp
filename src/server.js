@@ -20,21 +20,31 @@ app.prepare().then(() => {
     })
 
     io.on("connection", async (socket) => {
-        socket.on("userHasJoined", (data) => {
-            socket.join(data.game.id)
-            io.to(data.game.id).emit("userHasJoined", data)
+        socket.on("userHasJoined", async (data) => {
+            socket.join(data.game)
+
+            const request = await fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/participant/updateParticipant`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({game: data.game, user: data.user.id}),
+            })
+
+            if (request.status === 200) {
+                const participantsData = await request.json()
+                io.to(data.game).emit("userHasJoined", participantsData.content)
+            }
         })
 
-        socket.on("launchGame", (data) => {
-            fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/game/setStatus`, {
+        socket.on("launchGame", async (data) => {
+            const request = await fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/game/setStatus`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({accessCode: data.game.accessCode, status: "started"}),
-            }).then((request) => {
-                if (request.status === 200) {
-                    io.to(data.game.id).emit("gameHasBeenLaunched")
-                }
             })
+
+            if (request.status === 200) {
+                io.to(data.game.id).emit("gameHasBeenLaunched")
+            }
         })
 
         socket.on("userHasJoinedGame", (data) => {
@@ -50,16 +60,16 @@ app.prepare().then(() => {
             io.to(data.game.id).emit("getSolution")
         })
 
-        socket.on("getScores", (data) => {
-            fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/game/setStatus`, {
+        socket.on("getScores", async (data) => {
+            const request = await fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/game/setStatus`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({accessCode: data.game.accessCode, status: "ended"}),
-            }).then((request) => {
-                if (request.status === 200) {
-                    io.to(data.game.id).emit("getScores")
-                }
             })
+
+            if (request.status === 200) {
+                io.to(data.game.id).emit("getScores")
+            }
         })
     })
 

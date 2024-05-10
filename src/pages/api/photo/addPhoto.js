@@ -27,19 +27,21 @@ async function addPhoto(req, res) {
                     }
                 })
 
-                const participant = await prisma.participant.findFirst({
+                await prisma.participant.update({
+                    data: {
+                        game: game.id,
+                        user: req.session.user.id,
+                        score: 0,
+                        hasJoined: false,
+                        hasPhotos: true
+                    },
                     where: {
-                        game: game.id, user: req.session.user.id
+                        game_user: {
+                            game: game.id,
+                            user: req.session.user.id
+                        }
                     }
                 })
-
-                if (participant === null) {
-                    await prisma.participant.create({
-                        data: {
-                            game: game.id, user: req.session.user.id, score: 0, hasJoined: false, hasPhotos: true
-                        }
-                    })
-                }
 
                 let filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.webp`
                 await fs.renameSync(files.file[0].filepath, `./public/${filePath}`)
@@ -53,7 +55,9 @@ async function addPhoto(req, res) {
 
                 await prisma.photo.create({
                     data: {
-                        link: filePath, category: parseInt(fields.category[0]), user: req.session.user.id
+                        link: filePath,
+                        category: parseInt(fields.category[0]),
+                        user: req.session.user.id
                     }
                 })
 

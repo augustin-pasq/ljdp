@@ -4,13 +4,15 @@ import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../utils/ironSession"
 import {getCategories} from "../../../utils/getCategories"
 import {InputText} from "primereact/inputtext"
 import Navbar from "@/components/Navbar"
-import {useEffect, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
+import {Toast} from "primereact/toast";
 
 export default function Edit(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
+    const toast = useRef(null)
     const router = useRouter()
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
     const [categories, setCategories] = useState(null)
@@ -27,8 +29,11 @@ export default function Edit(props) {
                 .then(result => {
                     setGame(result.game)
                     setCategories(result.categories)
+                    setRendered(true)
+                    if (router.query.displayToast) {
+                        toast.current.show({severity: "success", detail: "La partie a été ajoutée à ton compte !"})
+                    }
                 })
-                .then(() => setRendered(true))
         } else if (lastPerformedAction === "add") {
             window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"})
         }
@@ -92,7 +97,7 @@ export default function Edit(props) {
                             <InputText id="title" className={isFormFieldInvalid("title") ? "p-invalid" : ""} name="title" placeholder="Titre" value={formik.values.title} onChange={formik.handleChange}/>
                             <Button type="submit" icon="pi pi-plus" rounded/>
                         </form>
-                        <Categories buttonIcon="pi pi-trash" categories={categories} handleAction={deleteCategory} page="join" />
+                        <Categories buttonIcon="pi pi-trash" categories={categories} handleAction={deleteCategory} page="edit" />
                     </section>
 
                     <section id="instructions-container" className="side-container" style={{width: "33%"}}>
@@ -101,11 +106,12 @@ export default function Edit(props) {
                         <div id="links-container">
                             <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
                             <span><a href={`https://ljdp.augustinpasquier.fr/upload/${game !== null ? game.id : ""}`} target="_blank">{`ljdp.augustinpasquier.fr/upload/${game !== null ? game.id : ""}`}</a> pour uploader des photos</span>
-                            <span><a href={`https://ljdp.augustinpasquier.fr/join/${game !== null ? game.id : ""}`} target="_blank">{`ljdp.augustinpasquier.fr/upload/${game !== null ? game.id : ""}`}</a> pour commencer la partie</span>
+                            <span><a href={`https://ljdp.augustinpasquier.fr/play/${game !== null ? game.id : ""}`} target="_blank">{`ljdp.augustinpasquier.fr/play/${game !== null ? game.id : ""}`}</a> pour commencer la partie</span>
                         </div>
                     </section>
                 </div>
             </main>
+            <Toast ref={toast} position="bottom-center" />
         </>
     )
 }

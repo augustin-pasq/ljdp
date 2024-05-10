@@ -25,8 +25,8 @@ export default function Upload(props) {
                 .then(result => {
                     setGame(result.game)
                     setCategories(result.categories)
+                    setRendered(true)
                 })
-                .then(() => setRendered(true))
         }
     }, [mediaQuery])
 
@@ -97,10 +97,10 @@ export default function Upload(props) {
                                         {photo !== "loading" && <Button rounded severity="danger" label="Supprimer le fichier" onClick={() => deletePhoto(photo)}/>}
                                     </>
                                     :
-                                    <div id="drop-area">
+                                    <div id="drop-area" className={photo === "loading" && "disabled"}>
                                         <i className={photo !== "loading" ? "pi pi-cloud-upload" : "pi pi-spin pi-spinner"} />
                                         <span>{photo !== "loading" ? "Clique ou dépose ton fichier ici" : "Envoi en cours..."}</span>
-                                        <input className="photo-input" id="file" type="file" multiple={false} accept="image/*" onChange={uploadPhoto}/>
+                                        <input className={photo === "loading" && "disabled"} id="file" type="file" disabled={photo === "loading"} multiple={false} accept="image/*" onChange={uploadPhoto}/>
                                     </div>
                                 }
                             </>

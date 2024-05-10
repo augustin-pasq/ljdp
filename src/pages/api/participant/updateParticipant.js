@@ -1,14 +1,23 @@
 import prisma from "../../../../utils/prisma"
 
-export default async function getParticipants(req, res) {
+export default async function updateParticipant(req, res) {
     try {
         const game = await prisma.game.findUnique({
             where: {
-                accessCode: req.body.accessCode,
+                id: req.body.game,
             }
         })
 
-        const response = await prisma.participant.findMany({
+        await prisma.participant.update({
+            data: {
+                hasJoined: true
+            },
+            where: {
+                game_user: {game: game.id, user: req.body.user},
+            }
+        })
+
+        const result = await prisma.participant.findMany({
             select: {
                 User: {
                     select: {
@@ -17,7 +26,8 @@ export default async function getParticipants(req, res) {
                         profilePicture: true,
                     }
                 },
-                hasJoined: true
+                hasJoined: true,
+                hasPhotos: true
             },
             where: {
                 game: game.id,
@@ -27,7 +37,7 @@ export default async function getParticipants(req, res) {
             }
         })
 
-        res.status(200).json({content: response})
+        res.status(200).json({content: result})
     } catch (err) {
         res.status(500).json(err)
     }

@@ -67,7 +67,7 @@ export default function Home(props) {
 
         if(request.status === 200) {
             const data = await request.json()
-            await router.push(`/edit/${data.content.id}`)
+            await router.push({pathname: `/edit/${data.content.id}`, query: {displayToast: true}}, `/edit/${data.content.id}`)
         }
     }
 

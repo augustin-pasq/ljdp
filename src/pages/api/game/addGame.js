@@ -28,7 +28,7 @@ async function addGame(req, res) {
                 game: response.id,
                 user: req.session.user.id,
                 score: 0,
-                hasJoined: true,
+                hasJoined: false,
                 hasPhotos: false,
                 createdAt: new Date()
             }
