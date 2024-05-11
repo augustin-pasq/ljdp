@@ -59,7 +59,7 @@ app.prepare().then(() => {
             const request = await fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/game/setStatus`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({accessCode: data.game.accessCode, status: "ended"}),
+                body: JSON.stringify({game: data.game.id, status: "ended"}),
             })
 
             if (request.status === 200) {
