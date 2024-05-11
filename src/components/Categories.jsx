@@ -22,11 +22,3 @@ export default function Categories(props) {
         </ul>
     )
 }
-
-/*
-{{
-    "/edit": <Button icon="pi pi-trash" rounded onClick={() => props.handleAction(category.id)}/>,
-    "/upload": <Button icon={`pi ${category.link === null ? "pi-cloud-upload" : "pi-check"}`} rounded severity={category.link === null ? "" : "success"} onClick={() => selectCategory(category, props.page)}/>,
-    "/scores": <Button icon="pi pi-arrow-right" rounded onClick={() => selectCategory(category, props.page)}/>,
-}[props.page]}
- */

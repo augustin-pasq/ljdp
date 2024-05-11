@@ -30,6 +30,7 @@ export default function Edit(props) {
                     setGame(result.game)
                     setCategories(result.categories)
                     setRendered(true)
+
                     if (router.query.displayToast) {
                         toast.current.show({severity: "success", detail: "La partie a été ajoutée à ton compte !"})
                     }

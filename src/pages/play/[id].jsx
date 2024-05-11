@@ -120,9 +120,9 @@ export default function Play(props) {
                         })
                         :
                         <>
-                            <Skeleton height="4.5rem" borderRadius="100rem"/>
-                            <Skeleton height="4.5rem" borderRadius="100rem"/>
-                            <Skeleton height="4.5rem" borderRadius="100rem"/>
+                            <Skeleton height="6rem" borderRadius="100rem"/>
+                            <Skeleton height="6rem" borderRadius="100rem"/>
+                            <Skeleton height="6rem" borderRadius="100rem"/>
                         </>
                     }
                 </ul>
@@ -158,7 +158,7 @@ export default function Play(props) {
                     </section>
 
                     {isTablet ?
-                        <div id="sections-wrapper">
+                        <div id="sections-wrapper" style={{width: "55%"}}>
                             {categoriesSection("100%")}
                             {playersSection("100%")}
                         </div>
