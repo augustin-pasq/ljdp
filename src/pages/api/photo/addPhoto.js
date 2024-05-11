@@ -21,23 +21,13 @@ async function addPhoto(req, res) {
             form.parse(req, async (err, fields, files) => {
                 if (err) reject(err)
 
-                const game = await prisma.game.findUnique({
-                    where: {
-                        id: parseInt(fields.game[0]),
-                    }
-                })
-
                 await prisma.participant.update({
                     data: {
-                        game: game.id,
-                        user: req.session.user.id,
-                        score: 0,
-                        hasJoined: false,
                         hasPhotos: true
                     },
                     where: {
                         game_user: {
-                            game: game.id,
+                            game: parseInt(fields.game[0]),
                             user: req.session.user.id
                         }
                     }

@@ -39,18 +39,13 @@ app.prepare().then(() => {
             const request = await fetch(`${process.env.NODE_ENV === "production" ? process.env.PROD_URL: process.env.DEV_URL}/api/game/setStatus`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({accessCode: data.game.accessCode, status: "started"}),
+                body: JSON.stringify({game: data.game.id, status: "started"}),
             })
 
             if (request.status === 200) {
-                io.to(data.game.id).emit("gameHasBeenLaunched")
+                io.to(data.game.id).emit("launchGame", data.game)
             }
         })
-
-        socket.on("userHasJoinedGame", (data) => {
-            socket.join(data.game.id)
-        })
-
 
         socket.on("changePhoto", (data) => {
             io.to(data.game.id).emit("changePhoto")

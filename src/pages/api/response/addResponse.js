@@ -1,19 +1,15 @@
 import prisma from "../../../../utils/prisma"
+import {withSessionRoute} from "../../../../utils/ironSession"
 
-export default async function addResponse(req, res) {
+export default withSessionRoute(addResponse)
 
+async function addResponse(req, res) {
     try {
         await prisma.response.create({
             data: {
-                user: req.body.user,
+                user: req.session.user.id,
                 photo: req.body.photo,
                 value: req.body.response
-            }
-        })
-
-        const game = await prisma.game.findUnique({
-            where: {
-                accessCode: req.body.accessCode,
             }
         })
 
@@ -26,14 +22,14 @@ export default async function addResponse(req, res) {
 
         const participant = await prisma.participant.findUnique({
             where: {
-                game_user: {game: game.id, user: req.body.user}
+                game_user: {game: req.body.game, user: req.session.user.id}
             }
         })
 
         if(solution !== null) {
             await prisma.participant.update({
                 where: {
-                    game_user: {game: game.id, user: req.body.user}
+                    game_user: {game: req.body.game, user: req.session.user.id}
                 },
                 data: {
                     score: participant.score + 1
@@ -43,7 +39,7 @@ export default async function addResponse(req, res) {
 
         const participantsCount = await prisma.participant.count({
             where: {
-                game: game.id,
+                game: req.body.game,
                 hasJoined: true
             }
         })
@@ -56,6 +52,7 @@ export default async function addResponse(req, res) {
 
         res.status(200).json({content: {participantsCount: participantsCount, responsesCount: responsesCount}})
     } catch (err) {
+        console.log(err)
         res.status(500).json(err)
     }
 }

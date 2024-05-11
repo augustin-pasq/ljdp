@@ -2,12 +2,6 @@ import prisma from "../../../../utils/prisma"
 
 export default async function getScores(req, res) {
     try {
-        const game = await prisma.game.findUnique({
-            where: {
-                accessCode: req.body.accessCode,
-            }
-        })
-
         const response = await prisma.participant.findMany({
             select: {
                 User: {
@@ -20,7 +14,7 @@ export default async function getScores(req, res) {
                 score: true
             },
             where: {
-                game: game.id,
+                game: req.body.game,
                 hasJoined: true
             },
             orderBy: {

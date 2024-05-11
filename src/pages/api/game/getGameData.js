@@ -3,12 +3,6 @@ import {shuffle} from "shuffle-seed"
 
 export default async function getGameData(req, res) {
     try {
-        const game = await prisma.game.findUnique({
-            where: {
-                accessCode: req.body.accessCode,
-            }
-        })
-
         const categories = await prisma.category.findMany({
             select: {
                 title: true,
@@ -21,7 +15,7 @@ export default async function getGameData(req, res) {
                 }
             },
             where: {
-                game: game.id
+                game: req.body.game
             }
         })
 
@@ -37,7 +31,7 @@ export default async function getGameData(req, res) {
             },
             where: {
                 hasPhotos: true,
-                game: game.id
+                game: req.body.game
             }
         })
 
@@ -58,7 +52,7 @@ export default async function getGameData(req, res) {
             gameData.propositions.push({ id: participant.User.id, username: participant.User.username, profilePicture: participant.User.profilePicture })
         })
 
-        res.status(200).json({content: {game: game, gameData: gameData}})
+        res.status(200).json({content: gameData})
     } catch (err) {
         res.status(500).json(err)
     }

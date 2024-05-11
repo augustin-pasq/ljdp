@@ -2,6 +2,7 @@ import {Button} from "primereact/button"
 import Categories from "@/components/Categories"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../utils/ironSession"
 import {getCategories} from "../../../utils/getCategories"
+import Game from "@/components/Game"
 import {InputText} from "primereact/inputtext"
 import Navbar from "@/components/Navbar"
 import PlayerCard from "@/components/PlayerCard"
@@ -14,17 +15,22 @@ import {useRouter} from "next/router"
 
 export default function Play(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
+    const mediaQueryMedium = useMediaQuery({minWidth: 768, maxWidth: 1200})
     const toast = useRef(null)
     const router = useRouter()
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
     const [categories, setCategories] = useState(null)
     const [game, setGame] = useState(null)
+    const [gameData, setGameData] = useState(null)
+    const [isGameStarted, setIsGameStarted] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
+    const [isTablet, setIsTablet] = useState(false)
     const [participants, setParticipants] = useState(null)
     const [rendered, setRendered] = useState(false)
 
     useEffect(() => {
         setIsMobile(mediaQuery)
+        setIsTablet(mediaQueryMedium)
 
         if (!rendered) {
             socket.emit("userHasJoined", {game: parseInt(router.query.id), user: props.user})
@@ -33,6 +39,15 @@ export default function Play(props) {
                 .then(result => {
                     setGame(result.game)
                     setCategories(result.categories)
+
+                    if(result.game.status === "started") {
+                        getGameData(result.game)
+                            .then((result) => {
+                                setGameData(result)
+                                setIsGameStarted(true)
+                            })
+                    }
+
                     setRendered(true)
                 })
         }
@@ -41,39 +56,90 @@ export default function Play(props) {
             setParticipants(data)
         })
 
-        socket.on("gameHasBeenLaunched", async () => {
-            await router.push({
-                pathname: "/play", query: {accessCode: props.accessCode},
-            }, "/play")
+        socket.on("launchGame", async (data) => {
+            getGameData(data)
+                .then((result) => {
+                    setGameData(result)
+                    setIsGameStarted(true)
+                })
         })
-    }, [mediaQuery, participants])
+    }, [mediaQuery, mediaQueryMedium, participants])
 
     const handleLaunch = async () => {
         const request = await fetch("/api/photo/countPhotos", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({accessCode: props.accessCode}),
+            body: JSON.stringify({game: game.id}),
         })
 
         if (request.status === 200) {
             const data = await request.json()
 
-            if (data.content.count > 0) {
-                socket.emit("launchGame", {game: data.content.game})
+            if (data.content > 0) {
+                socket.emit("launchGame", {game: game})
             } else {
                 toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun jouer n'a uploadé de photo !", life: 3000})
             }
         }
     }
 
-    return (
+    const getGameData = async (game) => {
+        const request = await fetch("/api/game/getGameData", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({game: game.id}),
+        })
+
+        if (request.status === 200) {
+            const data = await request.json()
+            return data.content
+        }
+    }
+
+    const categoriesSection = (width) => {
+        return(
+            <section className="list-container" style={{width: width}}>
+                <span className="section-header">Catégories</span>
+                <Categories categories={categories} page="play" />
+            </section>
+        )
+    }
+
+    const playersSection = (width) => {
+        return(
+            <section className="players-container" style={{width: width}}>
+                <span className="section-header">Participants</span>
+                <ul>
+                    {participants !== null ?
+                        participants.map(participant => {
+                            return (
+                                <li key={participant.User.id} className={`playercard_container ${participant.hasJoined ? "background-white" : "background-dark"}`}>
+                                    <PlayerCard user={participant.User} isMobile={isMobile} icon={participant.hasPhotos ? "pi-images" : ""} />
+                                </li>
+                            )
+                        })
+                        :
+                        <>
+                            <Skeleton height="4.5rem" borderRadius="100rem"/>
+                            <Skeleton height="4.5rem" borderRadius="100rem"/>
+                            <Skeleton height="4.5rem" borderRadius="100rem"/>
+                        </>
+                    }
+                </ul>
+            </section>
+        )
+    }
+
+    return (isGameStarted ?
+        <Game user={props.user} game={game} gameData={gameData} />
+        :
         <>
             <Navbar user={props.user} isMobile={isMobile}/>
             <main id="dashboard">
                 <h1 id="page-title">Rejoindre une partie</h1>
 
-                <div id="container" style={{flexDirection: "column"}}>
-                    <section id="instructions-container" style={{width: "34%"}}>
+                <div id="container" style={{flexDirection: isMobile ? "column" : "row"}}>
+                    <section id="instructions-container" style={{width: isTablet ? "45%" : "32%"}}>
                         <div className="side-container">
                             <span id="title">Voici le code d'accès de la partie :</span>
                             <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
@@ -84,38 +150,24 @@ export default function Play(props) {
                             </div>
                         </div>
 
-                        {props.gameOwner === props.user.id &&
+                        {(game !== null && game.owner === props.user.id) &&
                             <div className="side-down-container">
                                 <Button label="Lancer la partie" rounded onClick={handleLaunch}/>
                             </div>
                         }
                     </section>
 
-                    <section className="list-container" style={{width: "36%"}}>
-                        <span className="section-header">Catégories</span>
-                        <Categories categories={categories} page="play" />
-                    </section>
-
-                    <section className="players-container" style={{width: "30%"}}>
-                        <span className="section-header">Participants</span>
-                        <ul>
-                            {participants !== null ?
-                                participants.map(participant => {
-                                    return (
-                                        <li key={participant.User.id} className={`playercard_container ${participant.hasJoined ? "background-white" : "background-dark"}`}>
-                                            <PlayerCard user={participant.User} isMobile={isMobile} icon={participant.hasPhotos ? "pi-images" : ""} />
-                                        </li>
-                                    )
-                                })
-                                :
-                                <>
-                                    <Skeleton height="4.5rem" borderRadius="100rem"/>
-                                    <Skeleton height="4.5rem" borderRadius="100rem"/>
-                                    <Skeleton height="4.5rem" borderRadius="100rem"/>
-                                </>
-                            }
-                        </ul>
-                    </section>
+                    {isTablet ?
+                        <div id="sections-wrapper">
+                            {categoriesSection("100%")}
+                            {playersSection("100%")}
+                        </div>
+                        :
+                        <>
+                            {categoriesSection("40%")}
+                            {playersSection("28%")}
+                        </>
+                    }
                 </div>
             </main>
             <Toast ref={toast} />

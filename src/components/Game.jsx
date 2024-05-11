@@ -2,25 +2,19 @@ import {Button} from "primereact/button"
 import PlayerCard from "@/components/PlayerCard"
 import {socket} from "../../utils/socket"
 import {useMediaQuery} from "react-responsive"
-import {useRouter} from "next/router"
 import {useEffect, useState} from "react"
+import {useRouter} from "next/router"
 
 export default function Game(props) {
+    const isMobile = useMediaQuery({maxWidth: 768})
+    const router = useRouter()
     const [gameData, setGameData] = useState(props.gameData)
     const [index, setIndex] = useState(0)
     const [questionMode, setQuestionMode] = useState(true)
     const [propositionChecked, setPropositionChecked] = useState(null)
     const [preventValidation, setPreventValidation] = useState(false)
-    const [rendered, setRendered] = useState(false)
-    const router = useRouter()
-    const isMobile = useMediaQuery({maxWidth: 768})
 
     useEffect(() => {
-        if (!rendered) {
-            socket.emit("userHasJoinedGame", {game: props.game})
-            setRendered(true)
-        }
-
         socket.on("changePhoto", async () => {
             setIndex(index + 1)
             setPropositionChecked(null)
@@ -31,7 +25,7 @@ export default function Game(props) {
             const request = await fetch("/api/game/getSolution", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({user: props.user.id, accessCode: props.accessCode}),
+                body: JSON.stringify({game: props.game.id}),
             })
 
             if (request.status === 200) {
@@ -43,9 +37,7 @@ export default function Game(props) {
         })
 
         socket.on("getScores", async () => {
-            await router.push({
-                pathname: "/scores", query: {accessCode: props.accessCode},
-            }, "/scores")
+            await router.push(`/scores/${props.game.id}`)
         })
     }, [index])
 
@@ -56,7 +48,7 @@ export default function Game(props) {
             const request = await fetch("/api/response/addResponse", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({user: props.user.id, accessCode: props.accessCode, photo: gameData.photos[index].id, response: propositionChecked}),
+                body: JSON.stringify({game: props.game.id, photo: gameData.photos[index].id, response: propositionChecked}),
             })
 
             if (request.status === 200) {
@@ -85,7 +77,7 @@ export default function Game(props) {
 
             <div id="container">
                 <section id="photo-container">
-                    <img src={gameData.photos[index].link} alt="Photo"/>
+                    <img src={`/${gameData.photos[index].link}`} alt="Photo"/>
                 </section>
 
                 <section id="propositions-container">

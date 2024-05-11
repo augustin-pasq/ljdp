@@ -1,7 +1,10 @@
 import prisma from "../../../../utils/prisma"
 import {shuffle} from "shuffle-seed"
+import {withSessionRoute} from "../../../../utils/ironSession"
 
-export default async function getSolution(req, res) {
+export default withSessionRoute(getSolution)
+
+async function getSolution(req, res) {
     try {
         const categories = await prisma.category.findMany({
             select: {
@@ -33,9 +36,7 @@ export default async function getSolution(req, res) {
                 }
             },
             where: {
-                Game: {
-                    accessCode: req.body.accessCode
-                }
+                game: req.body.game
             }
         })
 
@@ -51,9 +52,9 @@ export default async function getSolution(req, res) {
                     category: category.title,
                     link: photo.link,
                     response: {
-                        id: photo.Response.find(element => element.user === req.body.user).User_Response_valueToUser.id,
-                        username: photo.Response.find(element => element.user === req.body.user).User_Response_valueToUser.username,
-                        profilePicture: photo.Response.find(element => element.user === req.body.user).User_Response_valueToUser.profilePicture,
+                        id: photo.Response.find(element => element.user === req.session.user.id).User_Response_valueToUser.id,
+                        username: photo.Response.find(element => element.user === req.session.user.id).User_Response_valueToUser.username,
+                        profilePicture: photo.Response.find(element => element.user === req.session.user.id).User_Response_valueToUser.profilePicture,
                     },
                     solution: {
                         id: photo.User.id,
@@ -68,6 +69,7 @@ export default async function getSolution(req, res) {
 
         res.status(200).json({content: response})
     } catch (err) {
+        console.log(err)
         res.status(500).json(err)
     }
 }

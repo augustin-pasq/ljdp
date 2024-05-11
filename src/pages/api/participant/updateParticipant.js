@@ -2,18 +2,12 @@ import prisma from "../../../../utils/prisma"
 
 export default async function updateParticipant(req, res) {
     try {
-        const game = await prisma.game.findUnique({
-            where: {
-                id: req.body.game,
-            }
-        })
-
         await prisma.participant.update({
             data: {
                 hasJoined: true
             },
             where: {
-                game_user: {game: game.id, user: req.body.user},
+                game_user: {game: req.body.game, user: req.body.user},
             }
         })
 
@@ -30,7 +24,7 @@ export default async function updateParticipant(req, res) {
                 hasPhotos: true
             },
             where: {
-                game: game.id,
+                game: req.body.game,
             },
             orderBy: {
                 score: "desc"
