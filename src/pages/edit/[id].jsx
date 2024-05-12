@@ -25,14 +25,16 @@ export default function Edit(props) {
         setIsMobile(mediaQuery)
 
         if (!rendered) {
-            getCategories(parseInt(router.query.id))
+            getCategories(parseInt(router.query.id), router)
                 .then(result => {
-                    setGame(result.game)
-                    setCategories(result.categories)
-                    setRendered(true)
+                    if (result !== null) {
+                        setGame(result.game)
+                        setCategories(result.categories)
+                        setRendered(true)
 
-                    if (router.query.displayToast) {
-                        toast.current.show({severity: "success", detail: "La partie a été ajoutée à ton compte !"})
+                        if (router.query.displayToast) {
+                            toast.current.show({severity: "success", detail: "La partie a été ajoutée à ton compte !"})
+                        }
                     }
                 })
         } else if (lastPerformedAction === "add") {

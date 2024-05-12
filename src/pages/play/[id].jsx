@@ -35,20 +35,22 @@ export default function Play(props) {
         if (!rendered) {
             socket.emit("userHasJoined", {game: parseInt(router.query.id), user: props.user})
 
-            getCategories(parseInt(router.query.id))
+            getCategories(parseInt(router.query.id), router)
                 .then(result => {
-                    setGame(result.game)
-                    setCategories(result.categories)
+                    if (result !== null) {
+                        setGame(result.game)
+                        setCategories(result.categories)
 
-                    if(result.game.status === "started") {
-                        getGameData(result.game)
-                            .then((result) => {
-                                setGameData(result)
-                                setIsGameStarted(true)
-                            })
+                        if(result.game.status === "started") {
+                            getGameData(result.game)
+                                .then((result) => {
+                                    setGameData(result)
+                                    setIsGameStarted(true)
+                                })
+                        }
+
+                        setRendered(true)
                     }
-
-                    setRendered(true)
                 })
         }
 

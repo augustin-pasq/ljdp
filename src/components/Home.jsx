@@ -16,6 +16,29 @@ export default function Home(props) {
 
     useEffect(() => {
         setIsMobile(mediaQuery)
+
+        if (router.query.message !== null) {
+            switch (router.query.message) {
+                case "not_found":
+                    toast.current.show({severity: "error", detail:"Aucune partie n'existe pour ce code."})
+                    break
+                case "unauthorized":
+                    toast.current.show({severity: "error", detail:"Tu ne peux pas gérer les catégories d'une partie que tu n'as pas créée."})
+                    break
+                case "ended":
+                    toast.current.show({severity: "error", detail:"Tu ne peux pas accéder à une partie terminée, désolé !"})
+                    break
+                case "started":
+                    toast.current.show({severity: "error", detail:"La partie a déjà commencé, il fallait être plus rapide !"})
+                    break
+                case "not_started_yet":
+                    toast.current.show({severity: "error", detail:"La partie n'a pas encore commencé, reviens plus tard !"})
+                    break
+                case "not_joined":
+                    toast.current.show({severity: "error", detail:"Tu ne peux pas jouer à une partie que tu n'as pas rejointe."})
+                    break
+            }
+        }
     }, [mediaQuery])
 
     const formik = useFormik({

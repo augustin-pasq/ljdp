@@ -21,11 +21,13 @@ export default function Upload(props) {
         setIsMobile(mediaQuery)
 
         if (!rendered) {
-            getCategories(parseInt(router.query.id))
+            getCategories(parseInt(router.query.id), router)
                 .then(result => {
-                    setGame(result.game)
-                    setCategories(result.categories)
-                    setRendered(true)
+                    if (result !== null) {
+                        setGame(result.game)
+                        setCategories(result.categories)
+                        setRendered(true)
+                    }
                 })
         }
     }, [mediaQuery])

@@ -26,13 +26,15 @@ export default function Scores(props) {
         setIsTablet(mediaQueryMedium)
 
         if (!rendered) {
-            getCategories(parseInt(router.query.id))
+            getCategories(parseInt(router.query.id), router)
                 .then(result => {
-                    setCategories(result.categories)
+                    if (result !== null) {
+                        setCategories(result.categories)
 
-                    getScores(result.game).then(result => setScores(result))
+                        getScores(result.game).then(result => setScores(result))
 
-                    setRendered(true)
+                        setRendered(true)
+                    }
                 })
         }
     }, [mediaQuery, mediaQueryMedium])
@@ -41,7 +43,7 @@ export default function Scores(props) {
         const request = await fetch("/api/participant/getScores", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({id: game.id}),
+            body: JSON.stringify({game: game.id}),
         })
 
         if (request.status === 200) {
