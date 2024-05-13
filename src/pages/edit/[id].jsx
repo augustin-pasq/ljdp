@@ -17,7 +17,7 @@ export default function Edit(props) {
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
     const [categories, setCategories] = useState(null)
     const [game, setGame] = useState(null)
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
     const [lastPerformedAction, setLastPerformedAction] = useState("")
     const [rendered, setRendered] = useState(false)
 

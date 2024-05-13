@@ -12,7 +12,7 @@ export default function Home(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
     const toast = useRef(null)
     const router = useRouter()
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
 
     useEffect(() => {
         setIsMobile(mediaQuery)

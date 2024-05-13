@@ -15,7 +15,7 @@ export default function Scores(props) {
     const mediaQueryMedium = useMediaQuery({minWidth: 768, maxWidth: 1200})
     const router = useRouter()
     const [categories, setCategories] = useState(null)
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
     const [isTablet, setIsTablet] = useState(false)
     const [photos, setPhotos] = useState(null)
     const [rendered, setRendered] = useState(false)

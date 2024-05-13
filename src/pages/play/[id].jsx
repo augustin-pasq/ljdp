@@ -23,7 +23,7 @@ export default function Play(props) {
     const [game, setGame] = useState(null)
     const [gameData, setGameData] = useState(null)
     const [isGameStarted, setIsGameStarted] = useState(false)
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
     const [isTablet, setIsTablet] = useState(false)
     const [participants, setParticipants] = useState(null)
     const [rendered, setRendered] = useState(false)

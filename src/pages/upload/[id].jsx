@@ -13,7 +13,7 @@ export default function Upload(props) {
     const router = useRouter()
     const [categories, setCategories] = useState(null)
     const [game, setGame] = useState(null)
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
     const [photo, setPhoto] = useState("")
     const [rendered, setRendered] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState(null)

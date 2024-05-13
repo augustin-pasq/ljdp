@@ -11,7 +11,7 @@ import {Skeleton} from "primereact/skeleton";
 export default function Games(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
     const [games, setGames] = useState(null)
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
 
     useEffect(() => {
         setIsMobile(mediaQuery)
