@@ -1,13 +1,14 @@
+import {Badge} from "primereact/badge"
+import Categories from "@/components/Categories"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../utils/ironSession"
+import {getCategories} from "../../../utils/getCategories"
+import Image from "next/image"
+import Navbar from "@/components/Navbar"
+import PlayerCard from "@/components/PlayerCard"
+import {Skeleton} from "primereact/skeleton"
+import {useEffect, useState} from "react"
+import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
-import Navbar from "@/components/Navbar";
-import {Badge} from "primereact/badge";
-import PlayerCard from "@/components/PlayerCard";
-import Categories from "@/components/Categories";
-import {useEffect, useState} from "react";
-import {useMediaQuery} from "react-responsive";
-import {getCategories} from "../../../utils/getCategories";
-import {Skeleton} from "primereact/skeleton";
 
 export default function Scores(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
@@ -136,7 +137,7 @@ export default function Scores(props) {
                                             <div className="playercard-wrapper">
                                                 <PlayerCard user={photo.User} isMobile={isMobile} />
                                             </div>
-                                            <img src={`/${photo.link}`} alt="Photo"/>
+                                            <Image src={`/${photo.link}`} alt="Photo"/>
                                         </li>
                                     )
                                     :

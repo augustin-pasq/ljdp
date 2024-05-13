@@ -1,5 +1,6 @@
 import {Avatar} from "primereact/avatar"
 import {Button} from "primereact/button"
+import Image from "next/image"
 import Link from "next/link"
 import {useRouter} from "next/router"
 
@@ -24,7 +25,7 @@ export default function Navbar(props) {
             </Link>
 
             <div className="navbar-item">
-                <img alt="Logo" />
+                <Image src={""} alt="Logo" />
             </div>
 
             <div className="navbar-item" onClick={handleLogout}>

@@ -2,6 +2,7 @@ import {Button} from "primereact/button"
 import Categories from "@/components/Categories"
 import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../utils/ironSession"
 import {getCategories} from "../../../utils/getCategories"
+import Image from "next/image"
 import Navbar from "@/components/Navbar"
 import {useEffect, useState} from "react"
 import {useMediaQuery} from "react-responsive"
@@ -95,7 +96,7 @@ export default function Upload(props) {
                             <>
                                 {photo !== "" && photo !== "loading"  ?
                                     <>
-                                        <img src={`/${photo}`} alt="Photo"/>
+                                        <Image src={`/${photo}`} alt="Photo"/>
                                         {photo !== "loading" && <Button rounded severity="danger" label="Supprimer le fichier" onClick={() => deletePhoto(photo)}/>}
                                     </>
                                     :

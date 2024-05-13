@@ -1,4 +1,5 @@
 import {Button} from "primereact/button"
+import Image from "next/image"
 import PlayerCard from "@/components/PlayerCard"
 import {socket} from "../../utils/socket"
 import {useMediaQuery} from "react-responsive"
@@ -77,7 +78,7 @@ export default function Game(props) {
 
             <div id="container">
                 <section id="photo-container">
-                    <img src={`/${gameData.photos[index].link}`} alt="Photo"/>
+                    <Image src={`/${gameData.photos[index].link}`} alt="Photo"/>
                 </section>
 
                 <section id="propositions-container">
