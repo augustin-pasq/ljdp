@@ -23,7 +23,7 @@ app.prepare().then(() => {
         socket.on("userHasJoined", async (data) => {
             socket.join(data.game)
 
-            const request = await fetch(`http://localhost:3000/api/participant/updateParticipant`, {
+            const request = await fetch(`http://localhost:3001/api/participant/updateParticipant`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({game: data.game, user: data.user.id}),
@@ -36,7 +36,7 @@ app.prepare().then(() => {
         })
 
         socket.on("launchGame", async (data) => {
-            const request = await fetch(`http://localhost:3000/api/game/setStatus`, {
+            const request = await fetch(`http://localhost:3001/api/game/setStatus`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({game: data.game.id, status: "started"}),
@@ -56,7 +56,7 @@ app.prepare().then(() => {
         })
 
         socket.on("getScores", async (data) => {
-            const request = await fetch(`http://localhost:3000/api/game/setStatus`, {
+            const request = await fetch(`http://localhost:3001/api/game/setStatus`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({game: data.game.id, status: "ended"}),
