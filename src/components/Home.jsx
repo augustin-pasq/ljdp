@@ -31,9 +31,6 @@ export default function Home(props) {
                 case "started":
                     toast.current.show({severity: "error", detail:"La partie a déjà commencé, il fallait être plus rapide !"})
                     break
-                case "not_started_yet":
-                    toast.current.show({severity: "error", detail:"La partie n'a pas encore commencé, reviens plus tard !"})
-                    break
                 case "not_joined":
                     toast.current.show({severity: "error", detail:"Tu ne peux pas jouer à une partie que tu n'as pas rejointe."})
                     break

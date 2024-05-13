@@ -22,7 +22,7 @@ async function getCategories(req, res) {
                 `
 
             code = 200
-            result = {game: game, categories: categories}
+            result = {game: game.content, categories: categories}
         } else {
             code = 403
             result = game.message
@@ -49,8 +49,6 @@ async function getGame(gameId, userId, page) {
             message = "not_found"
         } else if (page === "edit" && response.owner !== userId) {
             message = "unauthorized"
-        } else if (page === "play" && response.status === "created") {
-            message = "not_started_yet"
         } else if (page === "play" && response.status === "started") {
             const participant = await prisma.participant.findUnique({
                 where: {
