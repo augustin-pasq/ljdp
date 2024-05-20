@@ -1,6 +1,6 @@
 # LJDP : Le Jeu Des Photos
 
-Jeu de devinettes à base de photos.
+LJDP : Le Jeu Des Photos. Le party game de devinettes à base d'images.
 
 ## Le concept de LJDP
 
