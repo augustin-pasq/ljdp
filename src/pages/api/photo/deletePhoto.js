@@ -1,3 +1,4 @@
+import fs from "fs"
 import prisma from "../../../../utils/prisma"
 
 export default async function deletePhoto(req, res) {
@@ -13,6 +14,8 @@ export default async function deletePhoto(req, res) {
                 id: photo.id
             }
         })
+
+        fs.unlinkSync(`./public/${photo.link}`)
 
         res.status(200).json({content: {}})
     } catch (err) {
