@@ -1,4 +1,5 @@
 const {createServer} = require("http")
+const express = require("express")
 const next = require("next")
 const socketIO = require("socket.io")
 
@@ -11,6 +12,8 @@ const handler = app.getRequestHandler()
 
 app.prepare().then(() => {
     const httpServer = createServer(handler)
+    const expressServer = express()
+    expressServer.use(express.static("/uploads"))
 
     const io = new socketIO.Server(httpServer, {
         cors: {
