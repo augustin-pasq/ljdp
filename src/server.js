@@ -1,6 +1,7 @@
 const {createServer} = require("http")
-const express = require("express")
+const fs = require("fs")
 const next = require("next")
+const path = require("path")
 const socketIO = require("socket.io")
 
 const dev = process.env.NODE_ENV !== "production"
@@ -11,9 +12,7 @@ const app = next({ dev, hostname, port })
 const handler = app.getRequestHandler()
 
 app.prepare().then(() => {
-    const httpServer = createServer(handler)
-    const expressServer = express()
-    expressServer.use(express.static("/uploads"))
+    const httpServer = createServer()
 
     const io = new socketIO.Server(httpServer, {
         cors: {
@@ -75,6 +74,22 @@ app.prepare().then(() => {
         .once("error", (err) => {
             console.error(err)
             process.exit(1)
+        })
+        .on("request", (req, res) => {
+            if (req.url.startsWith("/uploads")) {
+                const filePath = path.join(process.cwd(), "public", req.url)
+                fs.stat(filePath, (err, stats) => {
+                    if (err) {
+                        return res.writeHead(404).end("Not Found")
+                    } else if (stats.isFile()) {
+                        return fs.createReadStream(filePath).pipe(res)
+                    } else {
+                        return res.writeHead(403).end("Forbidden")
+                    }
+                })
+            } else {
+                return handler(req, res)
+            }
         })
         .listen(port)
 })
