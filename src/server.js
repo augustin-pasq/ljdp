@@ -12,7 +12,22 @@ const app = next({ dev, hostname, port })
 const handler = app.getRequestHandler()
 
 app.prepare().then(() => {
-    const httpServer = createServer()
+    const httpServer = createServer((req, res) => {
+        if (req.url.startsWith("/uploads")) {
+            const filePath = path.join(process.cwd(), "public", req.url)
+            fs.stat(filePath, (err, stats) => {
+                if (err) {
+                    return res.writeHead(404).end("Not Found")
+                } else if (stats.isFile()) {
+                    return fs.createReadStream(filePath).pipe(res)
+                } else {
+                    return res.writeHead(403).end("Forbidden")
+                }
+            })
+        } else {
+            return handler(req, res)
+        }
+    })
 
     const io = new socketIO.Server(httpServer, {
         cors: {
@@ -74,22 +89,6 @@ app.prepare().then(() => {
         .once("error", (err) => {
             console.error(err)
             process.exit(1)
-        })
-        .on("request", (req, res) => {
-            if (req.url.startsWith("/uploads")) {
-                const filePath = path.join(process.cwd(), "public", req.url)
-                fs.stat(filePath, (err, stats) => {
-                    if (err) {
-                        return res.writeHead(404).end("Not Found")
-                    } else if (stats.isFile()) {
-                        return fs.createReadStream(filePath).pipe(res)
-                    } else {
-                        return res.writeHead(403).end("Forbidden")
-                    }
-                })
-            } else {
-                return handler(req, res)
-            }
         })
         .listen(port)
 })
