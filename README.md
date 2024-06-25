@@ -41,5 +41,13 @@ Pour suivre l'avancée du projet, rendez-vous sur [la roadmap](https://github.co
 5. Lancer les commandes ``npx prisma db pull`` et ``npx prisma db generate`` pour synchroniser la base de données avec Prisma
 6. Lancer la commande ``npm run dev`` pour lancer le projet
 
+## Charte graphique
+
+| Code hexadécimal | Couleur                        |
+|------------------|--------------------------------|
+| #4ebbe9          | Bleu clair, couleur principale |
+| #004480          | Bleu foncé, couleur variante   |
+| #f59e0b          | Orange, couleur d'accentuation |
+
 ## Auteurs
 - Augustin Pasquier [@augustin-pasq](https://github.com/augustin-pasq)
