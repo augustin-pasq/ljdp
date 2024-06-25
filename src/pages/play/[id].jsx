@@ -80,7 +80,7 @@ export default function Play(props) {
             if (data.content > 0) {
                 socket.emit("launchGame", {game: game})
             } else {
-                toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun jouer n'a uploadé de photo !", life: 3000})
+                toast.current.show({severity: "error", summary: "Impossible de lancer la partie", detail: "Aucun joueur n'a uploadé de photo !", life: 3000})
             }
         }
     }
