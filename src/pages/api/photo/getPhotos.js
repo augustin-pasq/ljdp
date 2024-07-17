@@ -5,6 +5,11 @@ export default async function getPhotos(req, res) {
         const response = await prisma.photo.findMany({
             select: {
                 link: true,
+                Category: {
+                    select: {
+                        type: true
+                    }
+                },
                 User: {
                     select: {
                         username: true,

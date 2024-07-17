@@ -85,11 +85,19 @@
                 width: 100% !important;
 
                 form {
+                    border-radius: 2rem;
+                    flex-direction: column-reverse;
                     gap: 0.5rem;
                     padding: 0.75rem;
 
+                    .action-buttons {
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+
                     .p-inputtext {
                         height: 2.5rem;
+                        width: 100%;
                     }
 
                     button {
@@ -179,6 +187,20 @@
                         padding: 0 3rem;
                     }
                 }
+
+                form {
+                    gap: 0.5rem;
+
+                    button {
+                        height: 2.5rem;
+                        width: 2.5rem;
+                    }
+
+                    input {
+                        height: 2.5rem;
+                    }
+                }
+
             }
 
             .players-container {

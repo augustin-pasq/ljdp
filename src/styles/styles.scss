@@ -257,14 +257,29 @@ ul {
                 background: rgba(255, 255, 255, 0.66);
                 border-radius: 100rem;
                 display: flex;
+                flex-wrap: wrap;
                 gap: 1rem;
                 justify-content: space-between;
                 padding: 1rem;
                 width: 100%;
 
+                .action-buttons {
+                    display: flex;
+                    gap: 1rem;
+                }
+
                 .p-inputtext {
+                    flex: 2;
                     height: 3rem;
-                    width: calc(100% - 4rem);
+                }
+
+                .p-selectbutton {
+                    display: flex;
+                    gap: 0.5rem;
+
+                    .p-button {
+                        border-radius: 100rem;
+                    }
                 }
             }
 
@@ -289,13 +304,17 @@ ul {
                     box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
                 }
 
+                .icon {
+                    margin-left: 0.75rem;
+                }
+
                 .title {
                     align-items: center;
                     display: flex;
+                    flex: 2;
                     font-size: 1.1rem;
                     font-weight: bold;
                     min-height: 3rem;
-                    margin-left: 0.75rem;
                 }
             }
         }
@@ -424,26 +443,39 @@ ul {
                 &.disabled {
                     background: rgba(255, 255, 255, 0.66);
                 }
-            }
 
-            input {
-                position: absolute;
-                left: 0;
-                top: 0;
-                height: 100%;
-                width: 100%;
-                opacity: 0;
-                cursor: pointer;
+                input {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    width: 100%;
+                    opacity: 0;
+                    cursor: pointer;
 
-                &.disabled {
-                    cursor: default;
+                    &.disabled {
+                        cursor: default;
+                    }
                 }
             }
 
-            img {
-                aspect-ratio: 4 / 3;
+            form {
+                align-items: center;
+                display: flex;
+                gap: 1rem;
                 width: 100%;
-                object-fit: contain;
+
+                input {
+                    flex: 2;
+                    height: 3rem;
+                }
+            }
+
+            .photo-component {
+                img {
+                    aspect-ratio: 4 / 3;
+                    object-fit: contain;
+                }
             }
         }
 
@@ -514,11 +546,6 @@ ul {
             border-radius: 2rem;
             height: 31vw;
             padding: 2vw;
-
-            img {
-                width: 100%;
-                height: 100%;
-            }
         }
 
         #propositions-container {
@@ -741,5 +768,20 @@ ul {
         .playercard_complementary {
             font-size: 1rem;
         }
+    }
+}
+
+.photo-component {
+    height: 100%;
+    width: 100%;
+
+    img, video, iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    iframe {
+        aspect-ratio: 16 / 9;
+        border: none;
     }
 }

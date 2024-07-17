@@ -4,6 +4,7 @@ import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../utils/ironSession"
 import {getCategories} from "../../../utils/getCategories"
 import Navbar from "@/components/Navbar"
 import PlayerCard from "@/components/PlayerCard"
+import Photo from "@/components/Photo";
 import {Skeleton} from "primereact/skeleton"
 import {useEffect, useState} from "react"
 import {useMediaQuery} from "react-responsive"
@@ -136,7 +137,7 @@ export default function Scores(props) {
                                             <div className="playercard-wrapper">
                                                 <PlayerCard user={photo.User} isMobile={isMobile} />
                                             </div>
-                                            <img src={`/${photo.link}`} alt="Photo"/>
+                                            <Photo photo={{type: photo.Category.type, link: photo.link}} />
                                         </li>
                                     )
                                     :

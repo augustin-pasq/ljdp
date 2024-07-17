@@ -27,6 +27,7 @@ CREATE TABLE Category
 (
     id          INTEGER PRIMARY KEY AUTO_INCREMENT,
     title       TEXT        NOT NULL,
+    type        VARCHAR(7)  NOT NULL,
     shuffleSeed VARCHAR(64) NOT NULL,
     game        INTEGER     NOT NULL,
 

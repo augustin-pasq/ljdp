@@ -6,6 +6,7 @@ export default async function getGameData(req, res) {
         const categories = await prisma.category.findMany({
             select: {
                 title: true,
+                type: true,
                 shuffleSeed: true,
                 Photo: {
                     select: {
@@ -43,7 +44,7 @@ export default async function getGameData(req, res) {
         categories.forEach(category => {
             const shuffledPhotos = shuffle(category.Photo, category.shuffleSeed)
             const formattedShuffledPhotos = shuffledPhotos.map(photo => {
-                return {...photo, category: category.title}
+                return {...photo, category: category.title, type: category.type}
             })
             gameData.photos = gameData.photos.concat(formattedShuffledPhotos)
         })

@@ -22,6 +22,7 @@ model User {
 model Category {
   id          Int     @id @default(autoincrement())
   title       String  @db.Text
+  type        String  @db.VarChar(7)
   shuffleSeed String  @db.VarChar(64)
   game        Int
   Game        Game    @relation(fields: [game], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Category_ibfk_1")

@@ -9,6 +9,7 @@ async function getSolution(req, res) {
         const categories = await prisma.category.findMany({
             select: {
                 title: true,
+                type: true,
                 shuffleSeed: true,
                 Photo: {
                     select: {
@@ -51,6 +52,7 @@ async function getSolution(req, res) {
                 return {
                     category: category.title,
                     link: photo.link,
+                    type: category.type,
                     response: {
                         id: photo.Response.find(element => element.user === req.session.user.id).User_Response_valueToUser.id,
                         username: photo.Response.find(element => element.user === req.session.user.id).User_Response_valueToUser.username,

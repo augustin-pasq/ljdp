@@ -6,6 +6,7 @@ export default async function addCategory(req, res) {
         const response = await prisma.category.create({
             data: {
                 title: req.body.title,
+                type: req.body.type,
                 shuffleSeed: randomBytes(32).toString("hex"),
                 game: req.body.game,
             }

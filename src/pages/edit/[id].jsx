@@ -4,11 +4,12 @@ import {checkIfUserIsLoggedIn, withSessionSsr} from "../../../utils/ironSession"
 import {getCategories} from "../../../utils/getCategories"
 import {InputText} from "primereact/inputtext"
 import Navbar from "@/components/Navbar"
+import {SelectButton} from "primereact/selectbutton"
+import {Toast} from "primereact/toast"
 import {useEffect, useRef, useState} from "react"
 import {useFormik} from "formik"
 import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
-import {Toast} from "primereact/toast";
 
 export default function Edit(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
@@ -20,6 +21,12 @@ export default function Edit(props) {
     const [isMobile, setIsMobile] = useState(true)
     const [lastPerformedAction, setLastPerformedAction] = useState("")
     const [rendered, setRendered] = useState(false)
+
+    const typeOptions = [
+        {icon: "pi pi-image", value: "image"},
+        {icon: "pi pi-video", value: 'video'},
+        {icon: "pi pi-youtube", value: "youtube"},
+    ]
 
     useEffect(() => {
         setIsMobile(mediaQuery)
@@ -45,11 +52,13 @@ export default function Edit(props) {
     const formik = useFormik({
         initialValues: {
             title: "",
+            type: "image"
         },
         validate: (data) => {
             let errors = {}
 
             if (!data.title || /^\s*$/.test(data.title)) errors.title = "Requis."
+            if (!data.type || (data.type !== "image" && data.type !== "video" && data.type !== "youtube")) errors.type = "Requis."
 
             return errors
         },
@@ -57,12 +66,12 @@ export default function Edit(props) {
             const request = await (await fetch("/api/category/addCategory", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title: data.title, game: game.id}),
+                body: JSON.stringify({title: data.title, type: data.type, game: game.id}),
             }))
 
             if(request.status === 200) {
                 const data = await request.json()
-                setCategories([...categories, {id: data.content.id, title: data.content.title}])
+                setCategories([...categories, {id: data.content.id, title: data.content.title, type: data.content.type}])
                 setLastPerformedAction("add")
             }
 
@@ -98,7 +107,10 @@ export default function Edit(props) {
                         <span className="section-header">Catégories</span>
                         <form onSubmit={formik.handleSubmit}>
                             <InputText id="title" className={isFormFieldInvalid("title") ? "p-invalid" : ""} name="title" placeholder="Titre" value={formik.values.title} onChange={formik.handleChange}/>
-                            <Button type="submit" icon="pi pi-plus" rounded/>
+                            <div className="action-buttons">
+                                <SelectButton id="type" className={isFormFieldInvalid("type") ? "p-invalid" : ""} name="type" itemTemplate={(option) => <i className={option.icon} />} optionLabel="value" options={typeOptions} value={formik.values.type} onChange={formik.handleChange} />
+                                <Button type="submit" icon="pi pi-plus" rounded/>
+                            </div>
                         </form>
                         <Categories buttonIcon="pi pi-trash" categories={categories} handleAction={deleteCategory} page="edit" />
                     </section>
