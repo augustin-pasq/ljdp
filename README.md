@@ -15,7 +15,7 @@ Le projet est aujourd'hui pleinement fonctionnel (malgré quelques points à am�
 - Connexion/Déconnexion à l'application
 - Session utilisateur
 - Création d'une partie et de ses catégories
-- Upload des photos
+- Upload des photos, vidéos et liens YouTube
 - Système de jeu : affichage des questions, soumission des réponses, affichage de la correction, calcul des scores
 - Principe du multijoueurs pour une expérience de jeu en temps réel
 - Historique des parties, avec les scores et les photos envoyées
