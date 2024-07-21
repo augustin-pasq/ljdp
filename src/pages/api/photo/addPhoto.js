@@ -1,7 +1,8 @@
 import formidable from "formidable"
 import fs from "fs"
+import gm from "gm"
+import path from "path"
 import prisma from "../../../../utils/prisma"
-import sharp from "sharp"
 import {v4 as uuidv4} from "uuid"
 import {withSessionRoute} from "../../../../utils/ironSession"
 import {youtubeURLParser} from "../../../../utils/youtubeURLParser"
@@ -44,27 +45,21 @@ async function addPhoto(req, res) {
                 })
 
                 let filePath = ''
-                switch(categoryType.type) {
-                    case 'image':
-                        filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.webp`
-                        await fs.renameSync(files.file[0].filepath, `./public/${filePath}`)
+                let originalFilePath = files.file[0].filepath
+                let extension = path.extname(originalFilePath)
 
-                        await sharp(fs.readFileSync(`./public/${filePath}`))
-                            .toFormat("webp")
-                            .resize({width: 960})
-                            .webp({quality: 85})
-                            .rotate()
-                            .toFile(`./public/${filePath}`)
-
-                        break
-                    case 'video':
-                        filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.mp4`
-                        await fs.renameSync(files.file[0].filepath, `./public/${filePath}`)
-
-                        break
-                    case 'youtube':
-                        const [id, startTime] = youtubeURLParser(fields.link[0])
-                        filePath = `https://www.youtube.com/embed/${id}${startTime ? `?start=${startTime}` : ''}`
+                if (categoryType.type === 'image' && extension !== '.gif') {
+                    filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.webp`
+                    await fs.renameSync(originalFilePath, `./public/${filePath}`)
+                    await processImage(`./public/${filePath}`)
+                }
+                else if (categoryType.type === 'video' || extension === '.gif') {
+                    filePath = `uploads/ljdp-uploaded_file-${uuidv4()}${extension}`
+                    await fs.renameSync(originalFilePath, `./public/${filePath}`)
+                }
+                else if (categoryType.type === 'youtube') {
+                    const [id, startTime] = youtubeURLParser(fields.link[0])
+                    filePath = `https://www.youtube.com/embed/${id}${startTime ? `?start=${startTime}` : ''}`
                 }
 
                 await prisma.photo.create({
@@ -83,4 +78,21 @@ async function addPhoto(req, res) {
     } catch (err) {
         res.status(500).json(err)
     }
+}
+
+function processImage(path) {
+    return new Promise((resolve, reject) => {
+        gm(path)
+            .resize(960)
+            .setFormat('webp')
+            .quality(85)
+            .noProfile()
+            .write(path, (err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+    })
 }

@@ -144,7 +144,7 @@ export default function Play(props) {
                     <section id="instructions-container" style={{width: isTablet ? "45%" : "32%"}}>
                         <div className="side-container">
                             <span id="title">Voici le code d'accès de la partie :</span>
-                            <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
+                            <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${game.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
                             <div id="links-container">
                                 <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
                                 <span><a href={`https://ljdp.augustinpasquier.fr/play/${game !== null ? game.id : ""}`} target="_blank">{`ljdp.augustinpasquier.fr/play/${game !== null ? game.id : ""}`}</a> pour commencer la partie</span>

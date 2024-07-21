@@ -117,7 +117,7 @@ export default function Edit(props) {
 
                     <section id="instructions-container" className="side-container" style={{width: "33%"}}>
                         <span id="title">Voici le code d'accès de la partie :</span>
-                        <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${props.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
+                        <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${game.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
                         <div id="links-container">
                             <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
                             <span><a href={`https://ljdp.augustinpasquier.fr/upload/${game !== null ? game.id : ""}`} target="_blank">{`ljdp.augustinpasquier.fr/upload/${game !== null ? game.id : ""}`}</a> pour uploader des photos</span>
