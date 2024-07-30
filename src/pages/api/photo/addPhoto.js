@@ -45,8 +45,8 @@ async function addPhoto(req, res) {
                 })
 
                 let filePath = ''
-                let originalFilePath = files.file[0].filepath
-                let extension = path.extname(originalFilePath)
+                let originalFilePath = files?.file?.[0]?.filepath ?? null
+                let extension = originalFilePath ? path.extname(originalFilePath) : null
 
                 if (categoryType.type === 'image' && extension !== '.gif') {
                     filePath = `uploads/ljdp-uploaded_file-${uuidv4()}.webp`
