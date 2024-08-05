@@ -12,7 +12,7 @@ async function register(req, res) {
             data: {
                 username: req.body.username,
                 password: hash,
-                profilePicture: `https://source.boringavatars.com/beam/64/${req.body.username}`
+                profilePicture: `https://api.dicebear.com/9.x/miniavs/svg?seed=${req.body.username}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`
             }
         })
 

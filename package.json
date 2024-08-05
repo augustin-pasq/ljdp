@@ -6,6 +6,7 @@
     "dev": "node src/server.js",
     "build": "next build",
     "start": "node src/server.js",
+    "prisma generate": "npx prisma generate",
     "prisma studio": "npx prisma studio"
   },
   "dependencies": {

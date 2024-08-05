@@ -85,6 +85,8 @@ app.prepare().then(() => {
         })
     })
 
+    console.log(`> Server listening at http://${hostname}:${port} as ${process.env.NODE_ENV}\n`)
+
     httpServer
         .once("error", (err) => {
             console.error(err)

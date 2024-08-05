@@ -80,19 +80,33 @@ async function addPhoto(req, res) {
     }
 }
 
-function processImage(path) {
-    return new Promise((resolve, reject) => {
-        gm(path)
-            .resize(960)
-            .setFormat('webp')
-            .quality(85)
-            .noProfile()
-            .write(path, (err) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve()
-                }
+async function processImage(path) {
+    try {
+        const format = await new Promise((resolve, reject) => {
+            gm(path).format((err, format) => {
+                if (err) return reject(err)
+                resolve(format)
             })
-    })
+        })
+
+        const image = gm(path)
+
+        if (format.toLowerCase() !== "heic") {
+            image.autoOrient()
+        }
+
+        await new Promise((resolve, reject) => {
+            image
+                .resize(960)
+                .setFormat("webp")
+                .quality(85)
+                .noProfile()
+                .write(path, (err) => {
+                    if (err) return reject(err)
+                    resolve()
+                })
+        })
+    } catch (error) {
+        throw error
+    }
 }
