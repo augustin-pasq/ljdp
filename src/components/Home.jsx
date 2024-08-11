@@ -7,15 +7,21 @@ import {useFormik} from "formik"
 import {useEffect, useRef, useState} from "react"
 import {useRouter} from "next/router"
 import {useMediaQuery} from "react-responsive";
+import {Avatar} from "primereact/avatar";
+import {Tag} from "primereact/tag";
+import {Skeleton} from "primereact/skeleton";
+import {Divider} from "primereact/divider";
 
 export default function Home(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
+    const [games, setGames] = useState(null)
     const toast = useRef(null)
     const router = useRouter()
     const [isMobile, setIsMobile] = useState(true)
 
     useEffect(() => {
         setIsMobile(mediaQuery)
+        getGames().then((result) => setGames(result))
 
         if (router.query.message !== null) {
             switch (router.query.message) {
@@ -38,6 +44,18 @@ export default function Home(props) {
         }
     }, [mediaQuery])
 
+    const getGames = async() => {
+        const request = await fetch("/api/participant/getGames", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"}
+        })
+
+        if(request.status === 200) {
+            const data = await request.json()
+            return data.content
+        }
+    }
+
     const formik = useFormik({
         initialValues: {
             code: "",
@@ -59,6 +77,7 @@ export default function Home(props) {
                 const data = await request.json()
                 switch(data.content.message) {
                     case "added":
+                        getGames().then((result) => setGames(result))
                         toast.current.show({severity: "success", detail: "La partie a été ajoutée à ton compte !"})
                         break
                     case "already_added":
@@ -95,29 +114,75 @@ export default function Home(props) {
         <>
             <Navbar user={props.user} isMobile={isMobile} />
             <main id="home">
-                <div className="home-item">
-                    <span className="title">🚀 Créer une partie</span>
-                    <p className="description">Crée une partie, ajoute des catégories et invite tes amis !</p>
-                    <Button label="Commencer" rounded onClick={navigateNewGame} />
-                </div>
-                <div className="home-item">
-                    <span className="title">🚪 Rejoindre une partie</span>
-                    <p className="description">Entre un code d'accès pour ajouter une partie à ton compte :</p>
+                <h2 id="page-title">Jouer à LJDP</h2>
 
-                    <form onSubmit={formik.handleSubmit}>
-                        <div id="input-wrapper">
-                            <InputText id="code" className={isFormFieldInvalid("code") ? "p-invalid" : ""} name="code" maxLength={4} value={formik.values.code} onChange={(e) => {formik.setFieldValue("code", e.target.value.toUpperCase())}} />
-                            <Button icon="pi pi-arrow-right" type="submit" rounded/>
-                        </div>
-                    </form>
+                <div id="home-items">
+                    <div className="item">
+                        <span className="title">🚀 Créer une partie</span>
+                        <p className="description">Crée une partie, ajoute des catégories et invite tes amis !</p>
+                        <Button label="Commencer" rounded onClick={navigateNewGame} />
+                    </div>
+                    <div className="item">
+                        <span className="title">🚪 Rejoindre une partie</span>
+                        <p className="description">Entre un code d'accès pour ajouter une partie à ton compte :</p>
+
+                        <form onSubmit={formik.handleSubmit}>
+                            <div id="input-wrapper">
+                                <InputText id="code" className={isFormFieldInvalid("code") ? "p-invalid" : ""} name="code" maxLength={4} value={formik.values.code} onChange={(e) => {formik.setFieldValue("code", e.target.value.toUpperCase())}} />
+                                <Button icon="pi pi-arrow-right" type="submit" rounded/>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div className="home-item">
-                    <span className="title">🎮 Jouer à LJDP</span>
-                    <p className="description">Accède à la liste de tes parties, upload tes photos et joue avec tes amis !</p>
-                    <Link href="/games">
-                        <Button label="C'est parti !" rounded />
-                    </Link>
-                </div>
+
+                <h2 id="page-title">Mes parties</h2>
+
+                <ul id="games-list">
+                    {games !== null ?
+                        games.map(game => {
+                            return (
+                                <li key={game.Game.id} className="game-item">
+                                    <div className="data">
+                                        <Avatar image={game.Game.User.profilePicture} size={isMobile ? "large" : "xlarge"} shape="circle" />
+                                        <Tag value={game.Game.accessCode} rounded />
+                                        <div className="details">
+                                            <span className="title">{`Partie de ${game.Game.User.username}`}</span>
+                                            <small className="date">{`Rejointe le ${(new Date(game.createdAt)).toLocaleString("fr-FR", {year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"})}`}</small>
+                                        </div>
+                                    </div>
+                                    <div className="actions">
+                                        {(props.user.id === game.Game.User.id && game.Game.status === "created") &&
+                                            <Link href={`/edit/${game.Game.id}`}>
+                                                <Button label={isMobile ? "" : "Éditer"} icon="pi pi-pencil" rounded outlined />
+                                            </Link>
+                                        }
+                                        {game.Game.status === "created" &&
+                                            <Link href={`/upload/${game.Game.id}`}>
+                                                <Button label={isMobile ? "" : "Uploader"} icon="pi pi-images" rounded outlined />
+                                            </Link>
+                                        }
+                                        {game.Game.status === "created" &&
+                                            <Link href={`/play/${game.Game.id}`}>
+                                                <Button label={isMobile ? "" : "Jouer"} icon="pi pi-play" rounded outlined />
+                                            </Link>
+                                        }
+                                        {game.Game.status === "ended" &&
+                                            <Link href={`/scores/${game.Game.id}`}>
+                                                <Button label={isMobile ? "" : "Scores"} icon="pi pi-chart-bar" rounded outlined />
+                                            </Link>
+                                        }
+                                    </div>
+                                </li>
+                            )
+                        })
+                        :
+                        <>
+                            <Skeleton height={isMobile ? "9rem" : "6rem"} borderRadius="1rem"></Skeleton>
+                            <Skeleton height={isMobile ? "9rem" : "6rem"} borderRadius="1rem"></Skeleton>
+                            <Skeleton height={isMobile ? "9rem" : "6rem"} borderRadius="1rem"></Skeleton>
+                        </>
+                    }
+                </ul>
             </main>
             <Toast ref={toast} position="bottom-center" />
         </>

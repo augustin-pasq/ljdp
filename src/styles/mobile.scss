@@ -289,10 +289,27 @@
         }
     }
 
-    #games {
+    #home {
+        align-items: center;
         flex-direction: column;
         gap: 1rem;
-        margin-top: 1rem;
+        padding: 0 1rem;
+
+        h2 {
+            font-size: 3rem;
+            margin: 2rem 0;
+        }
+
+        #home-items {
+            gap: 1rem;
+            margin-bottom: 2rem;
+
+            .item {
+                height: fit-content;
+                padding: 2rem;
+                width: 100%;
+            }
+        }
 
         #games-list {
             .game-item {
@@ -309,17 +326,6 @@
                     }
                 }
             }
-        }
-    }
-
-    #home {
-        flex-direction: column;
-        gap: 1rem;
-
-        .home-item {
-            height: fit-content;
-            padding: 2rem;
-            width: 100%;
         }
     }
 

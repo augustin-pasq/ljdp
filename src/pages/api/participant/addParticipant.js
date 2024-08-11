@@ -1,10 +1,11 @@
+import getGames from "@/pages/api/participant/getGames"
 import prisma from "../../../../utils/prisma"
 
 export default async function addParticipant(req, res) {
     try {
         let message = "added"
 
-        const game = await prisma.game.findUnique({
+        let game = await prisma.game.findUnique({
             where: {
                 accessCode: req.body.accessCode,
             }
@@ -37,7 +38,7 @@ export default async function addParticipant(req, res) {
             }
         }
 
-        res.status(200).json({content: {message: message}})
+        res.status(200).json({content: {message: message, games: getGames(req, res)}})
     } catch (err) {
         res.status(500).json(err)
     }

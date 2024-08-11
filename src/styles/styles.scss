@@ -41,10 +41,9 @@ a:-webkit-any-link {
 }
 
 body {
-    background-color: #EE9900;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3CradialGradient id='a' cx='0' cy='800' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23f70076'/%3E%3Cstop offset='1' stop-color='%23f70076' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='b' cx='1200' cy='800' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23cc4200'/%3E%3Cstop offset='1' stop-color='%23cc4200' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='c' cx='600' cy='0' r='600' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23d400aa'/%3E%3Cstop offset='1' stop-color='%23d400aa' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='d' cx='600' cy='800' r='600' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23EE9900'/%3E%3Cstop offset='1' stop-color='%23EE9900' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='e' cx='0' cy='0' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%236600FF'/%3E%3Cstop offset='1' stop-color='%236600FF' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='f' cx='1200' cy='0' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23AA0000'/%3E%3Cstop offset='1' stop-color='%23AA0000' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='1200' height='800'/%3E%3Crect fill='url(%23b)' width='1200' height='800'/%3E%3Crect fill='url(%23c)' width='1200' height='800'/%3E%3Crect fill='url(%23d)' width='1200' height='800'/%3E%3Crect fill='url(%23e)' width='1200' height='800'/%3E%3Crect fill='url(%23f)' width='1200' height='800'/%3E%3C/svg%3E");
+    background: hsla(190, 100%, 49%, 1);
+    background: radial-gradient(circle, hsla(190, 100%, 49%, 1) 0%, hsla(216, 100%, 41%, 1) 100%);
     background-attachment: fixed;
-    background-size: cover;
     margin: 0;
 
     &::-webkit-scrollbar {
@@ -365,7 +364,7 @@ ul {
 
             .p-inputtext {
                 background: rgba(255, 255, 255, 0.66);
-                border: 1px solid #6366F1;
+                border: 1px solid #f59e0b;
                 border-radius: 100rem;
                 caret-color: transparent;
                 color: #212121;
@@ -399,7 +398,7 @@ ul {
                 }
 
                 a {
-                    color: #6366F1;
+                    color: #b45309;
                     font-weight: bold;
                     text-decoration: none;
                 }
@@ -411,13 +410,15 @@ ul {
         }
 
         #uploader-container {
+            max-height: 48rem;
+            width: 100%;
+
             #instructions {
                 font-size: 1.25rem;
                 font-weight: bold;
             }
 
             #drop-area {
-                aspect-ratio: 4 / 3;
                 background: rgba(255, 255, 255, 0.66);
                 border: 1px dashed #dee2e6;
                 border-radius: 1rem;
@@ -427,6 +428,7 @@ ul {
                 font-size: 1.25rem;
                 font-weight: bold;
                 gap: 1.25rem;
+                height: 24rem;
                 justify-content: center;
                 position: relative;
                 transition: 0.2s;
@@ -595,11 +597,73 @@ ul {
     }
 }
 
-#games {
+#home {
     align-items: center;
     flex-direction: column;
-    gap: 3rem;
+    gap: 1rem;
     min-height: calc(100vh - 10rem);
+    padding: 1rem 20rem;
+
+    h2 {
+        font-family: "Mikado", sans-serif !important;
+        font-size: 3.5rem;
+    }
+
+    #home-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        margin-bottom: 5.5rem;
+
+        .item {
+            align-items: center;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: 20rem;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            user-select: none;
+            width: 28rem;
+
+            .title {
+                color: #424242;
+                font-family: "Mikado", sans-serif !important;
+                font-size: 1.75rem;
+            }
+
+            .description {
+                margin: 0 0 1rem 0;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+
+                #input-wrapper {
+                    align-items: center;
+                    display: flex;
+                    gap: 1rem;
+
+                    input {
+                        font-size: 1.75rem;
+                        font-weight: bold;
+                        height: 3rem;
+                        text-align: center;
+                        width: 7rem;
+                    }
+                }
+
+                small {
+                    position: fixed;
+                }
+            }
+        }
+    }
 
     #games-list {
         width: 100%;
@@ -632,64 +696,6 @@ ul {
             .actions {
                 display: flex;
                 gap: 0.5rem;
-            }
-        }
-    }
-}
-
-#home {
-    align-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 3rem;
-    justify-content: center;
-    min-height: calc(100vh - 10rem);
-
-    .home-item {
-        align-items: center;
-        background: rgba(255, 255, 255, 1);
-        border-radius: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        height: 20rem;
-        justify-content: center;
-        padding: 3rem;
-        text-align: center;
-        user-select: none;
-        width: 28rem;
-
-        .title {
-            color: #424242;
-            font-family: "Mikado", sans-serif !important;
-            font-size: 1.75rem;
-        }
-
-        .description {
-            margin: 0 0 1rem 0;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-
-            #input-wrapper {
-                align-items: center;
-                display: flex;
-                gap: 1rem;
-
-                input {
-                    font-size: 1.75rem;
-                    font-weight: bold;
-                    height: 3rem;
-                    text-align: center;
-                    width: 7rem;
-                }
-            }
-
-            small {
-                position: fixed;
             }
         }
     }

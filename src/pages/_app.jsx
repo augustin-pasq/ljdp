@@ -1,5 +1,5 @@
 import Head from "next/head"
-import "primereact/resources/themes/lara-light-indigo/theme.css"
+import "primereact/resources/themes/lara-light-amber/theme.css"
 import "primereact/resources/primereact.min.css"
 import 'primeicons/primeicons.css'
 import "@/styles/styles.scss"
