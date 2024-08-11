@@ -410,15 +410,13 @@ ul {
         }
 
         #uploader-container {
-            max-height: 48rem;
-            width: 100%;
-
             #instructions {
                 font-size: 1.25rem;
                 font-weight: bold;
             }
 
             #drop-area {
+                aspect-ratio: 4 / 3;
                 background: rgba(255, 255, 255, 0.66);
                 border: 1px dashed #dee2e6;
                 border-radius: 1rem;

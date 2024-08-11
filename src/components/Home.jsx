@@ -6,11 +6,10 @@ import {Toast} from "primereact/toast"
 import {useFormik} from "formik"
 import {useEffect, useRef, useState} from "react"
 import {useRouter} from "next/router"
-import {useMediaQuery} from "react-responsive";
-import {Avatar} from "primereact/avatar";
-import {Tag} from "primereact/tag";
-import {Skeleton} from "primereact/skeleton";
-import {Divider} from "primereact/divider";
+import {useMediaQuery} from "react-responsive"
+import {Avatar} from "primereact/avatar"
+import {Tag} from "primereact/tag"
+import {Skeleton} from "primereact/skeleton"
 
 export default function Home(props) {
     const mediaQuery = useMediaQuery({maxWidth: 768})
