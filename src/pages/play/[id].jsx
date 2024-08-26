@@ -14,8 +14,8 @@ import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 
 export default function Play(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 768})
-    const mediaQueryMedium = useMediaQuery({minWidth: 768, maxWidth: 1200})
+    const mediaQuery = useMediaQuery({maxWidth: 855})
+    const mediaQueryMedium = useMediaQuery({minWidth: 855, maxWidth: 1200})
     const toast = useRef(null)
     const router = useRouter()
     const [buttonTooltip, setButtonTooltip] = useState("Copier")
@@ -144,19 +144,20 @@ export default function Play(props) {
                     <section id="instructions-container" style={{width: isTablet ? "45%" : "32%"}}>
                         <div className="side-container">
                             <span id="title">Voici le code d'accès de la partie :</span>
-                            <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${game.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
+                            <div id="code-container">
+                                <InputText tooltip={buttonTooltip} tooltipOptions={{position: "right"}} value={game !== null ? game.accessCode : ""} onClick={() => {navigator.clipboard.writeText(`${game.accessCode}`).then(() => {setButtonTooltip("Copié !")})}}/>
+                                <Button icon="pi pi-copy" rounded text onClick={async () => {await navigator.clipboard.writeText(`${game.accessCode}`)}} />
+                            </div>
                             <div id="links-container">
                                 <span id="instruction">Partage-le avec tes amis, et rendez-vous sur :</span>
                                 <span><a href={`https://ljdp.augustinpasquier.fr/play/${game !== null ? game.id : ""}`} target="_blank">{`ljdp.augustinpasquier.fr/play/${game !== null ? game.id : ""}`}</a> pour commencer la partie</span>
                                 <small>(Les joueurs n'ayant pas envoyé de photos peuvent quand même participer.)</small>
                             </div>
-                        </div>
 
-                        {(game !== null && game.owner === props.user.id) &&
-                            <div className="side-down-container">
-                                <Button label="Lancer la partie" rounded onClick={handleLaunch}/>
-                            </div>
-                        }
+                            {(game !== null && game.owner === props.user.id) &&
+                                <Button id="start-button" label="Lancer la partie" rounded onClick={handleLaunch}/>
+                            }
+                        </div>
                     </section>
 
                     {isTablet ?

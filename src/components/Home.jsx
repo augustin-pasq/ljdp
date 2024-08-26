@@ -12,7 +12,7 @@ import {Tag} from "primereact/tag"
 import {Skeleton} from "primereact/skeleton"
 
 export default function Home(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 768})
+    const mediaQuery = useMediaQuery({maxWidth: 855})
     const [games, setGames] = useState(null)
     const toast = useRef(null)
     const router = useRouter()
@@ -134,7 +134,7 @@ export default function Home(props) {
                     </div>
                 </div>
 
-                <h2 id="page-title">Mes parties</h2>
+                {games !== null && games.length > 0 && <h2 id="page-title">Mes parties</h2>}
 
                 <ul id="games-list">
                     {games !== null ?

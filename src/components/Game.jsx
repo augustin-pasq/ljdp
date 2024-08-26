@@ -7,7 +7,7 @@ import {useEffect, useState} from "react"
 import {useRouter} from "next/router"
 
 export default function Game(props) {
-    const isMobile = useMediaQuery({maxWidth: 768})
+    const isMobile = useMediaQuery({maxWidth: 855})
     const router = useRouter()
     const [gameData, setGameData] = useState(props.gameData)
     const [index, setIndex] = useState(0)

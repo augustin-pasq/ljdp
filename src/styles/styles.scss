@@ -88,7 +88,7 @@ main {
 #page-title {
     align-items: center;
     align-self: center;
-    color: #FFFFFF;
+    color: white;
     display: flex;
     justify-content: center;
     margin: 2rem 0;
@@ -253,10 +253,9 @@ ul {
 
             form {
                 align-items: center;
-                background: rgba(255, 255, 255, 0.66);
+                background: white;
                 border-radius: 100rem;
                 display: flex;
-                flex-wrap: wrap;
                 gap: 1rem;
                 justify-content: space-between;
                 padding: 1rem;
@@ -280,11 +279,19 @@ ul {
                         border-radius: 100rem;
                     }
                 }
+
+                .p-button-group .p-button:not(:last-child) {
+                    border-right: 1px solid #d1d5db;
+                }
+
+                .p-selectbutton .p-button.p-highlight {
+                    border-color: #f59e0b;
+                }
             }
 
             .category {
                 align-items: center;
-                background: rgba(255, 255, 255, 0.66);
+                background: white;
                 border-radius: 100rem;
                 display: flex;
                 gap: 1rem;
@@ -294,13 +301,18 @@ ul {
                 transition: 0.2s;
 
                 &.hover:hover {
-                    background: rgba(255, 255, 255, 1);
+                    background: white;
                     cursor: pointer;
                 }
 
                 &.selected {
-                    background: rgba(255, 255, 255, 1);
+                    background: white;
                     box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
+
+                    .title {
+                        text-decoration: #f59e0b wavy underline;
+                        text-underline-offset: 0.33rem;
+                    }
                 }
 
                 .icon {
@@ -320,7 +332,7 @@ ul {
 
         .side-container {
             align-items: center;
-            background: rgba(255, 255, 255, 0.66);
+            background: white;
             border-radius: 2rem;
             color: #212121;
             display: flex;
@@ -331,12 +343,10 @@ ul {
             position: sticky;
             text-align: center;
             top: 7rem;
-        }
 
-        .side-down-container {
-            background: rgba(255, 255, 255, 0.66);
-            border-radius: 100rem;
-            padding: 0.75rem;
+            #start-button {
+                margin-top: 2rem;
+            }
         }
 
         #sections-wrapper {
@@ -360,28 +370,36 @@ ul {
             #title {
                 font-size: 1.25rem;
                 font-weight: bold;
+                width: 100%;
             }
 
-            .p-inputtext {
-                background: rgba(255, 255, 255, 0.66);
-                border: 1px solid #f59e0b;
-                border-radius: 100rem;
-                caret-color: transparent;
-                color: #212121;
-                font-size: 1.5rem;
-                font-weight: bold;
-                padding: 1rem;
-                text-align: center;
-                transition: 0.2s;
-                width: 6rem;
+            #code-container {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                width: 100%;
 
-                &:hover {
-                    background: rgba(255, 255, 255, 1);
-                    cursor: pointer;
-                }
+                .p-inputtext {
+                    background: white;
+                    border: 1px solid #f59e0b;
+                    border-radius: 100rem;
+                    caret-color: transparent;
+                    color: #212121;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    padding: 1rem;
+                    text-align: center;
+                    transition: 0.2s;
+                    width: 6rem;
 
-                &:focus {
-                    box-shadow: unset;
+                    &:hover {
+                        background: white;
+                        cursor: pointer;
+                    }
+
+                    &:focus {
+                        box-shadow: unset;
+                    }
                 }
             }
 
@@ -390,6 +408,8 @@ ul {
                 flex-direction: column;
                 gap: 0.75rem;
                 margin-top: 2rem;
+                width: 100%;
+                word-wrap: break-word;
 
                 #instruction {
                     font-size: 1.25rem;
@@ -403,10 +423,6 @@ ul {
                     text-decoration: none;
                 }
             }
-
-            .p-button {
-                width: 100%;
-            }
         }
 
         #uploader-container {
@@ -417,7 +433,7 @@ ul {
 
             #drop-area {
                 aspect-ratio: 4 / 3;
-                background: rgba(255, 255, 255, 0.66);
+                background: white;
                 border: 1px dashed #dee2e6;
                 border-radius: 1rem;
                 color: #757575;
@@ -436,11 +452,11 @@ ul {
                 }
 
                 &:hover {
-                    background: rgba(255, 255, 255, 1);
+                    background: white;
                 }
 
                 &.disabled {
-                    background: rgba(255, 255, 255, 0.66);
+                    background: white;
                 }
 
                 input {
@@ -485,7 +501,7 @@ ul {
             height: 100%;
 
             .background-white {
-                background: rgba(255, 255, 255, 0.66);
+                background: white;
             }
 
             .background-dark {
@@ -495,7 +511,7 @@ ul {
 
         #photos-container {
             .photo {
-                background: rgba(255, 255, 255, 0.66);
+                background: white;
                 border-radius: 2rem;
                 display: flex;
                 flex-direction: column;
@@ -529,7 +545,7 @@ ul {
     padding: 3rem;
 
     h1 {
-        color: #FFFFFF;
+        color: white;
         text-align: center;
         text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
         margin: 1rem 0;
@@ -541,7 +557,7 @@ ul {
         width: fit-content;
 
         #photo-container {
-            background: rgba(255, 255, 255, 0.66);
+            background: white;
             border-radius: 2rem;
             height: 31vw;
             padding: 2vw;
@@ -581,7 +597,7 @@ ul {
 
             #validate-container {
                 align-self: center;
-                background: rgba(255, 255, 255, 0.66);
+                background: white;
                 border-radius: 100rem;
                 margin-top: 2rem;
                 padding: 0.75rem;
@@ -599,7 +615,7 @@ ul {
     flex-direction: column;
     gap: 1rem;
     min-height: calc(100vh - 10rem);
-    padding: 1rem 20rem;
+    padding: 1rem 12rem;
 
     h2 {
         font-family: "Mikado", sans-serif !important;
@@ -614,7 +630,7 @@ ul {
 
         .item {
             align-items: center;
-            background: rgba(255, 255, 255, 1);
+            background: white;
             border-radius: 1rem;
             display: flex;
             flex-direction: column;
@@ -699,7 +715,7 @@ ul {
 }
 
 #navbar {
-    background: rgba(255, 255, 255, 1);
+    background: white;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08), 0 3px 4px rgba(0, 0, 0, 0.1), 0 1px 4px -1px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
@@ -727,7 +743,7 @@ ul {
 
 .playercard_container {
     align-items: center;
-    background: rgba(255, 255, 255, 0.66);
+    background: white;
     border-radius: 100rem;
     display: flex;
     flex-direction: row;
@@ -738,13 +754,18 @@ ul {
     transition: 0.2s;
 
     &.hover:hover {
-        background: rgba(255, 255, 255, 1);
+        background: white;
         cursor: pointer;
     }
 
     &.checked {
-        background: rgba(255, 255, 255, 1);
+        background: white;
         box-shadow: 0 7px 30px rgba(0, 0, 0, 0.08), 0 22px 30px 2px rgba(0, 0, 0, 0.15), 0 8px 10px rgba(0, 0, 0, 0.15);
+
+        .playercard_username-wrapper {
+            text-decoration: #f59e0b wavy underline;
+            text-underline-offset: 0.33rem;
+        }
     }
 
     .playercard_username-wrapper {

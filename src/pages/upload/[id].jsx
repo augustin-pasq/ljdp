@@ -12,7 +12,7 @@ import {useFormik} from "formik";
 import {youtubeURLParser} from "../../../utils/youtubeURLParser"
 
 export default function Upload(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 768})
+    const mediaQuery = useMediaQuery({maxWidth: 855})
     const router = useRouter()
     const [categories, setCategories] = useState(null)
     const [game, setGame] = useState(null)

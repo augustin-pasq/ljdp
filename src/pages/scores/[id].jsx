@@ -11,8 +11,8 @@ import {useMediaQuery} from "react-responsive"
 import {useRouter} from "next/router"
 
 export default function Scores(props) {
-    const mediaQuery = useMediaQuery({maxWidth: 768})
-    const mediaQueryMedium = useMediaQuery({minWidth: 768, maxWidth: 1200})
+    const mediaQuery = useMediaQuery({maxWidth: 855})
+    const mediaQueryMedium = useMediaQuery({minWidth: 855, maxWidth: 1200})
     const router = useRouter()
     const [categories, setCategories] = useState(null)
     const [isMobile, setIsMobile] = useState(true)

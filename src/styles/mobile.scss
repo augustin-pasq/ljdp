@@ -1,4 +1,4 @@
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 855px) {
     /** COMMON ITEMS **/
 
     h1 {
@@ -138,10 +138,6 @@
                 top: unset;
             }
 
-            .side-down-container {
-                padding: 0.5rem;
-            }
-
             #instructions-container {
                 gap: 0.75rem;
                 position: unset;
@@ -155,6 +151,10 @@
                     font-size: 1.25rem;
                     height: 3.25rem;
                     width: 5.25rem;
+                }
+
+                #start-button {
+                    margin-top: 1rem;
                 }
 
                 #links-container {
